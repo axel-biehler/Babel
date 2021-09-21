@@ -1,6 +1,7 @@
 #include <Networking/RawPacket.hpp>
 #include <Networking/Packets/PacketCmdRegister.hpp>
 #include <Networking/Packets/PacketRespRegister.hpp>
+#include <Networking/Packets/PacketCmdLogin.hpp>
 #include <memory>
 
 Babel::Networking::RawPacket::RawPacket(std::vector<char> data) : _data(data) {
@@ -21,6 +22,7 @@ std::shared_ptr<Babel::Networking::Packet> Babel::Networking::RawPacket::deseria
     switch (getPacketType()) {
         case PacketCmdRegister: return std::make_shared<Packets::PacketCmdRegister>(_data);
         case PacketRespRegister: return std::make_shared<Packets::PacketRespRegister>(_data);
+        case PacketCmdLogin: return std::make_shared<Packets::PacketCmdLogin>(_data);
         default: return std::make_shared<Babel::Networking::Packet>(PacketUnknown);
     }
 }
