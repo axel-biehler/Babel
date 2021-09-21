@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 namespace Babel {
     namespace Networking {
         class RawPacket;
@@ -35,6 +37,7 @@ namespace Babel {
 
         protected:
             PacketType _packetType;
+            std::vector<char> build(std::vector<char> content) const;
         };
     }
 }

@@ -17,7 +17,7 @@ namespace Babel {
                 RawPacket serialize() const;
 
             private:
-                const std::string _username;
+                std::string _username;
             };
         }
     }
