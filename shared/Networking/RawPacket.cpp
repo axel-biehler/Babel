@@ -3,6 +3,7 @@
 #include <Networking/Packets/PacketRespRegister.hpp>
 #include <Networking/Packets/PacketCmdLogin.hpp>
 #include <Networking/Packets/PacketRespLogin.hpp>
+#include <Networking/Packets/PacketCmdLogout.hpp>
 #include <memory>
 
 Babel::Networking::RawPacket::RawPacket(std::vector<char> data) : _data(data) {
@@ -25,6 +26,7 @@ std::shared_ptr<Babel::Networking::Packet> Babel::Networking::RawPacket::deseria
         case PacketRespRegister: return std::make_shared<Packets::PacketRespRegister>(_data);
         case PacketCmdLogin: return std::make_shared<Packets::PacketCmdLogin>(_data);
         case PacketRespLogin: return std::make_shared<Packets::PacketRespLogin>(_data);
+        case PacketCmdLogout: return std::make_shared<Packets::PacketCmdLogout>(_data);
         default: return std::make_shared<Babel::Networking::Packet>(PacketUnknown);
     }
 }
