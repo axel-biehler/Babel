@@ -38,4 +38,4 @@ Les textes sont des tableau de caractères terminés par un byte nul.
 | PacketRespLogin | `4` | ok: `char` errorMessage: `string` |
 | PacketCmdLogout | `5` | |
 | PacketCmdListOnlineUsers | `6` | |
-| PacketRespListOnlineUsers | `7` | usernames: `string[userCount]` |
+| PacketRespListOnlineUsers | `7` | userCount: `unsigned int` usernames: `string[userCount]` |
