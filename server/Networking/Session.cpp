@@ -26,6 +26,7 @@ void Babel::Networking::Session::read()
     {
         std::cout << std::istream(&self->_streambuf).rdbuf();
         self->write();
+        self->read();
     });
 }
 
