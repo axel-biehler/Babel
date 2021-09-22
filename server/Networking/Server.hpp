@@ -11,6 +11,7 @@
 #include "asio.hpp"
 #include "Session.hpp"
 #include <optional>
+#include <vector>
 
 namespace Babel {
     namespace Networking {
@@ -27,6 +28,7 @@ namespace Babel {
                 asio::ip::tcp::acceptor _acceptor;
                 asio::io_context& _io_context;
                 std::optional<asio::ip::tcp::socket> _socket;
+                std::vector<Babel::Networking::Session> _sessions;
         };
     }
 }

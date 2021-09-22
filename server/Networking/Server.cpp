@@ -22,7 +22,9 @@ void Babel::Networking::Server::async_accept()
 
     _acceptor.async_accept(*_socket, [&] (std::error_code err)
     {
-        std::make_shared<Babel::Networking::Session>(std::move(*_socket))->start();
+        Babel::Networking::Session session(std::make_shared<asio::ip::tcp::socket>(_io_context));
+        session.start();
+        _sessions.push_back(session);
         async_accept();
     });
 }
