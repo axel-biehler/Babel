@@ -6,7 +6,7 @@ Babel::Networking::Packet::Packet(Babel::Networking::PacketType packetType) : _p
 }
 
 Babel::Networking::RawPacket Babel::Networking::Packet::serialize() {
-    return {std::vector<char>({})};
+    return {build(std::vector<char>{})};
 }
 
 Babel::Networking::PacketType Babel::Networking::Packet::getPacketType() const {
