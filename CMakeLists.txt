@@ -36,7 +36,7 @@ add_executable(babel_server server/main.cpp
         shared/Networking/Packets/PacketRespLogin.cpp shared/Networking/Packets/PacketRespLogin.hpp
         shared/Networking/Packets/PacketCmdLogout.cpp shared/Networking/Packets/PacketCmdLogout.hpp
         server/Database/Database.cpp server/Database/Database.hpp
-        server/Database/IType.hpp
+        server/Database/IModel.hpp
         server/Database/User.cpp server/Database/User.hpp )
 target_include_directories(babel_server PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/shared)

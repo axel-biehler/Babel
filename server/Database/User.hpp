@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
-#include "IType.hpp"
+#include "IModel.hpp"
 
 namespace Babel {
     namespace Database {
-        class User : public IType {
+        class User : public IModel {
         public:
             User();
 
