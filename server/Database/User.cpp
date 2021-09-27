@@ -39,3 +39,12 @@ int Babel::Database::User::getId() const {
     return _id;
 }
 
+void Babel::Database::User::del(const Babel::Database::Database &db) {
+    auto sqlite{db.getHandle()};
+
+    if (_id < 0)
+        return;
+    std::string query{"DELETE FROM Users WHERE id = " + std::to_string(_id)};
+    sqlite3_exec(sqlite, query.c_str(), nullptr, 0, nullptr);
+}
+

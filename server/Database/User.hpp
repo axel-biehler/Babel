@@ -11,6 +11,7 @@ namespace Babel {
 
             void save(const Database &db) override;
             void getById(const Database &db, int id) override;
+            void del(const Database &db) override;
 
             int getId() const;
             std::string getUsername() const;
