@@ -15,6 +15,7 @@ namespace Babel {
 
             int getId() const;
             std::string getUsername() const;
+            void setUsername(const std::string &username);
 
             int _id;
             std::string _username;
