@@ -20,6 +20,7 @@ add_executable(babel_client client/main.cpp
         shared/Networking/Packets/PacketCmdLogout.cpp shared/Networking/Packets/PacketCmdLogout.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
+target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/client)
 target_link_directories(babel_client PUBLIC ${CMAKE_BINARY_DIR}/bin/lib)
 target_link_libraries(babel_client CONAN_PKG::portaudio CONAN_PKG::opus CONAN_PKG::qt)
 
@@ -33,8 +34,12 @@ add_executable(babel_server server/main.cpp
         shared/Networking/Packets/PacketRespRegister.cpp shared/Networking/Packets/PacketRespRegister.hpp
         shared/Networking/Packets/PacketCmdLogin.cpp shared/Networking/Packets/PacketCmdLogin.hpp
         shared/Networking/Packets/PacketRespLogin.cpp shared/Networking/Packets/PacketRespLogin.hpp
-        shared/Networking/Packets/PacketCmdLogout.cpp shared/Networking/Packets/PacketCmdLogout.hpp)
+        shared/Networking/Packets/PacketCmdLogout.cpp shared/Networking/Packets/PacketCmdLogout.hpp
+        server/Database/Database.cpp server/Database/Database.hpp
+        server/Database/IModel.hpp
+        server/Database/User.cpp server/Database/User.hpp )
 target_include_directories(babel_server PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/shared)
+target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/server)
 target_link_directories(babel_server PUBLIC ${CMAKE_BINARY_DIR}/bin/lib)
 target_link_libraries(babel_server CONAN_PKG::asio CONAN_PKG::sqlite_orm)
