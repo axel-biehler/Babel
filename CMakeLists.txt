@@ -17,7 +17,10 @@ add_executable(babel_client client/main.cpp
         shared/Networking/Packets/PacketRespRegister.cpp shared/Networking/Packets/PacketRespRegister.hpp
         shared/Networking/Packets/PacketCmdLogin.cpp shared/Networking/Packets/PacketCmdLogin.hpp
         shared/Networking/Packets/PacketRespLogin.cpp shared/Networking/Packets/PacketRespLogin.hpp
-        shared/Networking/Packets/PacketCmdLogout.cpp shared/Networking/Packets/PacketCmdLogout.hpp)
+        shared/Networking/Packets/PacketCmdLogout.cpp shared/Networking/Packets/PacketCmdLogout.hpp
+        client/Ui/FriendsWindow.cpp client/Ui/FriendsWindow.hpp
+        client/Ui/AddFriendPage.cpp client/Ui/AddFriendPage.hpp
+        client/Ui/FriendInvitesPage.cpp client/Ui/FriendInvitesPage.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/client)
