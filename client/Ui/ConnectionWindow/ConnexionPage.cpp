@@ -2,7 +2,7 @@
 // Created by max on 27/09/2021.
 //
 
-#include "./ConnexionPage.hpp"
+#include "ConnexionPage.hpp"
 
 ConnexionPage::ConnexionPage(QWidget *parent) {
     _input.setPlaceholderText("Username");

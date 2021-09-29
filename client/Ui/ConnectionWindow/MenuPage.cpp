@@ -2,7 +2,7 @@
 // Created by max on 27/09/2021.
 //
 
-#include "./MenuPage.hpp"
+#include "MenuPage.hpp"
 #include <QLineEdit>
 
 MenuPage::MenuPage(QWidget *parent) {

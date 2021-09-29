@@ -1,11 +1,11 @@
 #include <QApplication>
 #include <QWindow>
 #include <QLabel>
-#include "Ui/ConnexionPage/ConnexionPage.hpp"
+#include "Ui/ConnectionWindow/ConnexionPage.hpp"
 #include <QVBoxLayout>
 #include <QStackedWidget>
-#include "Ui/MenuPage/MenuPage.hpp"
-#include "Ui/Window/Window.hpp"
+#include "Ui/ConnectionWindow/MenuPage.hpp"
+#include "Ui/ConnectionWindow/Window.hpp"
 
 int main(int ac, char **av)
 {
