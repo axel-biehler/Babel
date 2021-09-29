@@ -10,6 +10,8 @@ sqlite3/3.36.0
 
 [generators]
 cmake
+cmake_find_package
+cmake_paths
 
 [imports]
 lib, *.so* -> bin/lib
