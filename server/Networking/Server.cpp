@@ -17,14 +17,18 @@ Babel::Networking::Server::~Server()
 
 void Babel::Networking::Server::async_accept()
 {
+    auto socket_ptr = std::make_shared<asio::ip::tcp::socket>(_io_context);
 
-    _socket.emplace(_io_context);
-
-    _acceptor.async_accept(*_socket, [&] (std::error_code err)
+    _acceptor.async_accept(*socket_ptr, [&, socket_ptr] (std::error_code err)
     {
-        Babel::Networking::Session session(std::make_shared<asio::ip::tcp::socket>(_io_context));
-        session.start();
-        _sessions.push_back(session);
-        async_accept();
+        if (!err) {
+            std::cout << "connected" << std::endl;
+            Babel::Networking::Session session(socket_ptr);
+            session.start();
+            _sessions.push_back(std::make_shared<Babel::Networking::Session>(session));
+            async_accept();
+        } else {
+            std::cerr << err << std::endl;
+        }
     });
 }

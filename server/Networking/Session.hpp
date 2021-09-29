@@ -14,15 +14,13 @@
 
 namespace Babel {
     namespace Networking {
-        class Session : public std::enable_shared_from_this<Session>{
+        class Session : public std::enable_shared_from_this<Session> {
             public:
                 Session(std::shared_ptr<asio::ip::tcp::socket> socket);
                 Session(const Session &session);
 
                 std::shared_ptr<asio::ip::tcp::socket> getSocket() const;
                 void setSocket(const std::shared_ptr<asio::ip::tcp::socket> socket);
-                std::shared_ptr<asio::streambuf> getStreambuf() const;
-                void setStreambuf(const std::shared_ptr<asio::streambuf> streambuffer);
 
 
                 ~Session();
@@ -31,9 +29,12 @@ namespace Babel {
             protected:
             private:
                 std::shared_ptr<asio::ip::tcp::socket> _socket;
-                std::shared_ptr<asio::streambuf>  _streambuf;
+                char _data[1024];
+                std::vector<char> _buffer;
+                bool _readable = true;
 
                 void write();
+
                 void read();
         };
     }

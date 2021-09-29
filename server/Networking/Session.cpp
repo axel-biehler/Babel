@@ -9,10 +9,12 @@
 
 Babel::Networking::Session::Session(std::shared_ptr<asio::ip::tcp::socket> socket) : _socket(socket)
 {
+    memset(_data, 0, 1024);
 }
 
-Babel::Networking::Session::Session(const Session &session) : _socket(session.getSocket()), _streambuf(session.getStreambuf())
+Babel::Networking::Session::Session(const Session &session) : _socket(session.getSocket())
 {
+    memset(_data, 0, 1024);
 }
 
 Babel::Networking::Session::~Session()
@@ -26,17 +28,22 @@ void Babel::Networking::Session::start()
 
 void Babel::Networking::Session::read()
 {
-    asio::async_read_until(*_socket, *_streambuf, '\n', [self = shared_from_this()] (std::error_code err, std::size_t bytes_transferred)
-    {
-        std::cout << std::istream(self->_streambuf.get()).rdbuf();
-        self->write();
-        self->read();
+    _socket->async_read_some(asio::buffer(_data, 4), [this] (std::error_code err, std::size_t bytes_transferred) {
+        std::cout << "nice cock bro" << std::endl;
+          if (!err) {
+              std::string str(_data, bytes_transferred);
+              _buffer.insert(_buffer.end(), str.begin(), str.end());
+              std::cout << str << std::endl;
+              //read();
+        } else {
+            std::cerr << err << std::endl;
+        }
     });
 }
 
 void  Babel::Networking::Session::write()
 {
-    asio::write(*_socket, *_streambuf);
+    asio::write(*_socket, asio::buffer(_data));
 }
 
 //setter getter
@@ -48,14 +55,4 @@ void Babel::Networking::Session::setSocket(const std::shared_ptr<asio::ip::tcp::
 std::shared_ptr<asio::ip::tcp::socket> Babel::Networking::Session::getSocket() const
 {
     return _socket;
-}
-
-void Babel::Networking::Session::setStreambuf(const std::shared_ptr<asio::streambuf> streambuffer)
-{
-    _streambuf = streambuffer;
-}
-
-std::shared_ptr<asio::streambuf> Babel::Networking::Session::getStreambuf() const
-{
-    return _streambuf;
 }

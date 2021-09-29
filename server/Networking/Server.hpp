@@ -27,8 +27,7 @@ namespace Babel {
             private:
                 asio::ip::tcp::acceptor _acceptor;
                 asio::io_context& _io_context;
-                std::optional<asio::ip::tcp::socket> _socket;
-                std::vector<Babel::Networking::Session> _sessions;
+                std::vector<std::shared_ptr<Babel::Networking::Session>> _sessions;
         };
     }
 }

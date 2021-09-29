@@ -1,14 +1,11 @@
-#include <QApplication>
-#include <QWindow>
-#include <QLabel>
+#include "Networking/Client.hpp"
 
 int main(int ac, char **av)
 {
-    QApplication app{ac, av};
+    QCoreApplication app(ac, av);
+    Babel::Networking::Client cli(av[1], std::stoi(av[2]));
 
-    QLabel label{};
-    label.setText("How are you?");
-    label.show();
+    cli.start();
 
     return app.exec();
 }
