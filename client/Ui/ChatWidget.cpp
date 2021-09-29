@@ -7,7 +7,7 @@ Babel::Ui::ChatWidget::ChatWidget(const std::string &username, int id) : _userId
     _userImageLabel.setPixmap(QPixmap("images/avatar.png").scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     _topLayout.addWidget(&_userImageLabel);
     _usernameLabel.setText(username.c_str());
-    _usernameLabel.setFont(QFont("Roboto", 16));
+    _usernameLabel.setFont(QFont("Roboto", 14));
     _topLayout.addSpacerItem(new QSpacerItem(4, 4));
     _topLayout.addWidget(&_usernameLabel);
     _topLayout.addStretch(1);
@@ -24,7 +24,7 @@ Babel::Ui::ChatWidget::ChatWidget(const std::string &username, int id) : _userId
     _mainLayout.addLayout(&_bottomLayout);
     _chatLineEdit.setPlaceholderText("Your message...");
     _chatLineEdit.setFixedHeight(32);
-    _chatLineEdit.setFont(QFont("Roboto", 12));
+    _chatLineEdit.setFont(QFont("Roboto", 10));
     _bottomLayout.addWidget(&_chatLineEdit, 1);
     _sendButton.setIcon(QIcon("images/sent.png"));
     _sendButton.setIconSize(QSize(20, 20));

@@ -19,7 +19,7 @@ Babel::Ui::MainWindow::MainWindow() {
     _leftLayout.addWidget(&_friendsButton);
 
     _friendsButton.setText("Manage friends");
-    _friendsButton.setFont(QFont("Roboto", 11));
+    _friendsButton.setFont(QFont("Roboto", 10));
     _friendsButton.setFixedHeight(32);
 
     _mainLayout.addWidget(_chatWidget.get(), 1);

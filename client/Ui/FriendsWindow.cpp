@@ -8,6 +8,7 @@ Babel::Ui::FriendsWindow::FriendsWindow() {
 
     _mainTabWidget.setParent(this);
     _mainTabWidget.setFixedSize(width(), height());
+    _mainTabWidget.setFont(QFont("Roboto", 10));
 
     auto addFriendsPage = new AddFriendPage;
     auto friendInvitesPage = new FriendInvitesPage;
