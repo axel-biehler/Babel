@@ -20,12 +20,14 @@ add_executable(babel_client client/main.cpp
         shared/Networking/Packets/PacketCmdLogout.cpp shared/Networking/Packets/PacketCmdLogout.hpp
         client/Ui/FriendsWindow.cpp client/Ui/FriendsWindow.hpp
         client/Ui/AddFriendPage.cpp client/Ui/AddFriendPage.hpp
-        client/Ui/FriendInvitesPage.cpp client/Ui/FriendInvitesPage.hpp)
+        client/Ui/FriendInvitesPage.cpp client/Ui/FriendInvitesPage.hpp
+        client/Ui/FriendInviteWidget.cpp client/Ui/FriendInviteWidget.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/client)
 target_link_directories(babel_client PUBLIC ${CMAKE_BINARY_DIR}/bin/lib)
 target_link_libraries(babel_client CONAN_PKG::portaudio CONAN_PKG::opus CONAN_PKG::qt)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/client/images DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
 add_executable(babel_server server/main.cpp
         shared/Networking/RawPacket.cpp shared/Networking/RawPacket.hpp

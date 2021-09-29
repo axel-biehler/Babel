@@ -1,6 +1,6 @@
 #include <QVBoxLayout>
-#include <QLabel>
 #include "FriendInvitesPage.hpp"
+#include "FriendInviteWidget.hpp"
 
 Babel::Ui::FriendInvitesPage::FriendInvitesPage() {
     setLayout(&_mainLayout);
@@ -13,9 +13,8 @@ Babel::Ui::FriendInvitesPage::FriendInvitesPage() {
     _mainWidget.setLayout(&_innerLayout);
 
     for (int i = 0; i < 50; i++) {
-        QLabel *label = new QLabel("Hello " + QString::number(i));
-        label->setFixedHeight(16);
-        _innerLayout.addWidget(label);
+        FriendInviteWidget *w = new FriendInviteWidget("John Doe", i % 2 == 0 ? Sent : Received);
+        _innerLayout.addWidget(w);
     }
 
 }
