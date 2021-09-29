@@ -3,14 +3,10 @@
 //
 
 #include "./ConnexionPage.hpp"
-#include <QLineEdit>
-#include <QFormLayout>
 
 ConnexionPage::ConnexionPage(QWidget *parent) {
-    QFormLayout *formLayout = new QFormLayout;
-    QLineEdit *input = new QLineEdit("", this);
-    //input->setGeometry(100, 100, 100, 100);
-    input->setPlaceholderText("Username");
-    formLayout->addRow("UserName:", input);
-    formLayout->setGeometry({100, 100, 100, 100});
+    _input.setPlaceholderText("Username");
+    _layout.addRow("UserName:", &_input);
+    _layout.setGeometry({100, 100, 100, 100});
+    setLayout(&_layout);
 }
