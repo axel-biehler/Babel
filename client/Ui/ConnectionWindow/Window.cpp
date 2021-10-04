@@ -11,11 +11,12 @@ Babel::Ui::Window::Window(QWidget *parent) {
     this->setFixedSize(600, 400);
     setWindowTitle("Connection");
     Babel::Ui::ConnexionPage *page = new Babel::Ui::ConnexionPage;
-
+    _layout = new QGridLayout(this);
     _pages.addWidget(page);
-    _layout.addWidget(&_pages);
+    _pages.setFixedSize(width() / 2, height() / 2);
+    _layout->addWidget(&_pages, 0, 0,Qt::AlignCenter);
 
-    this->setLayout(&_layout);
+    this->setLayout(_layout);
     show();
 }
 

@@ -5,12 +5,17 @@
 #include "ConnexionPage.hpp"
 
 Babel::Ui::ConnexionPage::ConnexionPage(QWidget *parent) {
+    _text.setText("Enter Username:");
+    _text.setAlignment(Qt::AlignCenter);
+    _mainLayout.addWidget(&_text);
     _input.setPlaceholderText("Username");
-    _layout.addWidget(&_input, Qt::AlignCenter);
+    _mainLayout.addWidget(&_input, Qt::AlignCenter);
     //_layout.setGeometry({100, 100, 100, 100});
-    _register = new QPushButton("Register", this);
-    _login = new QPushButton("Log In", this);
-    _layout.addWidget(_register);
-    _layout.addWidget(_login);
-    this->setLayout(&_layout);
+    _register = new QPushButton("Sign Up", this);
+    _login = new QPushButton("Sign In", this);
+    _mainLayout.addWidget(&_btnWidget);
+    _btnWidget.setLayout(&_btnLayout);
+    _btnLayout.addWidget(_login);
+    _btnLayout.addWidget(_register);
+    this->setLayout(&_mainLayout);
 }

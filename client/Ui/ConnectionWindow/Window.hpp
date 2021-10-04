@@ -17,7 +17,7 @@ namespace Babel {
             ~Window();
         private:
             QStackedWidget _pages;
-            QVBoxLayout _layout;
+            QGridLayout *_layout;
         };
     }
 }

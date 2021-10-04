@@ -19,7 +19,9 @@ namespace Babel {
             ~ConnexionPage() = default;
         private:
             QLineEdit _input;
-            QVBoxLayout _layout;
+            QVBoxLayout _mainLayout;
+            QHBoxLayout _btnLayout;
+            QWidget _btnWidget;
             QLabel _text;
             QPushButton *_register;
             QPushButton *_login;
