@@ -28,22 +28,22 @@ Opus::~Opus() {
     opus_decoder_destroy(_decoder);
 }
 
-std::vector<unsigned char> Opus::encode(std::vector<float>& audio_input) {
+std::vector<unsigned char> Opus::encode(std::vector<float> audio_input) {
     std::vector<unsigned char> encoded_buff;
 
     if (audio_input.empty()) {
         encoded_buff.resize(0);
         return encoded_buff;
     }
-    encoded_buff.resize(FRAMES_PER_BUFFER * STEREO);
-    //TODO: check si empty avec stereo
-    opus_int32 nb_encoded = opus_encode_float(_encoder, audio_input.data(), FRAMES_PER_BUFFER, encoded_buff.data(), FRAMES_PER_BUFFER * 2);
+    encoded_buff.resize(audio_input.size() * 2);
+        //TODO: check si empty avec stereo
+    opus_int32 nb_encoded = opus_encode_float(_encoder, audio_input.data(), FRAMES_PER_BUFFER, encoded_buff.data(), static_cast<int>(audio_input.size()) * 2);
     if (nb_encoded)
         encoded_buff.resize(nb_encoded);
     return encoded_buff;
 }
 
-std::vector<float> Opus::decode(std::vector<unsigned char>& encoded) {
+std::vector<float> Opus::decode(std::vector<unsigned char> encoded) {
     std::vector<float> decoded_buff;
 
     if (encoded.empty()) {
@@ -51,11 +51,7 @@ std::vector<float> Opus::decode(std::vector<unsigned char>& encoded) {
         return decoded_buff;
     }
     decoded_buff.resize(FRAMES_PER_BUFFER * STEREO);
-    opus_int32 nb_decoded = opus_decode_float(_decoder, encoded.data(), FRAMES_PER_BUFFER, decoded_buff.data(), FRAMES_PER_BUFFER * 2, 0);
+    opus_int32 nb_decoded = opus_decode_float(_decoder, encoded.data(), static_cast<int>(encoded.size()), decoded_buff.data(), 480, 0) * 2;
     decoded_buff.resize(nb_decoded);
     return decoded_buff;
 }
-
-
-//= opus_encode(_encoder, input_buff.data(), FRAMES_PER_BUFFER, encoded_buff.data(), FRAMES_PER_BUFFER);
-//AB.insert(AB.end(), B.begin(), B.end());

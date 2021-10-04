@@ -16,8 +16,8 @@ class Opus {
 public:
     Opus();
     ~Opus();
-    std::vector<unsigned char> encode(std::vector<float> &audio_input);
-    std::vector<float> decode(std::vector<unsigned char>& audio_input);
+    std::vector<unsigned char> encode(std::vector<float> audio_input);
+    std::vector<float> decode(std::vector<unsigned char> audio_input);
 private:
     OpusEncoder *   _encoder;
     OpusDecoder *   _decoder;

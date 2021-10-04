@@ -12,7 +12,7 @@
 #include "portaudio.h"
 
 #define STEREO              2
-#define SAMPLE_RATE         24000
+#define SAMPLE_RATE         48000
 #define FRAMES_PER_BUFFER   480
 
 class PortAudio {
