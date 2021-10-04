@@ -18,6 +18,9 @@ namespace Babel {
             QHBoxLayout _mainLayout;
             QWidget _leftWidget;
             QVBoxLayout _leftLayout;
+            QScrollArea _friendsScrollArea;
+            QWidget _friendsContainer;
+            QVBoxLayout _friendsInnerLayout;
             QPushButton _friendsButton;
             std::shared_ptr<ChatWidget> _chatWidget;
 

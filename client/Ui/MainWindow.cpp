@@ -12,10 +12,15 @@ Babel::Ui::MainWindow::MainWindow() {
     _mainLayout.addWidget(&_leftWidget);
     _leftWidget.setFixedWidth(250);
     _leftWidget.setLayout(&_leftLayout);
-    _leftLayout.addWidget(new QPushButton("Friend 1"));
-    _leftLayout.addWidget(new QPushButton("Friend 2"));
-    _leftLayout.addWidget(new QPushButton("Friend 3"));
-    _leftLayout.addStretch();
+    _leftLayout.addWidget(&_friendsScrollArea, 1);
+    _friendsScrollArea.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    _friendsScrollArea.setWidgetResizable(true);
+    _friendsScrollArea.setParent(&_leftWidget);
+    _friendsScrollArea.setWidget(&_friendsContainer);
+    _friendsContainer.setLayout(&_friendsInnerLayout);
+    _friendsInnerLayout.setAlignment(Qt::AlignTop);
+    for (int i = 0; i < 3; i++)
+        _friendsInnerLayout.addWidget(new QPushButton("Friend " + QString::number(i + 1)));
     _leftLayout.addWidget(&_friendsButton);
 
     _friendsButton.setText("Manage friends");
