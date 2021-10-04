@@ -18,7 +18,7 @@ Babel::Ui::FriendInviteWidget::FriendInviteWidget(const std::string &username, B
     _userImageLabel.setPixmap(QPixmap("images/avatar.png").scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     _usernameLabel.setText(username.c_str());
-    _usernameLabel.setFont(QFont("Roboto", 12));
+    _usernameLabel.setFont(QFont("Roboto", 10));
 
     _sentLabel.setPixmap(QPixmap("images/sent.png").scaled(22, 22, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 

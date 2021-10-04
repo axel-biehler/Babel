@@ -28,7 +28,11 @@ add_executable(babel_client client/main.cpp
         client/Ui/FriendsWindow.cpp client/Ui/FriendsWindow.hpp
         client/Ui/AddFriendPage.cpp client/Ui/AddFriendPage.hpp
         client/Ui/FriendInvitesPage.cpp client/Ui/FriendInvitesPage.hpp
-        client/Ui/FriendInviteWidget.cpp client/Ui/FriendInviteWidget.hpp)
+        client/Ui/FriendInviteWidget.cpp client/Ui/FriendInviteWidget.hpp
+        client/Ui/MainWindow.cpp client/Ui/MainWindow.hpp
+        client/Ui/ChatWidget.cpp client/Ui/ChatWidget.hpp
+        client/Ui/FriendItemWidget.cpp client/Ui/FriendItemWidget.hpp
+        client/Ui/MessageWidget.cpp client/Ui/MessageWidget.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/client)
@@ -54,4 +58,4 @@ target_include_directories(babel_server PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/server)
 target_link_directories(babel_server PUBLIC ${CMAKE_BINARY_DIR}/bin/lib)
-target_link_libraries(babel_server CONAN_PKG::asio CONAN_PKG::sqlite3   )
+target_link_libraries(babel_server CONAN_PKG::asio CONAN_PKG::sqlite3)
