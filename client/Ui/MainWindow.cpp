@@ -1,6 +1,7 @@
 #include <QLabel>
 #include "MainWindow.hpp"
 #include "FriendsWindow.hpp"
+#include "FriendItemWidget.hpp"
 
 Babel::Ui::MainWindow::MainWindow() {
     setWindowTitle("Babel");
@@ -20,7 +21,7 @@ Babel::Ui::MainWindow::MainWindow() {
     _friendsContainer.setLayout(&_friendsInnerLayout);
     _friendsInnerLayout.setAlignment(Qt::AlignTop);
     for (int i = 0; i < 3; i++)
-        _friendsInnerLayout.addWidget(new QPushButton("Friend " + QString::number(i + 1)));
+        _friendsInnerLayout.addWidget(new FriendItemWidget("Friend " + std::to_string(i + 1)));
     _leftLayout.addWidget(&_friendsButton);
 
     _friendsButton.setText("Manage friends");

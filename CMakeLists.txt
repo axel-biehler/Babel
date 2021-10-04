@@ -30,7 +30,9 @@ add_executable(babel_client client/main.cpp
         client/Ui/FriendInvitesPage.cpp client/Ui/FriendInvitesPage.hpp
         client/Ui/FriendInviteWidget.cpp client/Ui/FriendInviteWidget.hpp
         client/Ui/MainWindow.cpp client/Ui/MainWindow.hpp
-        client/Ui/ChatWidget.cpp client/Ui/ChatWidget.hpp)
+        client/Ui/ChatWidget.cpp client/Ui/ChatWidget.hpp
+        client/Ui/FriendItemWidget.cpp client/Ui/FriendItemWidget.hpp
+        client/Ui/MessageWidget.cpp client/Ui/MessageWidget.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/client)
