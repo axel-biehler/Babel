@@ -5,11 +5,20 @@
 #include <QWidget>
 #include "Window.hpp"
 #include <QLineEdit>
+#include "ConnexionPage.hpp"
 
-Window::Window(QWidget *parent) {
-    this->setFixedSize(1920, 1080);
+Babel::Ui::Window::Window(QWidget *parent) {
+    this->setFixedSize(600, 400);
+    setWindowTitle("Connection");
+    Babel::Ui::ConnexionPage *page = new Babel::Ui::ConnexionPage;
+
+    _pages.addWidget(page);
+    _layout.addWidget(&_pages);
+
+    this->setLayout(&_layout);
+    show();
 }
 
-Window::~Window() noexcept {
+Babel::Ui::Window::~Window() noexcept {
 
 }

@@ -6,12 +6,20 @@
 #define BABEL_WINDOW_HPP
 
 #include <QWidget>
+#include <QVBoxLayout>
+#include <QStackedWidget>
 
-class Window : public QWidget {
-public:
-    Window(QWidget *parent = 0);
-    ~Window();
-private:
-};
+namespace Babel {
+    namespace Ui {
+        class Window : public QWidget {
+        public:
+            Window(QWidget *parent = 0);
+            ~Window();
+        private:
+            QStackedWidget _pages;
+            QVBoxLayout _layout;
+        };
+    }
+}
 
 #endif //BABEL_WINDOW_HPP
