@@ -18,8 +18,8 @@ add_executable(babel_client client/main.cpp
         shared/Networking/Packets/PacketCmdLogin.cpp shared/Networking/Packets/PacketCmdLogin.hpp
         shared/Networking/Packets/PacketRespLogin.cpp shared/Networking/Packets/PacketRespLogin.hpp
         shared/Networking/Packets/PacketCmdLogout.cpp shared/Networking/Packets/PacketCmdLogout.hpp
-        client/Ui/ConnectionWindow/Window.cpp client/Ui/ConnectionWindow/Window.hpp
-        client/Ui/ConnectionWindow/ConnexionPage.cpp client/Ui/ConnectionWindow/ConnexionPage.hpp)
+        client/Ui/ConnectionWindow/ConnectionWindow.cpp client/Ui/ConnectionWindow/ConnectionWindow.hpp
+        client/Ui/ConnectionWindow/ConnectionPage.cpp client/Ui/ConnectionWindow/ConnectionPage.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_link_directories(babel_client PUBLIC ${CMAKE_BINARY_DIR}/bin/lib)

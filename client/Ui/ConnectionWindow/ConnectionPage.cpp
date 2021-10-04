@@ -2,9 +2,9 @@
 // Created by max on 27/09/2021.
 //
 
-#include "ConnexionPage.hpp"
+#include "ConnectionPage.hpp"
 
-Babel::Ui::ConnexionPage::ConnexionPage(QWidget *parent) {
+Babel::Ui::ConnectionPage::ConnectionPage(QWidget *parent) {
     _text.setText("Enter Username:");
     _text.setAlignment(Qt::AlignCenter);
     _mainLayout.addWidget(&_text);

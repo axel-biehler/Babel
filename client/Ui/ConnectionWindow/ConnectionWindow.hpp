@@ -2,8 +2,8 @@
 // Created by max on 27/09/2021.
 //
 
-#ifndef BABEL_WINDOW_HPP
-#define BABEL_WINDOW_HPP
+#ifndef BABEL_CONNECTIONWINDOW_HPP
+#define BABEL_CONNECTIONWINDOW_HPP
 
 #include <QWidget>
 #include <QVBoxLayout>
@@ -11,10 +11,10 @@
 
 namespace Babel {
     namespace Ui {
-        class Window : public QWidget {
+        class ConnectionWindow : public QWidget {
         public:
-            Window(QWidget *parent = 0);
-            ~Window();
+            ConnectionWindow(QWidget *parent = 0);
+            ~ConnectionWindow();
         private:
             QStackedWidget _pages;
             QGridLayout *_layout;
@@ -22,4 +22,4 @@ namespace Babel {
     }
 }
 
-#endif //BABEL_WINDOW_HPP
+#endif //BABEL_CONNECTIONWINDOW_HPP

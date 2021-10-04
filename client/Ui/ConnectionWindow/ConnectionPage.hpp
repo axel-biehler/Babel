@@ -2,8 +2,8 @@
 // Created by max on 27/09/2021.
 //
 
-#ifndef BABEL_CONNEXIONPAGE_HPP
-#define BABEL_CONNEXIONPAGE_HPP
+#ifndef BABEL_CONNECTIONPAGE_HPP
+#define BABEL_CONNECTIONPAGE_HPP
 
 #include <QWidget>
 #include <QLineEdit>
@@ -13,10 +13,10 @@
 
 namespace Babel {
     namespace Ui {
-        class ConnexionPage : public QWidget {
+        class ConnectionPage : public QWidget {
         public:
-            ConnexionPage(QWidget *parent = 0);
-            ~ConnexionPage() = default;
+            ConnectionPage(QWidget *parent = 0);
+            ~ConnectionPage() = default;
         private:
             QLineEdit _input;
             QVBoxLayout _mainLayout;
@@ -29,4 +29,4 @@ namespace Babel {
     }
 }
 
-#endif //BABEL_CONNEXIONPAGE_HPP
+#endif //BABEL_CONNECTIONPAGE_HPP
