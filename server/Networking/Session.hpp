@@ -11,6 +11,7 @@
 #include "asio.hpp"
 #include <string>
 #include <iostream>
+#include <Networking/RawPacket.hpp>
 
 namespace Babel {
     namespace Networking {
@@ -20,22 +21,24 @@ namespace Babel {
                 Session(const Session &session);
 
                 std::shared_ptr<asio::ip::tcp::socket> getSocket() const;
-                void setSocket(const std::shared_ptr<asio::ip::tcp::socket> socket);
-
+                char *getDate() const;
 
                 ~Session();
 
+
                 void start();
-            protected:
             private:
                 std::shared_ptr<asio::ip::tcp::socket> _socket;
-                char _data[1024];
+                char *_data;
                 std::vector<char> _buffer;
-                bool _readable = true;
 
+                //method
                 void write();
-
+                void on_read(std::error_code error, std::size_t bytes_transferred);
+                void on_write(std::error_code error, std::size_t bytes_transferred);
                 void read();
+                void handle_packet(Babel::Networking::RawPacket packet);
+
         };
     }
 }

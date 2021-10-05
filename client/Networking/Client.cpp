@@ -12,12 +12,12 @@ Babel::Networking::Client::Client(std::string adress, u_int16_t port) : QObject(
 {
     _in.setDevice(_socket);
     _in.setVersion(QDataStream::Qt_5_15);
+    connect(_socket, SIGNAL(bytesWritten(qint64)),this, SLOT(bytesWritten(qint64)));
 }
 
 void Babel::Networking::Client::start()
 {
     bool running = true;
-    connect(_socket, SIGNAL(bytesWritten(qint64)),this, SLOT(bytesWritten(qint64)));
     _socket->connectToHost(QHostAddress(_adress.c_str()), _port);
 
     if (_socket->waitForConnected()) {
@@ -26,7 +26,8 @@ void Babel::Networking::Client::start()
             std::string input;
 
             std::cin >> input;
-            _socket->write("azer");
+            _socket->write("azez");
+            _socket->flush();
             if (input == "exit\n")
                 running == false;
         }

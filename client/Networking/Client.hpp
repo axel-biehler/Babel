@@ -19,7 +19,6 @@ namespace Babel {
         private slots:
 
             void read();
-            void request();
             void bytesWritten(qint64 bytes);
 
 
