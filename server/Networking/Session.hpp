@@ -31,14 +31,16 @@ namespace Babel {
                 std::shared_ptr<asio::ip::tcp::socket> _socket;
                 char *_data;
                 std::vector<char> _buffer;
+                char *_size_str;
+                char _size;
 
                 //method
                 void write();
                 void on_read(std::error_code error, std::size_t bytes_transferred);
+                void on_read_data(std::error_code error, std::size_t bytes_transferred);
                 void on_write(std::error_code error, std::size_t bytes_transferred);
                 void read();
                 void handle_packet(Babel::Networking::RawPacket packet);
-
         };
     }
 }

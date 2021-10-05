@@ -4,6 +4,8 @@
 
 #include "Client.hpp"
 #include <iostream>
+#include <Networking/Packets/PacketCmdLogin.hpp>
+#include <Networking/RawPacket.hpp>
 
 Babel::Networking::Client::Client(std::string adress, u_int16_t port) : QObject(nullptr),
                                                                          _socket(new QTcpSocket(this)),
@@ -18,18 +20,23 @@ Babel::Networking::Client::Client(std::string adress, u_int16_t port) : QObject(
 void Babel::Networking::Client::start()
 {
     bool running = true;
+    std::string str;
+    Babel::Networking::Packets::PacketCmdLogin packet("joooooe");
+    std::vector<char> rawBytes = packet.serialize().getData();
+
+    for (int i = 0; rawBytes.size() > i; i++)
+        str.push_back(rawBytes[i]);
+
     _socket->connectToHost(QHostAddress(_adress.c_str()), _port);
 
     if (_socket->waitForConnected()) {
+        std::cout << str << std::endl;
+        _socket->write(str.c_str(), str.length());
+        _socket->flush();
         while (running) {
-            std::cout << "here" << std::endl;
-            std::string input;
-
-            std::cin >> input;
-            _socket->write("azez");
-            _socket->flush();
-            if (input == "exit\n")
-                running == false;
+            std::cin >> str;
+            if (str == "exit\n");
+                return;
         }
     }
 }
