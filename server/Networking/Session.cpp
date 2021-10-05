@@ -65,6 +65,7 @@ void Babel::Networking::Session::on_read_data(std::error_code error, std::size_t
             _buffer.push_back(_data[i]);
         auto rawPacket = Babel::Networking::RawPacket(_buffer);
         handle_packet(rawPacket);
+        write();
     }
 }
 
