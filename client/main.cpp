@@ -2,15 +2,19 @@
 #include <QWindow>
 #include <QLabel>
 #include <iostream>
-#include <../shared/audio/Portaudio.hpp>
-#include <../shared/audio/Opus.hpp>
+#include "audio/Portaudio.hpp"
+#include "audio/Opus.hpp"
 
+void test_function(std::queue<std::vector<float>> samples)
+{
+    (void)samples;
+}
 
 int main(int ac, char **av)
 {
     QApplication app{ac, av};
-    PortAudio audioHandler = PortAudio();
-    Opus compressor = Opus();
+    Babel::Audio::PortAudio audioHandler = Babel::Audio::PortAudio(test_function);
+    Babel::Compression::Opus compressor = Babel::Compression::Opus();
     std::queue<std::vector<float>> samples;
     std::queue<std::vector<unsigned char>> compressed_samples;
 
@@ -18,7 +22,7 @@ int main(int ac, char **av)
     Pa_Sleep(5000);
     audioHandler.stopRecording();
     std::cout << "compressing..." << std::endl;
-    samples = audioHandler.get_audio_samples();
+    samples = audioHandler.get_audio_input();
     for (; !samples.empty();) {
         compressed_samples.push(compressor.encode(samples.front()));
         samples.pop();
@@ -28,7 +32,7 @@ int main(int ac, char **av)
         samples.push(compressor.decode(compressed_samples.front()));
         compressed_samples.pop();
     }
-    audioHandler.set_audio_samples(samples);
+    audioHandler.set_audio_output(samples);
     std::cout << "playing" << std::endl;
     audioHandler.startPlaying();
     Pa_Sleep(5000);

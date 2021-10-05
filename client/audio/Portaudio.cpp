@@ -6,13 +6,19 @@
 */
 
 #include <cstdlib>
-#include <cstdio>
 #include <iostream>
+#include <utility>
 #include "Portaudio.hpp"
 
-PortAudio::PortAudio() {
+Babel::Audio::PortAudio::PortAudio(void (*sender)(std::queue<std::vector<float>>)) {
     PaError err = Pa_Initialize();
 
+    if (sender)
+        _sender = sender;
+    else {
+        exit(84);
+        //TODO: throw error
+    }
     if (err != paNoError) {
         std::cerr << "PortAudio initialisation failed." << std::endl;
         exit(84);
@@ -42,11 +48,11 @@ PortAudio::PortAudio() {
     _is_initialized = true;
 }
 
-PortAudio::~PortAudio() {
+Babel::Audio::PortAudio::~PortAudio() {
     Pa_Terminate();
 }
 
-void PortAudio::startRecording() {
+void Babel::Audio::PortAudio::startRecording() {
     if (!_is_initialized) {
         exit(84);
         //TODO: throw error
@@ -64,7 +70,7 @@ void PortAudio::startRecording() {
     _recording = true;
 }
 
-void PortAudio::stopRecording() {
+void Babel::Audio::PortAudio::stopRecording() {
     if (!_is_initialized || !_recording) {
         exit(84);
         //TODO: throw error
@@ -76,7 +82,7 @@ void PortAudio::stopRecording() {
     }
 }
 
-void PortAudio::startPlaying() {
+void Babel::Audio::PortAudio::startPlaying() {
     PaError err = Pa_OpenStream(&_stream, nullptr, &_outputParameters, SAMPLE_RATE, FRAMES_PER_BUFFER, paClipOff, playCallback, this);
     if (err != paNoError) {
         exit(84);
@@ -89,7 +95,7 @@ void PortAudio::startPlaying() {
     }
 }
 
-void PortAudio::stopPlaying() {
+void Babel::Audio::PortAudio::stopPlaying() {
     PaError err = Pa_CloseStream(_stream);
     if (err != paNoError) {
         exit(84);
@@ -97,24 +103,25 @@ void PortAudio::stopPlaying() {
     }
 }
 
-int PortAudio::recordCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags, void *userData) {
+int Babel::Audio::PortAudio::recordCallback(const void *inputBuffer, void *, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags , void *userData) {
     auto *audioHandler = (PortAudio *)userData;
     std::vector<float> newAudio = std::vector<float>();
 
     newAudio.assign((float *)inputBuffer, (float *)inputBuffer + framesPerBuffer * STEREO);
-    audioHandler->_audio_samples.push(newAudio);
+    audioHandler->_input_sample.push(newAudio);
+    audioHandler->send_audio(audioHandler->get_audio_input());
     return 0;
 }
 
-int PortAudio::playCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags, void *userData) {
+int Babel::Audio::PortAudio::playCallback(const void *, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags , void *userData) {
     auto *audioHandler = (PortAudio *)userData;
     auto *output = (float *)outputBuffer;
 
-    if (audioHandler->_audio_samples.empty())
+    if (audioHandler->_output_sample.empty())
         return 1;
-    std::vector<float> playAudio = audioHandler->_audio_samples.front();
+    std::vector<float> playAudio = audioHandler->_output_sample.front();
     auto it = playAudio.begin();
-    audioHandler->_audio_samples.pop();
+    audioHandler->_output_sample.pop();
     for (int i = 0; i < framesPerBuffer * STEREO; i++) {
         if (it != playAudio.end())
             *(output++) = *(it++);
@@ -124,10 +131,22 @@ int PortAudio::playCallback(const void *inputBuffer, void *outputBuffer, unsigne
     return 0;
 }
 
-std::queue<std::vector<float>> PortAudio::get_audio_samples() {
-    return _audio_samples;
+std::queue<std::vector<float>> Babel::Audio::PortAudio::get_audio_input() {
+    return _input_sample;
 }
 
-void PortAudio::set_audio_samples(std::queue<std::vector<float>> samples) {
-    _audio_samples = samples;
+std::queue<std::vector<float>> Babel::Audio::PortAudio::get_audio_output() {
+    return _output_sample;
+}
+
+void Babel::Audio::PortAudio::set_audio_input(std::queue<std::vector<float>> &samples) {
+    _input_sample = samples;
+}
+
+void Babel::Audio::PortAudio::set_audio_output(std::queue<std::vector<float>> &samples) {
+    _output_sample = samples;
+}
+
+void Babel::Audio::PortAudio::send_audio(std::queue<std::vector<float>> samples) {
+    _sender(std::move(samples));
 }

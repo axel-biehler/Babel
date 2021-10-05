@@ -8,7 +8,7 @@
 #include <QtEndian>
 #include "Opus.hpp"
 
-Opus::Opus() {
+Babel::Compression::Opus::Opus() {
     int error;
 
     _encoder = opus_encoder_create(SAMPLE_RATE, STEREO, OPUS_APPLICATION_VOIP, &error);
@@ -23,12 +23,12 @@ Opus::Opus() {
     }
 }
 
-Opus::~Opus() {
+Babel::Compression::Opus::~Opus() {
     opus_encoder_destroy(_encoder);
     opus_decoder_destroy(_decoder);
 }
 
-std::vector<unsigned char> Opus::encode(std::vector<float> audio_input) {
+std::vector<unsigned char> Babel::Compression::Opus::encode(std::vector<float> audio_input) {
     std::vector<unsigned char> encoded_buff;
 
     if (audio_input.empty()) {
@@ -36,14 +36,13 @@ std::vector<unsigned char> Opus::encode(std::vector<float> audio_input) {
         return encoded_buff;
     }
     encoded_buff.resize(audio_input.size() * 2);
-        //TODO: check si empty avec stereo
     opus_int32 nb_encoded = opus_encode_float(_encoder, audio_input.data(), FRAMES_PER_BUFFER, encoded_buff.data(), static_cast<int>(audio_input.size()) * 2);
     if (nb_encoded)
         encoded_buff.resize(nb_encoded);
     return encoded_buff;
 }
 
-std::vector<float> Opus::decode(std::vector<unsigned char> encoded) {
+std::vector<float> Babel::Compression::Opus::decode(std::vector<unsigned char> encoded) {
     std::vector<float> decoded_buff;
 
     if (encoded.empty()) {

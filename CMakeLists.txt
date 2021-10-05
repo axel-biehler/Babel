@@ -17,7 +17,9 @@ add_executable(babel_client client/main.cpp
         shared/Networking/Packets/PacketRespRegister.cpp shared/Networking/Packets/PacketRespRegister.hpp
         shared/Networking/Packets/PacketCmdLogin.cpp shared/Networking/Packets/PacketCmdLogin.hpp
         shared/Networking/Packets/PacketRespLogin.cpp shared/Networking/Packets/PacketRespLogin.hpp
-        shared/Networking/Packets/PacketCmdLogout.cpp shared/Networking/Packets/PacketCmdLogout.hpp shared/audio/Portaudio.cpp shared/audio/Portaudio.hpp shared/audio/Opus.cpp shared/audio/Opus.hpp)
+        shared/Networking/Packets/PacketCmdLogout.cpp shared/Networking/Packets/PacketCmdLogout.hpp
+        client/audio/Portaudio.cpp client/audio/Portaudio.hpp
+        client/audio/Opus.cpp client/audio/Opus.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_link_directories(babel_client PUBLIC ${CMAKE_BINARY_DIR}/bin/lib)
