@@ -19,9 +19,7 @@ namespace Babel {
             public:
                 Session(std::shared_ptr<asio::ip::tcp::socket> socket);
                 Session(const Session &session);
-
                 std::shared_ptr<asio::ip::tcp::socket> getSocket() const;
-                char *getDate() const;
 
                 ~Session();
 
@@ -38,7 +36,6 @@ namespace Babel {
                 void write();
                 void on_read(std::error_code error, std::size_t bytes_transferred);
                 void on_read_data(std::error_code error, std::size_t bytes_transferred);
-                void on_write(std::error_code error, std::size_t bytes_transferred);
                 void read();
                 void handle_packet(Babel::Networking::RawPacket packet);
         };

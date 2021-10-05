@@ -82,24 +82,15 @@ void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawP
 
 void Babel::Networking::Session::write()
 {
-    // Schedule asynchronous sending of the data
-    _socket->async_send(asio::buffer(_data, 4), std::bind(&Session::on_write, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+    std::string str = "";
+    for (int i = 0; i < _buffer.size(); i++)
+        str.push_back(_buffer[i]);
+    _socket->send(asio::buffer(str, str.size()));
+    read();
 }
-
-void Babel::Networking::Session::on_write(std::error_code error, std::size_t bytes_transferred) {
-    if (!error) {
-        // When the data is sent and no error occurred, return to the first step
-        read();
-    }
-}
-
 //setter getter
 
 std::shared_ptr<asio::ip::tcp::socket> Babel::Networking::Session::getSocket() const
 {
     return _socket;
-}
-
-char *Babel::Networking::Session::getDate() const {
-    return _data;
 }
