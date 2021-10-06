@@ -40,3 +40,11 @@ Babel::Networking::PacketType Babel::Networking::RawPacket::getPacketType() cons
 const std::vector<char> Babel::Networking::RawPacket::getData() const {
     return _data;
 }
+
+const std::string Babel::Networking::RawPacket::toStdString() const {
+    std::string str = "";
+
+    for (int i = 0; i < _data.size(); i++)
+        str.push_back(_data[i]);
+    return str;
+}

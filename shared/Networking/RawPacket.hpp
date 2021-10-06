@@ -16,6 +16,7 @@ namespace Babel {
             PacketType getPacketType() const;
 
             const std::vector<char> getData() const;
+            const std::string toStdString() const;
 
         private:
             std::vector<char> _data;

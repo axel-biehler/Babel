@@ -3,7 +3,7 @@ project(Babel)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 conan_basic_setup(TARGETS)
@@ -35,12 +35,13 @@ add_executable(babel_client client/main.cpp
         client/Ui/ChatWidget.cpp client/Ui/ChatWidget.hpp
         client/Ui/FriendItemWidget.cpp client/Ui/FriendItemWidget.hpp
         client/Ui/MessageWidget.cpp client/Ui/MessageWidget.hpp
-        client/Ui/CallWindow.cpp client/Ui/CallWindow.hpp)
+        client/Ui/CallWindow.cpp client/Ui/CallWindow.hpp
+        client/Networking/Client.cpp client/Networking/Client.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/client)
 target_link_directories(babel_client PUBLIC ${CMAKE_BINARY_DIR}/bin/lib)
-target_link_libraries(babel_client CONAN_PKG::portaudio CONAN_PKG::opus Qt5::Widgets)
+target_link_libraries(babel_client CONAN_PKG::portaudio CONAN_PKG::opus Qt5::Widgets Qt5::Network)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/client/images DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
 add_executable(babel_server server/main.cpp
@@ -56,7 +57,9 @@ add_executable(babel_server server/main.cpp
         shared/Networking/Packets/PacketCmdLogout.cpp shared/Networking/Packets/PacketCmdLogout.hpp
         server/Database/Database.cpp server/Database/Database.hpp
         server/Database/IModel.hpp
-        server/Database/User.cpp server/Database/User.hpp )
+        server/Database/User.cpp server/Database/User.hpp
+        server/Networking/Server.cpp server/Networking/Server.hpp
+        server/Networking/Session.cpp server/Networking/Session.hpp)
 target_include_directories(babel_server PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/server)
