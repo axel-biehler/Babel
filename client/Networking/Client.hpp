@@ -10,12 +10,20 @@
 
 namespace Babel {
     namespace Networking {
-        class Client : public QObject {
+        class   Client : public QObject {
         Q_OBJECT
         public:
 
             Client(std::string adress, u_int16_t port);
             void start();
+
+        signals:
+            /*
+             * when packet receive emit signal you need to connect your slot function to connect
+             * your object with this object => connect(Object1(this), PacketReceive, Object2, yourSlotFunc);
+             * https://doc.qt.io/qt-5/signalsandslots.html
+             */
+            void packetReceive(Babel::Networking::RawPacket);
 
         private slots:
 

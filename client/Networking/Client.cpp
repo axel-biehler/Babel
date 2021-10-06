@@ -48,7 +48,7 @@ void Babel::Networking::Client::readyRead()
     for (int i = 0; i < raw.i; i++)
         bytesArray.push_back(str[i]);
     auto rawPacket = Babel::Networking::RawPacket(bytesArray);
-    handle_packet(rawPacket);
+    emit packetReceive(rawPacket);
 }
 
 void Babel::Networking::Client::write(Babel::Networking::RawPacket rawPacket)
