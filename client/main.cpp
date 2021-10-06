@@ -13,9 +13,9 @@ void test_function(std::queue<std::vector<float>> samples)
 int main(int ac, char **av)
 {
     QApplication app{ac, av};
-    Babel::Management::LibHandler libHandler = Babel::Management::LibHandler();
-    Babel::Audio::PortAudio audioHandler = Babel::Audio::PortAudio();
-    Babel::Compression::Opus compressor = Babel::Compression::Opus();
+    Babel::Management::LibHandler libHandler;
+    Babel::Audio::PortAudio audioHandler;
+    Babel::Compression::Opus compressor;
     std::queue<std::vector<float>> samples;
     std::queue<std::vector<unsigned char>> compressed_samples;
 
