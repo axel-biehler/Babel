@@ -69,5 +69,4 @@ void Babel::Networking::Client::handle_packet(Babel::Networking::RawPacket rawPa
 
 void Babel::Networking::Client::bytesWritten(qint64 bytes)
 {
-    qDebug() << bytes << " bytes written...";
 }

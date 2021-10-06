@@ -19,6 +19,7 @@ Babel::Networking::Session::Session(std::shared_ptr<asio::ip::tcp::socket> socke
 Babel::Networking::Session::Session(const Session &session) : _socket(session.getSocket())
 {
     _data = (char *)(malloc(1024));
+    _size_str = (char *)(malloc(4));
 }
 
 Babel::Networking::Session::~Session()
@@ -41,32 +42,31 @@ void Babel::Networking::Session::read()
 
 void Babel::Networking::Session::on_read(std::error_code error, std::size_t bytes_transferred)
 {
-    if(!error)
-    {
-        try {
-            RawInt raw{};
-            for (int i = 0; i < sizeof(raw.i); i++)
-                raw.c[i] = _data[i];
-            for (int i = 0; i < 4; i++)
-                _buffer.push_back(_data[i]);
-            _size = raw.i - 4;
-            _socket->async_receive(asio::buffer(_data, raw.i - 4), std::bind(&Session::on_read_data, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
-        }
-        catch (std::invalid_argument err) {
-            std::cerr << err.what() << std::endl;
-        }
+    if(error)
+        return;
+    try {
+        RawInt raw{};
+        for (int i = 0; i < sizeof(raw.i); i++)
+            raw.c[i] = _data[i];
+        for (int i = 0; i < 4; i++)
+            _buffer.push_back(_data[i]);
+        _size = raw.i - 4;
+        _socket->async_receive(asio::buffer(_data, raw.i - 4), std::bind(&Session::on_read_data, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+    }
+    catch (std::invalid_argument err) {
+        std::cerr << err.what() << std::endl;
     }
 }
 
 void Babel::Networking::Session::on_read_data(std::error_code error, std::size_t bytes_transferred)
 {
-    if (!error) {
-        for (int i = 0; i < _size; i++)
-            _buffer.push_back(_data[i]);
-        auto rawPacket = Babel::Networking::RawPacket(_buffer);
-        handle_packet(rawPacket);
-        write();
-    }
+    if (error)
+        return;
+    for (int i = 0; i < _size; i++)
+        _buffer.push_back(_data[i]);
+    auto rawPacket = Babel::Networking::RawPacket(_buffer);
+    handle_packet(rawPacket);
+    write();
 }
 
 void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawPacket) {
