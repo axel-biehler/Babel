@@ -10,7 +10,6 @@
 
 #include <cstdlib>
 #include "opus.h"
-#include "Portaudio.hpp"
 
 namespace Babel::Compression {
     class Opus {

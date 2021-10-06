@@ -8,6 +8,10 @@
 #include <QtEndian>
 #include "Opus.hpp"
 
+#define STEREO              2
+#define SAMPLE_RATE         48000
+#define FRAMES_PER_BUFFER   480
+
 Babel::Compression::Opus::Opus() {
     int error;
 

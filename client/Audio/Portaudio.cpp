@@ -10,15 +10,10 @@
 #include <utility>
 #include "Portaudio.hpp"
 
-Babel::Audio::PortAudio::PortAudio(void (*sender)(std::queue<std::vector<float>>)) {
+Babel::Audio::PortAudio::PortAudio(): IAudio() {
     PaError err = Pa_Initialize();
 
-    if (sender)
-        _sender = sender;
-    else {
-        exit(84);
-        //TODO: throw error
-    }
+    _sender = nullptr;
     if (err != paNoError) {
         std::cerr << "PortAudio initialisation failed." << std::endl;
         exit(84);
@@ -148,5 +143,11 @@ void Babel::Audio::PortAudio::set_audio_output(std::queue<std::vector<float>> &s
 }
 
 void Babel::Audio::PortAudio::send_audio(std::queue<std::vector<float>> samples) {
-    _sender(std::move(samples));
+    if (_sender)
+        _sender->get()->send(samples);
+    // ->get()->send(samples);
+}
+
+void Babel::Audio::PortAudio::set_sender(Babel::Management::LibHandler *sender) {
+    _sender = reinterpret_cast<std::shared_ptr<Babel::Management::LibHandler> *>(sender);
 }

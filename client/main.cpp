@@ -2,8 +2,8 @@
 #include <QWindow>
 #include <QLabel>
 #include <iostream>
-#include "audio/Portaudio.hpp"
-#include "audio/Opus.hpp"
+#include "Audio/Portaudio.hpp"
+#include "Audio/Opus.hpp"
 
 void test_function(std::queue<std::vector<float>> samples)
 {
@@ -13,11 +13,13 @@ void test_function(std::queue<std::vector<float>> samples)
 int main(int ac, char **av)
 {
     QApplication app{ac, av};
-    Babel::Audio::PortAudio audioHandler = Babel::Audio::PortAudio(test_function);
+    Babel::Management::LibHandler libHandler = Babel::Management::LibHandler();
+    Babel::Audio::PortAudio audioHandler = Babel::Audio::PortAudio();
     Babel::Compression::Opus compressor = Babel::Compression::Opus();
     std::queue<std::vector<float>> samples;
     std::queue<std::vector<unsigned char>> compressed_samples;
 
+    audioHandler.set_sender(&libHandler);
     audioHandler.startRecording();
     Pa_Sleep(5000);
     audioHandler.stopRecording();
