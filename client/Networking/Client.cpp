@@ -24,7 +24,6 @@ void Babel::Networking::Client::start(const std::string &address, u_int16_t port
 void Babel::Networking::Client::readyRead()
 {
     QByteArray datas = _socket->readAll();
-    std::cout << datas.length() << " data received" << std::endl;
     std::string str = datas.toStdString();
     RawInt raw{};
     std::vector<char> bytesArray;
@@ -39,7 +38,7 @@ void Babel::Networking::Client::readyRead()
 
 void Babel::Networking::Client::write(Babel::Networking::RawPacket rawPacket)
 {
-    _socket->write(rawPacket.toStdString().c_str());
+    _socket->write(rawPacket.getData().data(), rawPacket.getData().size());
     _socket->flush();
 }
 

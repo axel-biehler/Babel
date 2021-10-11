@@ -55,7 +55,6 @@ void Babel::Ui::ConnectionPage::Login()
 }
 
 void Babel::Ui::ConnectionPage::OnPacketReceived(Babel::Networking::RawPacket packet) {
-    std::cout << "got packet" << std::endl;
     switch (packet.getPacketType()) {
         case Networking::PacketRespLogin:
             QMessageBox::information(this, "Titre de la fenêtre", "Bonjour et bienvenueà tous les Zéros !");
