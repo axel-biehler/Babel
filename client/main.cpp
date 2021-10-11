@@ -1,4 +1,4 @@
-#include <QApplication>
+#   include <QApplication>
 #include <Ui/ConnectionWindow/ConnectionWindow.hpp>
 #include <Networking/Client.hpp>
 

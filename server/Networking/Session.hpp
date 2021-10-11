@@ -12,12 +12,13 @@
 #include <string>
 #include <iostream>
 #include <Networking/RawPacket.hpp>
+#include <Database/Database.hpp>
 
 namespace Babel {
     namespace Networking {
         class Session : public std::enable_shared_from_this<Session> {
             public:
-                Session(std::shared_ptr<asio::ip::tcp::socket> socket);
+                Session(std::shared_ptr<asio::ip::tcp::socket> socket, std::shared_ptr<Babel::Database::Database> db);
                 Session(const Session &session);
                 std::shared_ptr<asio::ip::tcp::socket> getSocket() const;
 
@@ -31,6 +32,7 @@ namespace Babel {
                 std::vector<char> _buffer;
                 char *_size_str;
                 char _size;
+                std::shared_ptr<Babel::Database::Database> _db;
 
                 //method
                 void on_read(std::error_code error, std::size_t bytes_transferred);

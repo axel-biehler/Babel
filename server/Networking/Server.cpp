@@ -7,7 +7,10 @@
 
 #include "Server.hpp"
 
-Babel::Networking::Server::Server(asio::io_context& io_context, short port) : _acceptor(io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)), _io_context(io_context)
+Babel::Networking::Server::Server(asio::io_context& io_context, short port, std::shared_ptr<Babel::Database::Database> db) :
+    _acceptor(io_context,asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)),
+    _io_context(io_context),
+    _db(db)
 {
 }
 
@@ -23,7 +26,7 @@ void Babel::Networking::Server::async_accept()
     {
         if (!err) {
             std::cout << "connected" << std::endl;
-            auto session = std::make_shared<Babel::Networking::Session>(socket_ptr);
+            auto session = std::make_shared<Babel::Networking::Session>(socket_ptr, _db);
             session->start();
             _sessions.push_back(session);
             async_accept();

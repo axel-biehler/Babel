@@ -11,7 +11,7 @@
 #include <Networking/Packets/PacketCmdLogin.hpp>
 #include <Networking/Packets/PacketRespLogin.hpp>
 
-Babel::Networking::Session::Session(std::shared_ptr<asio::ip::tcp::socket> socket) : _socket(socket)
+Babel::Networking::Session::Session(std::shared_ptr<asio::ip::tcp::socket> socket, std::shared_ptr<Babel::Database::Database> db) : _socket(socket), _db(db)
 {
     _data = (char *)(malloc(1024));
     _size_str = (char *)(malloc(4));

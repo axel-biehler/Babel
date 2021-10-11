@@ -12,12 +12,13 @@
 #include "Session.hpp"
 #include <optional>
 #include <vector>
+#include <Database/Database.hpp>
 
 namespace Babel {
     namespace Networking {
         class Server {
             public:
-                Server(asio::io_context& io_context, short port);
+                Server(asio::io_context& io_context, short port, std::shared_ptr<Babel::Database::Database> db);
                 ~Server();
 
                 void async_accept();
@@ -28,6 +29,7 @@ namespace Babel {
                 asio::ip::tcp::acceptor _acceptor;
                 asio::io_context& _io_context;
                 std::vector<std::shared_ptr<Babel::Networking::Session>> _sessions;
+                std::shared_ptr<Babel::Database::Database> _db;
         };
     }
 }
