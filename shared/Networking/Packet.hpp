@@ -13,8 +13,7 @@ namespace Babel {
             PacketCmdLogin,
             PacketRespLogin,
             PacketCmdLogout,
-            PacketCmdListOnlineUsers,
-            PacketRespListOnlineUsers,
+            PacketAudio,
         };
 
         enum PacketArgType {
@@ -22,6 +21,7 @@ namespace Babel {
             PacketArgUnsignedInt,
             PacketArgInt,
             PacketArgChar,
+            PacketArgUnsignedChar,
         };
 
         class Packet {

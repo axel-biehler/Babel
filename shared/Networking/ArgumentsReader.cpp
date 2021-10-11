@@ -43,6 +43,14 @@ char Babel::Networking::ArgumentsReader::readChar() {
     return _data[_cursor - 1];
 }
 
+unsigned char Babel::Networking::ArgumentsReader::readUnsignedChar() {
+    checkType(PacketArgUnsignedChar);
+    RawUnsignedChar raw{};
+    raw.c = _data[_cursor];
+    _cursor++;
+    return raw.u;
+}
+
 std::vector<Babel::Networking::PacketArgType> Babel::Networking::ArgumentsReader::getTypes() const {
     return _types;
 }

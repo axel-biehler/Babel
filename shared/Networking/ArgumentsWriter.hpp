@@ -12,6 +12,7 @@ namespace Babel {
             void addUnsignedInt(const unsigned int &value);
             void addInt(const int &value);
             void addChar(const char &value);
+            void addUnsignedChar(const unsigned char &value);
 
             std::vector<char> build() const;
 

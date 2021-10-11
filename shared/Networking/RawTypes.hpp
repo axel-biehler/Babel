@@ -10,5 +10,9 @@ namespace Babel {
             char c[4];
             unsigned int i;
         };
+        union RawUnsignedChar {
+            char c;
+            unsigned char u;
+        };
     }
 }

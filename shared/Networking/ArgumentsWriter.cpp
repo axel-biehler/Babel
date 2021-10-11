@@ -35,6 +35,14 @@ void Babel::Networking::ArgumentsWriter::addChar(const char &value) {
     _data.push_back(value);
 }
 
+void Babel::Networking::ArgumentsWriter::addUnsignedChar(const unsigned char &value) {
+    _types.push_back(PacketArgUnsignedChar);
+    RawUnsignedChar raw{};
+
+    raw.u = value;
+    _data.push_back(raw.c);
+}
+
 std::vector<char> Babel::Networking::ArgumentsWriter::build() const {
     std::vector<char> data;
 
