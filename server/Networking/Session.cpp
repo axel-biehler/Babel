@@ -10,14 +10,20 @@
 #include <Networking/RawTypes.hpp>
 #include <Networking/Packets/PacketCmdLogin.hpp>
 #include <Networking/Packets/PacketRespLogin.hpp>
+#include <utility>
 
-Babel::Networking::Session::Session(std::shared_ptr<asio::ip::tcp::socket> socket, std::shared_ptr<Babel::Database::Database> db) : _socket(socket), _db(db)
+Babel::Networking::Session::Session(std::shared_ptr<asio::ip::tcp::socket> socket, std::shared_ptr<Babel::Database::Database> db) :
+    _socket(std::move(socket)),
+    _db(std::move(db)),
+    _handlePacket(std::make_shared<Babel::Networking::HandlePacket>(std::move(_db)))
 {
     _data = (char *)(malloc(1024));
     _size_str = (char *)(malloc(4));
 }
 
-Babel::Networking::Session::Session(const Session &session) : _socket(session.getSocket())
+Babel::Networking::Session::Session(const Session &session) : _socket(session.getSocket()),
+    _handlePacket(std::make_shared<Babel::Networking::HandlePacket>(std::move(_db)))
+
 {
     _data = (char *)(malloc(1024));
     _size_str = (char *)(malloc(4));
@@ -73,13 +79,8 @@ void Babel::Networking::Session::on_read_data(std::error_code error, std::size_t
 void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawPacket) {
     switch (rawPacket.getPacketType()) {
         case Babel::Networking::PacketType::PacketCmdLogin:
-            auto newPacket = std::static_pointer_cast<Babel::Networking::Packets::PacketCmdLogin>(
-                    rawPacket.deserialize());
-            std::cout << newPacket->getUsername() << std::endl;
-            Packets::PacketRespLogin packet{1, ""};
-            write(packet.serialize());
+            write(_handlePacket->handleCmdLoginPacket(rawPacket));
             break;
-
     }
 }
 
@@ -93,3 +94,4 @@ std::shared_ptr<asio::ip::tcp::socket> Babel::Networking::Session::getSocket() c
 {
     return _socket;
 }
+

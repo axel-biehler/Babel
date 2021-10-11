@@ -31,6 +31,21 @@ void Babel::Database::User::getById(const Babel::Database::Database &db, int id)
     sqlite3_finalize(stmt);
 }
 
+void Babel::Database::User::getByUsername(const Babel::Database::Database &db, const std::string &name)
+{
+    auto sqlite{db.getHandle()};
+
+    sqlite3_stmt *stmt;
+    std::string query{"SELECT * FROM Users WHERE username=" + name};
+
+    sqlite3_prepare_v2(sqlite, query.c_str(), -1, &stmt, nullptr);
+    if (sqlite3_step(stmt) != SQLITE_ROW)
+        throw std::runtime_error("User not found");
+    _id = sqlite3_column_int(stmt, 0);
+    _username = std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
+    sqlite3_finalize(stmt);
+}
+
 std::string Babel::Database::User::getUsername() const {
     return _username;
 }

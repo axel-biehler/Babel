@@ -9,6 +9,7 @@
 #define SESSION_HPP_
 
 #include "asio.hpp"
+#include "HandlePacket.h"
 #include <string>
 #include <iostream>
 #include <Networking/RawPacket.hpp>
@@ -20,9 +21,11 @@ namespace Babel {
             public:
                 Session(std::shared_ptr<asio::ip::tcp::socket> socket, std::shared_ptr<Babel::Database::Database> db);
                 Session(const Session &session);
-                std::shared_ptr<asio::ip::tcp::socket> getSocket() const;
 
-                ~Session();
+                std::shared_ptr<asio::ip::tcp::socket> getSocket() const;
+                void write(Babel::Networking::RawPacket rawPacket);
+
+            ~Session();
 
                 void start();
                 void write(RawPacket packet);
@@ -33,6 +36,7 @@ namespace Babel {
                 char *_size_str;
                 char _size;
                 std::shared_ptr<Babel::Database::Database> _db;
+                std::shared_ptr<Babel::Networking::HandlePacket> _handlePacket;
 
                 //method
                 void on_read(std::error_code error, std::size_t bytes_transferred);
