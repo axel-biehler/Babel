@@ -29,4 +29,3 @@ Babel::Networking::RawPacket Babel::Networking::Packets::PacketCmdLogin::seriali
     writer.addString(_password);
     return {build(writer.build())};
 }
-

@@ -39,7 +39,8 @@ add_executable(babel_client client/main.cpp
         client/Audio/Portaudio.cpp client/Audio/Portaudio.hpp
         client/Audio/Opus.cpp client/Audio/Opus.hpp
         client/LibHandler/LibHandler.cpp client/LibHandler/LibHandler.hpp
-        client/Audio/IAudio.hpp)
+        client/Audio/IAudio.hpp
+        shared/Networking/Packets/PacketAudio.cpp shared/Networking/Packets/PacketAudio.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/client)

@@ -14,6 +14,7 @@ namespace Babel {
             unsigned int readUnsignedInt();
             int readInt();
             char readChar();
+            unsigned char readUnsignedChar();
 
             std::vector<PacketArgType> getTypes() const;
 
