@@ -9,6 +9,7 @@
 #include <Networking/RawPacket.hpp>
 #include <Networking/RawTypes.hpp>
 #include <Networking/Packets/PacketCmdLogin.hpp>
+#include <Networking/Packets/PacketRespLogin.hpp>
 
 Babel::Networking::Session::Session(std::shared_ptr<asio::ip::tcp::socket> socket) : _socket(socket)
 {
@@ -66,7 +67,7 @@ void Babel::Networking::Session::on_read_data(std::error_code error, std::size_t
         _buffer.push_back(_data[i]);
     auto rawPacket = Babel::Networking::RawPacket(_buffer);
     handle_packet(rawPacket);
-    write();
+    read();
 }
 
 void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawPacket) {
@@ -75,20 +76,18 @@ void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawP
             auto newPacket = std::static_pointer_cast<Babel::Networking::Packets::PacketCmdLogin>(
                     rawPacket.deserialize());
             std::cout << newPacket->getUsername() << std::endl;
+            Packets::PacketRespLogin packet{1, ""};
+            write(packet.serialize());
             break;
 
     }
 }
 
-void Babel::Networking::Session::write()
+void Babel::Networking::Session::write(Babel::Networking::RawPacket rawPacket)
 {
-    std::string str = "";
-    for (int i = 0; i < _buffer.size(); i++)
-        str.push_back(_buffer[i]);
-    _socket->send(asio::buffer(str, str.size()));
-    read();
+    auto data{rawPacket.toStdString()};
+    _socket->send(asio::buffer(data, data.size()));
 }
-//setter getter
 
 std::shared_ptr<asio::ip::tcp::socket> Babel::Networking::Session::getSocket() const
 {

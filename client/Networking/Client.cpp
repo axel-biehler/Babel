@@ -8,37 +8,23 @@
 #include <Networking/RawPacket.hpp>
 #include <Networking/RawTypes.hpp>
 
-Babel::Networking::Client::Client(std::string adress, u_int16_t port) : QObject(nullptr),
-                                                                         _socket(new QTcpSocket(this)),
-                                                                         _adress(std::move(adress)),
-                                                                         _port(std::move(port))
+Babel::Networking::Client::Client() : QObject(nullptr), _socket(new QTcpSocket(this))
 {
     _in.setDevice(_socket);
     _in.setVersion(QDataStream::Qt_5_15);
-    connect(_socket, SIGNAL(bytesWritten(qint64)),this, SLOT(bytesWritten(qint64)));
     connect(_socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 }
 
-void Babel::Networking::Client::start()
+void Babel::Networking::Client::start(const std::string &address, u_int16_t port)
 {
-    std::string str;
-    Babel::Networking::Packets::PacketCmdLogin packet("joooooe");
-    std::vector<char> rawBytes = packet.serialize().getData();
-
-    for (int i = 0; rawBytes.size() > i; i++)
-        str.push_back(rawBytes[i]);
-
-    _socket->connectToHost(QHostAddress(_adress.c_str()), _port);
-
-    if (_socket->waitForConnected()) {
-        _socket->write(str.c_str(), str.length());
-        _socket->flush();
-    }
+    _socket->connectToHost(QHostAddress(address.c_str()), port);
+    _socket->waitForConnected();
 }
 
 void Babel::Networking::Client::readyRead()
 {
     QByteArray datas = _socket->readAll();
+    std::cout << datas.length() << " data received" << std::endl;
     std::string str = datas.toStdString();
     RawInt raw{};
     std::vector<char> bytesArray;
@@ -54,19 +40,9 @@ void Babel::Networking::Client::readyRead()
 void Babel::Networking::Client::write(Babel::Networking::RawPacket rawPacket)
 {
     _socket->write(rawPacket.toStdString().c_str());
+    _socket->flush();
 }
 
-void Babel::Networking::Client::handle_packet(Babel::Networking::RawPacket rawPacket)
-{
-    switch (rawPacket.getPacketType()) {
-        case Babel::Networking::PacketType::PacketCmdLogin:
-            auto newPacket = std::static_pointer_cast<Babel::Networking::Packets::PacketCmdLogin>(
-                    rawPacket.deserialize());
-            std::cout << newPacket->getUsername() << std::endl;
-            break;
-    }
-}
-
-void Babel::Networking::Client::bytesWritten(qint64 bytes)
-{
+bool Babel::Networking::Client::isConnected() const {
+    return _socket->state() == QAbstractSocket::ConnectedState;
 }

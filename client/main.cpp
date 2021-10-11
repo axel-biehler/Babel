@@ -1,20 +1,14 @@
 #include <QApplication>
-#include <QWindow>
-#include <QLabel>
-#include <iostream>
-#include "Audio/Portaudio.hpp"
-#include "Audio/Opus.hpp"
-#include "Networking/Client.hpp"
-#include "Ui/ConnectionWindow/ConnectionWindow.hpp"
+#include <Ui/ConnectionWindow/ConnectionWindow.hpp>
+#include <Networking/Client.hpp>
 
 int main(int ac, char **av)
 {
-    //QCoreApplication app(ac, av);
     QApplication app(ac, av);
-    //Babel::Networking::Client cli(av[1], std::stoi(av[2]));
+    Babel::Networking::Client cli;
+    Babel::Ui::ConnectionWindow connWindow(&cli);
 
-    //cli.start();
-    Babel::Ui::ConnectionWindow win;
-    win.show();
+    connWindow.show();
+
     return app.exec();
 }

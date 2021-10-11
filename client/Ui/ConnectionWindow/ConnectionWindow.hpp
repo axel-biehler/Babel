@@ -8,12 +8,14 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QStackedWidget>
+#include <Networking/Client.hpp>
 
 namespace Babel {
     namespace Ui {
         class ConnectionWindow : public QWidget {
         public:
-            ConnectionWindow(QWidget *parent = 0);
+            explicit ConnectionWindow(Babel::Networking::Client *cli);
+
             ~ConnectionWindow();
         private:
             QStackedWidget _pages;

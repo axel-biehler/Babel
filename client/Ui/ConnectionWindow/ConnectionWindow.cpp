@@ -3,14 +3,14 @@
 //
 
 #include <QWidget>
+#include <Networking/Client.hpp>
 #include "ConnectionWindow.hpp"
-#include <QLineEdit>
 #include "ConnectionPage.hpp"
 
-Babel::Ui::ConnectionWindow::ConnectionWindow(QWidget *parent) {
+Babel::Ui::ConnectionWindow::ConnectionWindow(Babel::Networking::Client *cli) {
     this->setMinimumSize(600, 400);
     setWindowTitle("Connection");
-    Babel::Ui::ConnectionPage *page = new Babel::Ui::ConnectionPage;
+    Babel::Ui::ConnectionPage *page = new Babel::Ui::ConnectionPage(cli);
     _layout = new QGridLayout(this);
     _pages.addWidget(page);
     _pages.setFixedSize(width() / 2, height() / 2);

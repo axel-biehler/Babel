@@ -23,8 +23,8 @@ namespace Babel {
 
                 ~Session();
 
-
                 void start();
+                void write(RawPacket packet);
             private:
                 std::shared_ptr<asio::ip::tcp::socket> _socket;
                 char *_data;
@@ -33,7 +33,6 @@ namespace Babel {
                 char _size;
 
                 //method
-                void write();
                 void on_read(std::error_code error, std::size_t bytes_transferred);
                 void on_read_data(std::error_code error, std::size_t bytes_transferred);
                 void read();

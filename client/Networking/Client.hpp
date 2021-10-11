@@ -13,25 +13,20 @@ namespace Babel {
         class   Client : public QObject {
         Q_OBJECT
         public:
-
-            Client(std::string adress, u_int16_t port);
-            void start();
+            Client();
+            void start(const std::string &address, u_int16_t port);
+            void write(Babel::Networking::RawPacket rawPacket);
+            bool isConnected() const;
 
         signals:
             void packetReceive(Babel::Networking::RawPacket);
 
         private slots:
-
             void readyRead();
-            void write(Babel::Networking::RawPacket rawPacket);
-            void bytesWritten(qint64 bytes);
 
         private:
             QTcpSocket *_socket = nullptr;
             QDataStream _in;
-            std::string _adress;
-            uint16_t _port;
-            void handle_packet(Babel::Networking::RawPacket rawPacket);
         };
     }
 }
