@@ -2,6 +2,7 @@
 #include <Networking/Packets/PacketCmdListInvites.hpp>
 #include <Networking/Packets/PacketRespListInvites.hpp>
 #include <Networking/Packets/PacketRespInviteFriend.hpp>
+#include <Networking/Packets/PacketInviteReceived.hpp>
 #include "FriendInvitesPage.hpp"
 #include "FriendInviteWidget.hpp"
 
@@ -39,6 +40,11 @@ void Babel::Ui::FriendInvitesPage::onPacketReceived(Babel::Networking::RawPacket
             return;
         }
         auto w = new FriendInviteWidget(_cli, resp->getFriendshipId(), resp->getUsername(), Sent);
+        _innerLayout.addWidget(w);
+    } else if (packet.getPacketType() == Networking::PacketInviteReceived) {
+        auto resp = std::static_pointer_cast<Babel::Networking::Packets::PacketInviteReceived>(packet.deserialize());
+
+        auto w = new FriendInviteWidget(_cli, resp->getId(), resp->getUsername(), Received);
         _innerLayout.addWidget(w);
     }
 }

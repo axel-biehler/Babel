@@ -28,6 +28,8 @@ namespace Babel {
                 void setHandlePacket(std::shared_ptr<Babel::Networking::IHandlePacket> handlePacket);
                 std::shared_ptr<Babel::Networking::IHandlePacket> getHandlePacket() const;
 
+                std::shared_ptr<Babel::Networking::Session> getSessionFromUser(int userId);
+
             private:
                 asio::ip::tcp::acceptor _acceptor;
                 asio::io_context& _io_context;

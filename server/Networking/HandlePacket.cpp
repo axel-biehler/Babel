@@ -17,6 +17,7 @@
 #include <Networking/Packets/PacketCmdDenyFriend.hpp>
 #include <Networking/Packets/PacketRespDenyFriend.hpp>
 #include <Networking/Packets/PacketRespListFriends.hpp>
+#include <Networking/Packets/PacketInviteReceived.hpp>
 #include "HandlePacket.hpp"
 
 Babel::Networking::HandlePacket::HandlePacket(std::shared_ptr<Server> server) : _server(server)
@@ -108,6 +109,15 @@ Babel::Networking::RawPacket Babel::Networking::HandlePacket::handleCmdInviteFri
     friendship.setFrom(session->getUserId());
     friendship.setTo(newFriend.getId());
     friendship.save(*db);
+
+    auto otherSession = _server->getSessionFromUser(newFriend.getId());
+    if (otherSession != nullptr) {
+        Database::User self;
+        self.getById(*db, session->getUserId());
+
+        Babel::Networking::Packets::PacketInviteReceived resp{friendship.getId(), self.getUsername()};
+        otherSession->write(resp.serialize());
+    }
 
     Babel::Networking::Packets::PacketRespInviteFriend resp{1, "", friendship.getId(), newFriend.getUsername()};
     return resp.serialize();

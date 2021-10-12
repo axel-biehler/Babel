@@ -2,6 +2,8 @@
 #include <Networking/Packets/PacketCmdListFriends.hpp>
 #include <Networking/Packets/PacketRespListFriends.hpp>
 #include <Networking/Packets/PacketRespAcceptFriend.hpp>
+#include <Networking/Packets/PacketInviteReceived.hpp>
+#include <QMessageBox>
 #include "MainWindow.hpp"
 #include "FriendsWindow.hpp"
 #include "FriendItemWidget.hpp"
@@ -53,5 +55,8 @@ void Babel::Ui::MainWindow::onPacketReceived(Babel::Networking::RawPacket packet
         if (resp->getOk() == 0)
             return;
         _friendsInnerLayout.addWidget(new FriendItemWidget(resp->getUserId(), resp->getUsername()));
+    } else if (packet.getPacketType() == Networking::PacketInviteReceived) {
+        auto resp = std::static_pointer_cast<Babel::Networking::Packets::PacketInviteReceived>(packet.deserialize());
+        QMessageBox::information(nullptr, "Friend invite received", QString("You received an invite from ") + QString(resp->getUsername().c_str()) + QString("."));
     }
 }
