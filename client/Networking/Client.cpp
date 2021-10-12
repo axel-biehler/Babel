@@ -45,3 +45,11 @@ void Babel::Networking::Client::write(Babel::Networking::RawPacket rawPacket)
 bool Babel::Networking::Client::isConnected() const {
     return _socket->state() == QAbstractSocket::ConnectedState;
 }
+
+int Babel::Networking::Client::getUserId() const {
+    return _userId;
+}
+
+void Babel::Networking::Client::setUserId(int userId) {
+    _userId = userId;
+}

@@ -10,6 +10,8 @@
 #include <Networking/Packets/PacketCmdRegister.hpp>
 #include <Networking/Packets/PacketCmdInviteFriend.hpp>
 #include <Networking/Packets/PacketRespInviteFriend.hpp>
+#include <Networking/PacketTypes.hpp>
+#include <Networking/Packets/PacketRespListInvites.hpp>
 #include "HandlePacket.hpp"
 
 Babel::Networking::HandlePacket::HandlePacket(std::shared_ptr<Server> server) : _server(server)
@@ -36,7 +38,7 @@ Babel::Networking::RawPacket Babel::Networking::HandlePacket::handleCmdLoginPack
          ok = 0;
      }
 
-    Babel::Networking::Packets::PacketRespLogin resp(ok, e);
+    Babel::Networking::Packets::PacketRespLogin resp(ok, e, usr.getId());
     session->setUserId(usr.getId());
     return resp.serialize();
 }
@@ -98,5 +100,31 @@ Babel::Networking::RawPacket Babel::Networking::HandlePacket::handleCmdInviteFri
     friendship.save(*db);
 
     Babel::Networking::Packets::PacketRespInviteFriend resp{1, ""};
+    return resp.serialize();
+}
+
+Babel::Networking::RawPacket
+Babel::Networking::HandlePacket::handleCmdListInvites(Babel::Networking::RawPacket rawPacket,
+                                                      Babel::Networking::Session *session) {
+    auto db = _server->getDb();
+    std::vector<Babel::Networking::Invite> netInvites;
+
+    Database::User from;
+    Database::User to;
+
+    auto invites = Database::Friendship::getAllWaiting(*db, session->getUserId());
+    for (auto fri : invites) {
+        from.getById(*db, fri.getFrom());
+        to.getById(*db, fri.getTo());
+
+        Babel::Networking::Invite netInvite;
+        netInvite.id = fri.getId();
+        netInvite.from = fri.getFrom();
+        netInvite.fromUsername = from.getUsername();
+        netInvite.toUsername = to.getUsername();
+        netInvites.push_back(netInvite);
+    }
+
+    Babel::Networking::Packets::PacketRespListInvites resp{netInvites};
     return resp.serialize();
 }

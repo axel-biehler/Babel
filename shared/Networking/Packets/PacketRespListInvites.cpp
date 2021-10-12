@@ -15,7 +15,10 @@ Babel::Networking::Packets::PacketRespListInvites::PacketRespListInvites(std::ve
     for (int i = 0; i < count; i++) {
         Invite inv;
         inv.id = reader.readInt();
-        inv.username = reader.readString();
+        inv.from = reader.readInt();
+        inv.to = reader.readInt();
+        inv.fromUsername = reader.readString();
+        inv.toUsername = reader.readString();
         _invites.push_back(inv);
     }
 }
@@ -29,7 +32,10 @@ Babel::Networking::RawPacket Babel::Networking::Packets::PacketRespListInvites::
     writer.addInt(_invites.size());
     for (auto &inv : _invites) {
         writer.addInt(inv.id);
-        writer.addString(inv.username);
+        writer.addInt(inv.from);
+        writer.addInt(inv.to);
+        writer.addString(inv.fromUsername);
+        writer.addString(inv.toUsername);
     }
     return {build(writer.build())};
 }

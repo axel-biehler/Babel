@@ -17,6 +17,8 @@ namespace Babel {
             void start(const QString &address, quint16 port);
             void write(Babel::Networking::RawPacket rawPacket);
             bool isConnected() const;
+            int getUserId() const;
+            void setUserId(int userId);
 
         signals:
             void packetReceive(Babel::Networking::RawPacket);
@@ -27,6 +29,7 @@ namespace Babel {
         private:
             QTcpSocket *_socket = nullptr;
             QDataStream _in;
+            int _userId;
         };
     }
 }

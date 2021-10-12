@@ -11,7 +11,7 @@ Babel::Ui::FriendsWindow::FriendsWindow(Babel::Networking::Client *cli) : _cli(c
     _mainTabWidget.setFont(QFont("Roboto", 10));
 
     auto addFriendsPage = new AddFriendPage(_cli);
-    auto friendInvitesPage = new FriendInvitesPage;
+    auto friendInvitesPage = new FriendInvitesPage(_cli);
 
     _mainTabWidget.addTab(addFriendsPage, "Add a friend");
     _mainTabWidget.addTab(friendInvitesPage, "Pending invites");

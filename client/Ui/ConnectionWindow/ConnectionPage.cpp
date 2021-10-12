@@ -65,6 +65,7 @@ void Babel::Ui::ConnectionPage::handlePacketRespLogin(Babel::Networking::RawPack
         QMessageBox::critical(this, "Could not login.", respLoginPacket->getErrorMessage().c_str());
         return;
     }
+    _cli->setUserId(respLoginPacket->getUserId());
     Babel::Ui::MainWindow *mainWindow = new Babel::Ui::MainWindow(_cli);
     mainWindow->show();
     _win->hide();
