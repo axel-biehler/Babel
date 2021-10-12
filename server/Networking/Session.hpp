@@ -9,7 +9,7 @@
 #define SESSION_HPP_
 
 #include "asio.hpp"
-#include "HandlePacket.h"
+#include "IHandlepacket.h"
 #include <string>
 #include <iostream>
 #include <Networking/RawPacket.hpp>
@@ -19,11 +19,11 @@ namespace Babel {
     namespace Networking {
         class Session : public std::enable_shared_from_this<Session> {
             public:
-                Session(std::shared_ptr<asio::ip::tcp::socket> socket, std::shared_ptr<Babel::Database::Database> db);
+                Session(std::shared_ptr<asio::ip::tcp::socket> socket, std::shared_ptr<Babel::Networking::IHandlePacket> handlePacket);
                 Session(const Session &session);
 
                 std::shared_ptr<asio::ip::tcp::socket> getSocket() const;
-                void write(Babel::Networking::RawPacket rawPacket);
+                std::shared_ptr<Babel::Networking::IHandlePacket> getHandlePacket() const;
 
             ~Session();
 
@@ -35,10 +35,9 @@ namespace Babel {
                 std::vector<char> _buffer;
                 char *_size_str;
                 char _size;
-                std::shared_ptr<Babel::Database::Database> _db;
-                std::shared_ptr<Babel::Networking::HandlePacket> _handlePacket;
+                std::shared_ptr<Babel::Networking::IHandlePacket> _handlePacket;
 
-                //method
+            //method
                 void on_read(std::error_code error, std::size_t bytes_transferred);
                 void on_read_data(std::error_code error, std::size_t bytes_transferred);
                 void read();

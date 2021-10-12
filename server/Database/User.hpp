@@ -17,9 +17,13 @@ namespace Babel {
             int getId() const;
             std::string getUsername() const;
             void setUsername(const std::string &username);
+            std::string getPassword() const;
+            void setPassword(const std::string &pass);
 
+        private:
             int _id;
             std::string _username;
+            std::string _password;
         };
     }
 }

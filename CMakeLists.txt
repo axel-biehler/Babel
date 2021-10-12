@@ -64,7 +64,8 @@ add_executable(babel_server server/main.cpp
         server/Database/User.cpp server/Database/User.hpp
         server/Networking/Server.cpp server/Networking/Server.hpp
         server/Networking/Session.cpp server/Networking/Session.hpp
-        server/Networking/HandlePacket.cpp server/Networking/HandlePacket.h)
+        server/Networking/HandlePacket.cpp server/Networking/HandlePacket.h
+        server/Networking/IHandlepacket.h)
 target_include_directories(babel_server PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/server)

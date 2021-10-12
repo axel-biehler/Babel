@@ -36,7 +36,7 @@ void Babel::Database::User::getByUsername(const Babel::Database::Database &db, c
     auto sqlite{db.getHandle()};
 
     sqlite3_stmt *stmt;
-    std::string query{"SELECT * FROM Users WHERE username=" + name};
+    std::string query{"SELECT * FROM Users WHERE username='" + name + "'"};
 
     sqlite3_prepare_v2(sqlite, query.c_str(), -1, &stmt, nullptr);
     if (sqlite3_step(stmt) != SQLITE_ROW)
@@ -65,4 +65,14 @@ void Babel::Database::User::del(const Babel::Database::Database &db) {
         return;
     std::string query{"DELETE FROM Users WHERE id = " + std::to_string(_id)};
     sqlite3_exec(sqlite, query.c_str(), nullptr, 0, nullptr);
+}
+
+std::string Babel::Database::User::getPassword() const
+{
+    return _password;
+}
+
+void Babel::Database::User::setPassword(const std::string &pass)
+{
+    _password = pass;
 }

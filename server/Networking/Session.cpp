@@ -12,18 +12,14 @@
 #include <Networking/Packets/PacketRespLogin.hpp>
 #include <utility>
 
-Babel::Networking::Session::Session(std::shared_ptr<asio::ip::tcp::socket> socket, std::shared_ptr<Babel::Database::Database> db) :
-    _socket(std::move(socket)),
-    _db(std::move(db)),
-    _handlePacket(std::make_shared<Babel::Networking::HandlePacket>(std::move(_db)))
+Babel::Networking::Session::Session(std::shared_ptr<asio::ip::tcp::socket> socket, std::shared_ptr<Babel::Networking::IHandlePacket> handlePacket) :
+    _socket(socket), _handlePacket(handlePacket)
 {
     _data = (char *)(malloc(1024));
     _size_str = (char *)(malloc(4));
 }
 
-Babel::Networking::Session::Session(const Session &session) : _socket(session.getSocket()),
-    _handlePacket(std::make_shared<Babel::Networking::HandlePacket>(std::move(_db)))
-
+Babel::Networking::Session::Session(const Session &session) : _socket(session.getSocket()), _handlePacket(session.getHandlePacket())
 {
     _data = (char *)(malloc(1024));
     _size_str = (char *)(malloc(4));
@@ -81,6 +77,10 @@ void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawP
         case Babel::Networking::PacketType::PacketCmdLogin:
             write(_handlePacket->handleCmdLoginPacket(rawPacket));
             break;
+        case Babel::Networking::PacketType::PacketCmdRegister:
+            write(_handlePacket->handleCmdRegisterPacket(rawPacket));
+            break;
+
     }
 }
 
@@ -93,5 +93,10 @@ void Babel::Networking::Session::write(Babel::Networking::RawPacket rawPacket)
 std::shared_ptr<asio::ip::tcp::socket> Babel::Networking::Session::getSocket() const
 {
     return _socket;
+}
+
+std::shared_ptr<Babel::Networking::IHandlePacket> Babel::Networking::Session::getHandlePacket() const
+{
+    return _handlePacket;
 }
 

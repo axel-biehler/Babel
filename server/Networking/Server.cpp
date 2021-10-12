@@ -26,7 +26,7 @@ void Babel::Networking::Server::async_accept()
     {
         if (!err) {
             std::cout << "connected" << std::endl;
-            auto session = std::make_shared<Babel::Networking::Session>(socket_ptr, std::move(_db));
+            auto session = std::make_shared<Babel::Networking::Session>(socket_ptr, std::move(_handlePacket));
             session->start();
             _sessions.push_back(session);
             async_accept();
@@ -34,4 +34,19 @@ void Babel::Networking::Server::async_accept()
             std::cerr << err << std::endl;
         }
     });
+}
+
+std::shared_ptr<Babel::Database::Database> Babel::Networking::Server::getDb() const
+{
+    return _db;
+}
+
+void Babel::Networking::Server::setHandlePacket(std::shared_ptr<Babel::Networking::IHandlePacket> handlePacket)
+{
+    _handlePacket = handlePacket;
+}
+
+std::shared_ptr<Babel::Networking::IHandlePacket> Babel::Networking::Server::getHandlePacket() const
+{
+    return _handlePacket;
 }

@@ -7,16 +7,22 @@
 
 #include <Networking/RawPacket.hpp>
 #include <Database/Database.hpp>
+#include <asio/io_context.hpp>
+#include <asio/ip/tcp.hpp>
+#include "IHandlepacket.h"
+#include "Server.hpp"
 
 namespace Babel {
     namespace Networking {
-        class HandlePacket {
-        public:
-            HandlePacket(std::shared_ptr<Babel::Database::Database> db);
 
-            RawPacket handleCmdLoginPacket(RawPacket packet);
+        class HandlePacket : public IHandlePacket {
+        public:
+            HandlePacket(std::shared_ptr<Server> server);
+
+            RawPacket handleCmdLoginPacket(RawPacket packet) override;
+            RawPacket handleCmdRegisterPacket(RawPacket rawPacket) override;
         private:
-            std::shared_ptr<Babel::Database::Database> _db;
+            std::shared_ptr<Babel::Networking::Server> _server;
         };
     }
 }

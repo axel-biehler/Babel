@@ -10,14 +10,17 @@
 
 #include <Networking/Server.hpp>
 #include <Database/Database.hpp>
+#include <Networking/HandlePacket.h>
 
 int main(int argc, char* argv[])
 {
     try {
         auto database = std::make_shared<Babel::Database::Database>("db.sqlite");
         asio::io_context context;
-        Babel::Networking::Server server(context, std::stoi(argv[1]), database);
-        server.async_accept();
+        auto server = std::make_shared<Babel::Networking::Server>(context, std::stoi(argv[1]), database);
+        auto handlePacket = std::make_shared<Babel::Networking::HandlePacket>(server);
+        server->setHandlePacket(handlePacket);
+        server->async_accept();
         context.run();
     }
     catch (std::exception &e) {
