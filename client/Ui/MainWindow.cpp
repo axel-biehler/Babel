@@ -3,7 +3,7 @@
 #include "FriendsWindow.hpp"
 #include "FriendItemWidget.hpp"
 
-Babel::Ui::MainWindow::MainWindow() {
+Babel::Ui::MainWindow::MainWindow(Babel::Networking::Client *cli) : _cli(cli) {
     setWindowTitle("Babel");
     setMinimumSize(800, 600);
     setLayout(&_mainLayout);

@@ -9,7 +9,7 @@
 #define SESSION_HPP_
 
 #include "asio.hpp"
-#include "IHandlepacket.h"
+#include "IHandlePacket.hpp"
 #include <string>
 #include <iostream>
 #include <Networking/RawPacket.hpp>
@@ -24,6 +24,7 @@ namespace Babel {
 
                 std::shared_ptr<asio::ip::tcp::socket> getSocket() const;
                 std::shared_ptr<Babel::Networking::IHandlePacket> getHandlePacket() const;
+                void setUserId(int userId);
 
             ~Session();
 
@@ -36,6 +37,7 @@ namespace Babel {
                 char *_size_str;
                 char _size;
                 std::shared_ptr<Babel::Networking::IHandlePacket> _handlePacket;
+                int _userId;
 
             //method
                 void on_read(std::error_code error, std::size_t bytes_transferred);

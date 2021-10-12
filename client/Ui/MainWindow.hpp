@@ -6,13 +6,14 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <Ui/ChatWidget.hpp>
+#include <Networking/Client.hpp>
 
 namespace Babel {
     namespace Ui {
         class MainWindow : public QWidget {
             Q_OBJECT
         public:
-            MainWindow();
+            MainWindow(Babel::Networking::Client *cli);
 
         private:
             QHBoxLayout _mainLayout;
@@ -23,6 +24,7 @@ namespace Babel {
             QVBoxLayout _friendsInnerLayout;
             QPushButton _friendsButton;
             std::shared_ptr<ChatWidget> _chatWidget;
+            Babel::Networking::Client *_cli;
 
         private slots:
             void showFriends();
