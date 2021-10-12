@@ -79,14 +79,19 @@ Babel::Networking::RawPacket Babel::Networking::HandlePacket::handleCmdInviteFri
     try {
         newFriend.getByUsername(*db, packet->getUsername());
     } catch (std::runtime_error &err) {
-        Babel::Networking::Packets::PacketRespInviteFriend resp{0, "Could not find user."};
+        Babel::Networking::Packets::PacketRespInviteFriend resp{0, "Could not find user.", 0, ""};
+        return resp.serialize();
+    }
+
+    if (newFriend.getId() == session->getUserId()) {
+        Babel::Networking::Packets::PacketRespInviteFriend resp{0, "You can't invite yourself.", 0, ""};
         return resp.serialize();
     }
 
     auto friends = Database::Friendship::getAllFriends(*db, session->getUserId());
     for (auto &fri : friends) {
         if (fri.getTo() == newFriend.getId() || fri.getFrom() == newFriend.getId()) {
-            Babel::Networking::Packets::PacketRespInviteFriend resp{0, "Already a friend of yours."};
+            Babel::Networking::Packets::PacketRespInviteFriend resp{0, "Already a friend of yours.", 0, ""};
             return resp.serialize();
         }
     }
@@ -94,7 +99,7 @@ Babel::Networking::RawPacket Babel::Networking::HandlePacket::handleCmdInviteFri
     auto invites = Database::Friendship::getAllWaiting(*db, session->getUserId());
     for (auto &fri : invites) {
         if (fri.getTo() == newFriend.getId() || fri.getFrom() == newFriend.getId()) {
-            Babel::Networking::Packets::PacketRespInviteFriend resp{0, "An invite is already waiting."};
+            Babel::Networking::Packets::PacketRespInviteFriend resp{0, "An invite is already waiting.", 0, ""};
             return resp.serialize();
         }
     }
@@ -104,7 +109,7 @@ Babel::Networking::RawPacket Babel::Networking::HandlePacket::handleCmdInviteFri
     friendship.setTo(newFriend.getId());
     friendship.save(*db);
 
-    Babel::Networking::Packets::PacketRespInviteFriend resp{1, ""};
+    Babel::Networking::Packets::PacketRespInviteFriend resp{1, "", friendship.getId(), newFriend.getUsername()};
     return resp.serialize();
 }
 

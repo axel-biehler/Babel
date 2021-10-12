@@ -1,6 +1,7 @@
 #include <QVBoxLayout>
 #include <Networking/Packets/PacketCmdListInvites.hpp>
 #include <Networking/Packets/PacketRespListInvites.hpp>
+#include <Networking/Packets/PacketRespInviteFriend.hpp>
 #include "FriendInvitesPage.hpp"
 #include "FriendInviteWidget.hpp"
 
@@ -23,7 +24,7 @@ Babel::Ui::FriendInvitesPage::FriendInvitesPage(Babel::Networking::Client *cli) 
 void Babel::Ui::FriendInvitesPage::onPacketReceived(Babel::Networking::RawPacket packet) {
     if (packet.getPacketType() == Networking::PacketRespListInvites) {
         auto resp = std::static_pointer_cast<Networking::Packets::PacketRespListInvites>(packet.deserialize());
-        for (auto invite : resp->getInvites()) {
+        for (auto &invite : resp->getInvites()) {
             if (invite.from == _cli->getUserId()) {
                 auto w = new FriendInviteWidget(_cli, invite.id, invite.toUsername, Sent);
                 _innerLayout.addWidget(w);
@@ -32,5 +33,12 @@ void Babel::Ui::FriendInvitesPage::onPacketReceived(Babel::Networking::RawPacket
                 _innerLayout.addWidget(w);
             }
         }
+    } else if (packet.getPacketType() == Networking::PacketRespInviteFriend) {
+        auto resp = std::static_pointer_cast<Networking::Packets::PacketRespInviteFriend>(packet.deserialize());
+        if (resp->getOk() == 0) {
+            return;
+        }
+        auto w = new FriendInviteWidget(_cli, resp->getFriendshipId(), resp->getUsername(), Sent);
+        _innerLayout.addWidget(w);
     }
 }
