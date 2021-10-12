@@ -1,9 +1,10 @@
 #include <Networking/Packets/PacketCmdAcceptFriend.hpp>
 #include <Networking/Packets/PacketRespAcceptFriend.hpp>
 #include <Networking/Packets/PacketRespDenyFriend.hpp>
-#include <iostream>
 #include <Networking/Packets/PacketCmdDenyFriend.hpp>
 #include <QMessageBox>
+#include <Networking/Packets/PacketFriendDenied.hpp>
+#include <Networking/Packets/PacketFriendAdded.hpp>
 #include "FriendInviteWidget.hpp"
 
 Babel::Ui::FriendInviteWidget::FriendInviteWidget(Babel::Networking::Client *cli, int friendshipId, const std::string &username, Babel::Ui::FriendInviteWidgetType type)
@@ -62,7 +63,6 @@ void Babel::Ui::FriendInviteWidget::onPacketReceived(Babel::Networking::RawPacke
             return;
 
         if (packet->getOk() == 1) {
-            QMessageBox::information(this, "Invitation accepted.", "The invitation was accepted.");
             delete this;
         } else {
             QMessageBox::critical(this, "Could not accept invitation.", packet->getErrorMessage().c_str());
@@ -72,10 +72,19 @@ void Babel::Ui::FriendInviteWidget::onPacketReceived(Babel::Networking::RawPacke
         if (packet->getFriendshipId() != _friendshipId)
             return;
         if (packet->getOk() == 1) {
-            QMessageBox::information(this, "Invitation denied.", "The invitation was denied.");
             delete this;
         } else {
             QMessageBox::critical(this, "Could not deny invitation.", packet->getErrorMessage().c_str());
         }
+    } else if (rawPacket.getPacketType() == Networking::PacketFriendDenied) {
+        auto packet = std::static_pointer_cast<Babel::Networking::Packets::PacketFriendDenied>(rawPacket.deserialize());
+        if (packet->getId() != _friendshipId)
+            return;
+        delete this;
+    } else if (rawPacket.getPacketType() == Networking::PacketFriendAdded) {
+        auto packet = std::static_pointer_cast<Babel::Networking::Packets::PacketFriendAdded>(rawPacket.deserialize());
+        if (packet->getFriendshipId() != _friendshipId)
+            return;
+        delete this;
     }
 }

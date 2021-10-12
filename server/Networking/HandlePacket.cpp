@@ -18,6 +18,8 @@
 #include <Networking/Packets/PacketRespDenyFriend.hpp>
 #include <Networking/Packets/PacketRespListFriends.hpp>
 #include <Networking/Packets/PacketInviteReceived.hpp>
+#include <Networking/Packets/PacketFriendAdded.hpp>
+#include <Networking/Packets/PacketFriendDenied.hpp>
 #include "HandlePacket.hpp"
 
 Babel::Networking::HandlePacket::HandlePacket(std::shared_ptr<Server> server) : _server(server)
@@ -169,12 +171,20 @@ Babel::Networking::HandlePacket::handleCmdAcceptFriend(Babel::Networking::RawPac
         return resp.serialize();
     }
 
-
     friendship.accept();
     friendship.save(*db);
 
     Database::User from;
     from.getById(*db, friendship.getFrom());
+
+    auto otherSession = _server->getSessionFromUser(from.getId());
+    if (otherSession != nullptr) {
+        Database::User self;
+        self.getById(*db, session->getUserId());
+
+        Babel::Networking::Packets::PacketFriendAdded resp{self.getId(), self.getUsername(), friendship.getId()};
+        otherSession->write(resp.serialize());
+    }
 
     Babel::Networking::Packets::PacketRespAcceptFriend resp{1, "", packet->getId(), from.getId(), from.getUsername()};
     return resp.serialize();
@@ -201,6 +211,16 @@ Babel::Networking::HandlePacket::handleCmdDenyFriend(Babel::Networking::RawPacke
     }
 
     friendship.del(*db);
+
+    auto otherSession = _server->getSessionFromUser(friendship.getFrom());
+    if (otherSession != nullptr) {
+        Database::User self;
+        self.getById(*db, session->getUserId());
+
+        Babel::Networking::Packets::PacketFriendDenied resp{friendship.getId()};
+        otherSession->write(resp.serialize());
+    }
+
     Babel::Networking::Packets::PacketRespDenyFriend resp{1, "", packet->getId()};
     return resp.serialize();
 }
