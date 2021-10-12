@@ -27,13 +27,14 @@ Babel::Networking::RawPacket Babel::Networking::HandlePacket::handleCmdLoginPack
         e = err.what();
         ok = 0;
      }
-     if(usr.getPassword() != cmdLoginPacket->getPassword()) {
+
+     if (e == "" && usr.getPassword() != cmdLoginPacket->getPassword()) {
+         e = "Invalid password.";
          ok = 0;
-         e = "Invalid Password.";
      }
 
     Babel::Networking::Packets::PacketRespLogin resp(ok, e);
-     session->setUserId(usr.getId());
+    session->setUserId(usr.getId());
     return resp.serialize();
 }
 
