@@ -41,7 +41,7 @@ void Babel::Ui::ConnectionPage::Register()
     if (split.length() < 2)
         return;
     if (!_cli->isConnected())
-        _cli->start(split[0].toStdString(), split[1].toInt());
+        _cli->start(split[0], split[1].toInt());
     Babel::Networking::Packets::PacketCmdRegister packetCmdRegister{_input.text().toStdString(), _pass.text().toStdString()};
     _cli->write(packetCmdRegister.serialize());
 }
@@ -52,7 +52,7 @@ void Babel::Ui::ConnectionPage::Login()
     if (split.length() < 2)
         return;
     if (!_cli->isConnected())
-        _cli->start(split[0].toStdString(), split[1].toInt());
+        _cli->start(split[0], split[1].toInt());
     Babel::Networking::Packets::PacketCmdLogin packetCmdLogin{_input.text().toStdString(), _pass.text().toStdString()};
     _cli->write(packetCmdLogin.serialize());
 }
@@ -88,7 +88,6 @@ void Babel::Ui::ConnectionPage::OnPacketReceived(Babel::Networking::RawPacket pa
             handlePacketRespLogin(packet);
             break;
         case Networking::PacketRespRegister:
-            auto respRegisterPacket = std::static_pointer_cast<Babel::Networking::Packets::PacketRespRegister> (packet.deserialize());
             handlePacketRespRegister(packet);
             break;
     }
