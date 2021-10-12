@@ -34,5 +34,5 @@ Babel::Ui::MainWindow::MainWindow(Babel::Networking::Client *cli) : _cli(cli) {
 }
 
 void Babel::Ui::MainWindow::showFriends() {
-    (new FriendsWindow())->show();
+    (new FriendsWindow(_cli))->show();
 }

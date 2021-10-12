@@ -2,7 +2,7 @@
 #include "AddFriendPage.hpp"
 #include "FriendInvitesPage.hpp"
 
-Babel::Ui::FriendsWindow::FriendsWindow() {
+Babel::Ui::FriendsWindow::FriendsWindow(Babel::Networking::Client *cli) : _cli(cli) {
     setFixedSize(600, 400);
     setWindowTitle("Friends");
 
@@ -10,7 +10,7 @@ Babel::Ui::FriendsWindow::FriendsWindow() {
     _mainTabWidget.setFixedSize(width(), height());
     _mainTabWidget.setFont(QFont("Roboto", 10));
 
-    auto addFriendsPage = new AddFriendPage;
+    auto addFriendsPage = new AddFriendPage(_cli);
     auto friendInvitesPage = new FriendInvitesPage;
 
     _mainTabWidget.addTab(addFriendsPage, "Add a friend");

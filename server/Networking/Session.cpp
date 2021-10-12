@@ -80,6 +80,9 @@ void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawP
         case Babel::Networking::PacketType::PacketCmdRegister:
             write(_handlePacket->handleCmdRegisterPacket(rawPacket, this));
             break;
+        case Babel::Networking::PacketType::PacketCmdInviteFriend:
+            write(_handlePacket->handleCmdInviteFriendPacket(rawPacket, this));
+            break;
     }
 }
 
@@ -102,4 +105,8 @@ std::shared_ptr<Babel::Networking::IHandlePacket> Babel::Networking::Session::ge
 void Babel::Networking::Session::setUserId(int userId)
 {
     _userId = userId;
+}
+
+int Babel::Networking::Session::getUserId() const {
+    return _userId;
 }

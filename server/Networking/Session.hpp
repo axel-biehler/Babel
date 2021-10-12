@@ -25,6 +25,7 @@ namespace Babel {
                 std::shared_ptr<asio::ip::tcp::socket> getSocket() const;
                 std::shared_ptr<Babel::Networking::IHandlePacket> getHandlePacket() const;
                 void setUserId(int userId);
+                int getUserId() const;
 
             ~Session();
 

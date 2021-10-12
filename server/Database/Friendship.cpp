@@ -12,14 +12,14 @@ void Babel::Database::Friendship::save(const Babel::Database::Database &db) {
     auto sqlite{db.getHandle()};
 
     if (_id < 0) {
-        std::string query{"INSERT INTO Friendships (from, to, status) VALUES (" +
+        std::string query{"INSERT INTO Friendships (\"from\", \"to\", status) VALUES (" +
                                   std::to_string(_from) + ", " + std::to_string(_to) + ", " +
                                   std::to_string(_status) + ")"};
         sqlite3_exec(sqlite, query.c_str(), nullptr, nullptr, nullptr);
         _id = sqlite3_last_insert_rowid(sqlite);
     } else {
         std::string query{"UPDATE Friendships SET id = " + std::to_string(_id) +
-            ", from = " + std::to_string(_from) + ", to = " +
+            ", \"from\" = " + std::to_string(_from) + ", \"to\" = " +
             std::to_string(_to) + ", status = " + std::to_string(_status) +
             " WHERE id = " + std::to_string(_id)};
         sqlite3_exec(sqlite, query.c_str(), nullptr, nullptr, nullptr);
