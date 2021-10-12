@@ -15,9 +15,9 @@ Babel::Networking::Client::Client() : QObject(nullptr), _socket(new QTcpSocket(t
     connect(_socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 }
 
-void Babel::Networking::Client::start(const std::string &address, u_int16_t port)
+void Babel::Networking::Client::start(const QString &address, quint16 port)
 {
-    _socket->connectToHost(QHostAddress(address.c_str()), port);
+    _socket->connectToHost(QHostAddress(address), port);
     _socket->waitForConnected();
 }
 

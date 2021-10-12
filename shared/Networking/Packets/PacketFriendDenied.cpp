@@ -13,10 +13,6 @@ Babel::Networking::Packets::PacketFriendDenied::PacketFriendDenied(std::vector<c
     _id = reader.readInt();
 }
 
-std::string Babel::Networking::Packets::PacketFriendDenied::getUsername() const {
-    return _username;
-}
-
 int Babel::Networking::Packets::PacketFriendDenied::getId() const {
     return _id;
 }
