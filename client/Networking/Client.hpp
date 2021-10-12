@@ -14,7 +14,7 @@ namespace Babel {
         Q_OBJECT
         public:
             Client();
-            void start(const std::string &address, u_int16_t port);
+            void start(const QString &address, quint16 port);
             void write(Babel::Networking::RawPacket rawPacket);
             bool isConnected() const;
 

@@ -14,6 +14,19 @@ namespace Babel {
             PacketRespLogin,
             PacketCmdLogout,
             PacketAudio,
+            PacketCmdInviteFriend,
+            PacketRespInviteFriend,
+            PacketCmdAcceptFriend,
+            PacketRespAcceptFriend,
+            PacketCmdDenyFriend,
+            PacketRespDenyFriend,
+            PacketInviteReceived,
+            PacketFriendAdded,
+            PacketFriendDenied,
+            PacketCmdListFriends,
+            PacketRespListFriends,
+            PacketCmdListInvites,
+            PacketRespListInvites
         };
 
         enum PacketArgType {

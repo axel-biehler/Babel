@@ -11,14 +11,19 @@ namespace Babel {
 
             void save(const Database &db) override;
             void getById(const Database &db, int id) override;
+            void getByUsername(const Database &db, const std::string &username);
             void del(const Database &db) override;
 
             int getId() const;
             std::string getUsername() const;
             void setUsername(const std::string &username);
+            std::string getPassword() const;
+            void setPassword(const std::string &pass);
 
+        private:
             int _id;
             std::string _username;
+            std::string _password;
         };
     }
 }
