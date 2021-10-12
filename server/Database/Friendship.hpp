@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "IModel.hpp"
 
 namespace Babel {
@@ -13,6 +14,7 @@ namespace Babel {
         class Friendship : public IModel {
         public:
             Friendship();
+            Friendship(int id, int from, int to, FriendshipStatus status);
 
             void save(const Database &db) override;
             void getById(const Database &db, int id) override;
@@ -26,7 +28,9 @@ namespace Babel {
             void setTo(int to);
             void accept();
 
-        private:
+            static std::vector<Friendship> getAllFriends(const Babel::Database::Database &db, int userId);
+            static std::vector<Friendship> getAllWaiting(const Babel::Database::Database &db, int userId);
+
             int _id;
             int _from;
             int _to;

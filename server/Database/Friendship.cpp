@@ -4,6 +4,10 @@
 Babel::Database::Friendship::Friendship() : _id(-1), _from(-1), _to(-1), _status(FriendshipStatus::Waiting) {
 }
 
+
+Babel::Database::Friendship::Friendship(int id, int from, int to, FriendshipStatus status) : _id(id), _from(from), _to(to), _status(status) {
+}
+
 void Babel::Database::Friendship::save(const Babel::Database::Database &db) {
     auto sqlite{db.getHandle()};
 
@@ -73,4 +77,38 @@ void Babel::Database::Friendship::setTo(int to) {
 
 void Babel::Database::Friendship::accept() {
     _status = FriendshipStatus::Accepted;
+}
+
+std::vector<Babel::Database::Friendship> Babel::Database::Friendship::getAllFriends(const Babel::Database::Database &db, int userId) {
+    auto sqlite{db.getHandle()};
+    std::vector<Friendship> friendships;
+
+    sqlite3_stmt *stmt;
+    std::string query{"SELECT * FROM Friendships WHERE (\"from\"=" + std::to_string(userId) + " OR \"to\"=" + std::to_string(userId) + ") AND status=1"};
+
+    sqlite3_prepare_v2(sqlite, query.c_str(), -1, &stmt, nullptr);
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        Friendship f{sqlite3_column_int(stmt, 0), sqlite3_column_int(stmt, 1), sqlite3_column_int(stmt, 2),
+                     static_cast<FriendshipStatus>(sqlite3_column_int(stmt, 3))};
+        friendships.push_back(f);
+    }
+    sqlite3_finalize(stmt);
+    return friendships;
+}
+
+std::vector<Babel::Database::Friendship> Babel::Database::Friendship::getAllWaiting(const Babel::Database::Database &db, int userId) {
+    auto sqlite{db.getHandle()};
+    std::vector<Friendship> friendships;
+
+    sqlite3_stmt *stmt;
+    std::string query{"SELECT * FROM Friendships WHERE (\"from\"=" + std::to_string(userId) + " OR \"to\"=" + std::to_string(userId) + ") AND status=0"};
+
+    sqlite3_prepare_v2(sqlite, query.c_str(), -1, &stmt, nullptr);
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        Friendship f{sqlite3_column_int(stmt, 0), sqlite3_column_int(stmt, 1), sqlite3_column_int(stmt, 2),
+                     static_cast<FriendshipStatus>(sqlite3_column_int(stmt, 3))};
+        friendships.push_back(f);
+    }
+    sqlite3_finalize(stmt);
+    return friendships;
 }
