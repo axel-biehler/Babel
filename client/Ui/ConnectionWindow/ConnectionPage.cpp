@@ -78,7 +78,13 @@ void Babel::Ui::ConnectionPage::handlePacketRespRegister(Babel::Networking::RawP
         QMessageBox::critical(this, "Could not register", respRegisterPacket->getErrorMessage().c_str());
         return;
     }
-    QMessageBox::information(this, "Successfully register", "You can sign in now.");
+    auto split = _ip.text().split(':');
+    if (split.length() < 2)
+        return;
+    if (!_cli->isConnected())
+        _cli->start(split[0], split[1].toInt());
+    Babel::Networking::Packets::PacketCmdLogin packetCmdLogin{_input.text().toStdString(), _pass.text().toStdString()};
+    _cli->write(packetCmdLogin.serialize());
 }
 
 void Babel::Ui::ConnectionPage::OnPacketReceived(Babel::Networking::RawPacket packet) {
