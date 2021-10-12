@@ -20,6 +20,7 @@ namespace Babel {
             virtual RawPacket handleCmdListInvites(RawPacket rawPacket, Session *session) = 0;
             virtual RawPacket handleCmdAcceptFriend(RawPacket rawPacket, Session *session) = 0;
             virtual RawPacket handleCmdDenyFriend(RawPacket rawPacket, Session *session) = 0;
+            virtual RawPacket handleCmdListFriends(RawPacket rawPacket, Session *session) = 0;
         };
     }
 }

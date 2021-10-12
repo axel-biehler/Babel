@@ -1,4 +1,7 @@
 #include <QLabel>
+#include <Networking/Packets/PacketCmdListFriends.hpp>
+#include <Networking/Packets/PacketRespListFriends.hpp>
+#include <Networking/Packets/PacketRespAcceptFriend.hpp>
 #include "MainWindow.hpp"
 #include "FriendsWindow.hpp"
 #include "FriendItemWidget.hpp"
@@ -20,8 +23,6 @@ Babel::Ui::MainWindow::MainWindow(Babel::Networking::Client *cli) : _cli(cli) {
     _friendsScrollArea.setWidget(&_friendsContainer);
     _friendsContainer.setLayout(&_friendsInnerLayout);
     _friendsInnerLayout.setAlignment(Qt::AlignTop);
-    for (int i = 0; i < 3; i++)
-        _friendsInnerLayout.addWidget(new FriendItemWidget("Friend " + std::to_string(i + 1)));
     _leftLayout.addWidget(&_friendsButton);
 
     _friendsButton.setText("Manage friends");
@@ -31,8 +32,26 @@ Babel::Ui::MainWindow::MainWindow(Babel::Networking::Client *cli) : _cli(cli) {
     _mainLayout.addWidget(_chatWidget.get(), 1);
 
     connect(&_friendsButton, &QPushButton::released, this, &MainWindow::showFriends);
+    connect(_cli, &Babel::Networking::Client::packetReceive, this, &MainWindow::onPacketReceived);
+
+    Babel::Networking::Packets::PacketCmdListFriends friends;
+    _cli->write(friends.serialize());
 }
 
 void Babel::Ui::MainWindow::showFriends() {
     (new FriendsWindow(_cli))->show();
+}
+
+void Babel::Ui::MainWindow::onPacketReceived(Babel::Networking::RawPacket packet) {
+    if (packet.getPacketType() == Networking::PacketType::PacketRespListFriends) {
+        auto resp = std::static_pointer_cast<Networking::Packets::PacketRespListFriends>(packet.deserialize());
+        for (auto &f : resp->getFriends()) {
+            _friendsInnerLayout.addWidget(new FriendItemWidget(f.id, f.username));
+        }
+    } else if (packet.getPacketType() == Networking::PacketRespAcceptFriend) {
+        auto resp = std::static_pointer_cast<Babel::Networking::Packets::PacketRespAcceptFriend>(packet.deserialize());
+        if (resp->getOk() == 0)
+            return;
+        _friendsInnerLayout.addWidget(new FriendItemWidget(resp->getUserId(), resp->getUsername()));
+    }
 }

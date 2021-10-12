@@ -92,6 +92,9 @@ void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawP
         case Babel::Networking::PacketType::PacketCmdDenyFriend:
             write(_handlePacket->handleCmdDenyFriend(rawPacket, this));
             break;
+        case Babel::Networking::PacketType::PacketCmdListFriends:
+            write(_handlePacket->handleCmdListFriends(rawPacket, this));
+            break;
     }
 }
 

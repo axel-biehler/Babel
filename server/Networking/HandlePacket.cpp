@@ -16,6 +16,7 @@
 #include <Networking/Packets/PacketRespAcceptFriend.hpp>
 #include <Networking/Packets/PacketCmdDenyFriend.hpp>
 #include <Networking/Packets/PacketRespDenyFriend.hpp>
+#include <Networking/Packets/PacketRespListFriends.hpp>
 #include "HandlePacket.hpp"
 
 Babel::Networking::HandlePacket::HandlePacket(std::shared_ptr<Server> server) : _server(server)
@@ -32,7 +33,7 @@ Babel::Networking::RawPacket Babel::Networking::HandlePacket::handleCmdLoginPack
 
      try {
          usr.getByUsername(*db, cmdLoginPacket->getUsername());
-     } catch (std::runtime_error err) {
+     } catch (std::runtime_error &err) {
         e = err.what();
         ok = 0;
      }
@@ -56,7 +57,7 @@ Babel::Networking::RawPacket Babel::Networking::HandlePacket::handleCmdRegisterP
     try {
         usr.getByUsername(*db, cmdRegisterPacket->getUsername());
     }
-    catch (std::runtime_error err) {}
+    catch (std::runtime_error &err) {}
     if (usr.getUsername() == cmdRegisterPacket->getUsername()) {
         Babel::Networking::Packets::PacketRespRegister resp(0, "Username already used.");
         return resp.serialize();
@@ -77,13 +78,13 @@ Babel::Networking::RawPacket Babel::Networking::HandlePacket::handleCmdInviteFri
 
     try {
         newFriend.getByUsername(*db, packet->getUsername());
-    } catch (std::runtime_error err) {
+    } catch (std::runtime_error &err) {
         Babel::Networking::Packets::PacketRespInviteFriend resp{0, "Could not find user."};
         return resp.serialize();
     }
 
     auto friends = Database::Friendship::getAllFriends(*db, session->getUserId());
-    for (auto fri : friends) {
+    for (auto &fri : friends) {
         if (fri.getTo() == newFriend.getId() || fri.getFrom() == newFriend.getId()) {
             Babel::Networking::Packets::PacketRespInviteFriend resp{0, "Already a friend of yours."};
             return resp.serialize();
@@ -91,7 +92,7 @@ Babel::Networking::RawPacket Babel::Networking::HandlePacket::handleCmdInviteFri
     }
 
     auto invites = Database::Friendship::getAllWaiting(*db, session->getUserId());
-    for (auto fri : invites) {
+    for (auto &fri : invites) {
         if (fri.getTo() == newFriend.getId() || fri.getFrom() == newFriend.getId()) {
             Babel::Networking::Packets::PacketRespInviteFriend resp{0, "An invite is already waiting."};
             return resp.serialize();
@@ -117,7 +118,7 @@ Babel::Networking::HandlePacket::handleCmdListInvites(Babel::Networking::RawPack
     Database::User to;
 
     auto invites = Database::Friendship::getAllWaiting(*db, session->getUserId());
-    for (auto fri : invites) {
+    for (auto &fri : invites) {
         from.getById(*db, fri.getFrom());
         to.getById(*db, fri.getTo());
 
@@ -143,19 +144,24 @@ Babel::Networking::HandlePacket::handleCmdAcceptFriend(Babel::Networking::RawPac
 
     try {
         friendship.getById(*db, packet->getId());
-    } catch (std::runtime_error e) {
-        Babel::Networking::Packets::PacketRespAcceptFriend resp{0, "Invite not found.", packet->getId()};
+    } catch (std::runtime_error &e) {
+        Babel::Networking::Packets::PacketRespAcceptFriend resp{0, "Invite not found.", packet->getId(), 0, ""};
         return resp.serialize();
     }
 
     if (friendship.getTo() != session->getUserId()) {
-        Babel::Networking::Packets::PacketRespAcceptFriend resp{0, "This invite is not for you.", packet->getId()};
+        Babel::Networking::Packets::PacketRespAcceptFriend resp{0, "This invite is not for you.", packet->getId(), 0,  ""};
         return resp.serialize();
     }
 
+
     friendship.accept();
     friendship.save(*db);
-    Babel::Networking::Packets::PacketRespAcceptFriend resp{1, "", packet->getId()};
+
+    Database::User from;
+    from.getById(*db, friendship.getFrom());
+
+    Babel::Networking::Packets::PacketRespAcceptFriend resp{1, "", packet->getId(), from.getId(), from.getUsername()};
     return resp.serialize();
 }
 
@@ -169,7 +175,7 @@ Babel::Networking::HandlePacket::handleCmdDenyFriend(Babel::Networking::RawPacke
 
     try {
         friendship.getById(*db, packet->getId());
-    } catch (std::runtime_error e) {
+    } catch (std::runtime_error &e) {
         Babel::Networking::Packets::PacketRespDenyFriend resp{0, "Invite not found.", packet->getId()};
         return resp.serialize();
     }
@@ -181,5 +187,27 @@ Babel::Networking::HandlePacket::handleCmdDenyFriend(Babel::Networking::RawPacke
 
     friendship.del(*db);
     Babel::Networking::Packets::PacketRespDenyFriend resp{1, "", packet->getId()};
+    return resp.serialize();
+}
+
+Babel::Networking::RawPacket
+Babel::Networking::HandlePacket::handleCmdListFriends(Babel::Networking::RawPacket rawPacket,
+                                                      Babel::Networking::Session *session) {
+    auto db = _server->getDb();
+    std::vector<Babel::Networking::User> netUsers;
+
+    Database::User user;
+
+    auto friends = Database::Friendship::getAllFriends(*db, session->getUserId());
+    for (auto &fri : friends) {
+        user.getById(*db, fri.getTo() == session->getUserId() ? fri.getFrom() : fri.getTo());
+
+        Babel::Networking::User netUser;
+        netUser.id = user.getId();
+        netUser.username = user.getUsername();
+        netUsers.push_back(netUser);
+    }
+
+    Babel::Networking::Packets::PacketRespListFriends resp{netUsers};
     return resp.serialize();
 }

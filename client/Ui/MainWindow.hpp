@@ -28,6 +28,7 @@ namespace Babel {
 
         private slots:
             void showFriends();
+            void onPacketReceived(Babel::Networking::RawPacket packet);
         };
     }
 }
