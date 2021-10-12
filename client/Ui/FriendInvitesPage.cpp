@@ -14,13 +14,6 @@ Babel::Ui::FriendInvitesPage::FriendInvitesPage(Babel::Networking::Client *cli) 
     _innerLayout.setAlignment(Qt::AlignTop);
     _mainWidget.setLayout(&_innerLayout);
 
-    /*
-    for (int i = 0; i < 50; i++) {
-        FriendInviteWidget *w = new FriendInviteWidget("John Doe", i % 2 == 0 ? Sent : Received);
-        _innerLayout.addWidget(w);
-    }
-    */
-
     QObject::connect(_cli, &Babel::Networking::Client::packetReceive, this, &FriendInvitesPage::onPacketReceived);
 
     Networking::Packets::PacketCmdListInvites packet;
@@ -32,10 +25,10 @@ void Babel::Ui::FriendInvitesPage::onPacketReceived(Babel::Networking::RawPacket
         auto resp = std::static_pointer_cast<Networking::Packets::PacketRespListInvites>(packet.deserialize());
         for (auto invite : resp->getInvites()) {
             if (invite.from == _cli->getUserId()) {
-                auto w = new FriendInviteWidget(invite.toUsername, Sent);
+                auto w = new FriendInviteWidget(_cli, invite.id, invite.toUsername, Sent);
                 _innerLayout.addWidget(w);
             } else {
-                auto w = new FriendInviteWidget(invite.fromUsername, Received);
+                auto w = new FriendInviteWidget(_cli, invite.id, invite.fromUsername, Received);
                 _innerLayout.addWidget(w);
             }
         }

@@ -12,6 +12,10 @@
 #include <Networking/Packets/PacketRespInviteFriend.hpp>
 #include <Networking/PacketTypes.hpp>
 #include <Networking/Packets/PacketRespListInvites.hpp>
+#include <Networking/Packets/PacketCmdAcceptFriend.hpp>
+#include <Networking/Packets/PacketRespAcceptFriend.hpp>
+#include <Networking/Packets/PacketCmdDenyFriend.hpp>
+#include <Networking/Packets/PacketRespDenyFriend.hpp>
 #include "HandlePacket.hpp"
 
 Babel::Networking::HandlePacket::HandlePacket(std::shared_ptr<Server> server) : _server(server)
@@ -126,5 +130,56 @@ Babel::Networking::HandlePacket::handleCmdListInvites(Babel::Networking::RawPack
     }
 
     Babel::Networking::Packets::PacketRespListInvites resp{netInvites};
+    return resp.serialize();
+}
+
+Babel::Networking::RawPacket
+Babel::Networking::HandlePacket::handleCmdAcceptFriend(Babel::Networking::RawPacket rawPacket,
+                                                       Babel::Networking::Session *session) {
+    auto packet = std::static_pointer_cast<Babel::Networking::Packets::PacketCmdAcceptFriend>(rawPacket.deserialize());
+    auto db = _server->getDb();
+
+    Database::Friendship friendship;
+
+    try {
+        friendship.getById(*db, packet->getId());
+    } catch (std::runtime_error e) {
+        Babel::Networking::Packets::PacketRespAcceptFriend resp{0, "Invite not found.", packet->getId()};
+        return resp.serialize();
+    }
+
+    if (friendship.getTo() != session->getUserId()) {
+        Babel::Networking::Packets::PacketRespAcceptFriend resp{0, "This invite is not for you.", packet->getId()};
+        return resp.serialize();
+    }
+
+    friendship.accept();
+    friendship.save(*db);
+    Babel::Networking::Packets::PacketRespAcceptFriend resp{1, "", packet->getId()};
+    return resp.serialize();
+}
+
+Babel::Networking::RawPacket
+Babel::Networking::HandlePacket::handleCmdDenyFriend(Babel::Networking::RawPacket rawPacket,
+                                                     Babel::Networking::Session *session) {
+    auto packet = std::static_pointer_cast<Babel::Networking::Packets::PacketCmdDenyFriend>(rawPacket.deserialize());
+    auto db = _server->getDb();
+
+    Database::Friendship friendship;
+
+    try {
+        friendship.getById(*db, packet->getId());
+    } catch (std::runtime_error e) {
+        Babel::Networking::Packets::PacketRespDenyFriend resp{0, "Invite not found.", packet->getId()};
+        return resp.serialize();
+    }
+
+    if (friendship.getTo() != session->getUserId()) {
+        Babel::Networking::Packets::PacketRespDenyFriend resp{0, "This invite is not for you.", packet->getId()};
+        return resp.serialize();
+    }
+
+    friendship.del(*db);
+    Babel::Networking::Packets::PacketRespDenyFriend resp{1, "", packet->getId()};
     return resp.serialize();
 }

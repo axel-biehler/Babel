@@ -18,6 +18,8 @@ namespace Babel {
             virtual RawPacket handleCmdRegisterPacket(RawPacket rawPacket, Session *session) = 0;
             virtual RawPacket handleCmdInviteFriendPacket(RawPacket rawPacket, Session *session) = 0;
             virtual RawPacket handleCmdListInvites(RawPacket rawPacket, Session *session) = 0;
+            virtual RawPacket handleCmdAcceptFriend(RawPacket rawPacket, Session *session) = 0;
+            virtual RawPacket handleCmdDenyFriend(RawPacket rawPacket, Session *session) = 0;
         };
     }
 }
