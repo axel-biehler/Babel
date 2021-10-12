@@ -16,7 +16,10 @@ namespace Babel {
 
         struct Invite {
             int id;
-            std::string username;
+            std::string fromUsername;
+            std::string toUsername;
+            int from;
+            int to;
         };
     }
 }

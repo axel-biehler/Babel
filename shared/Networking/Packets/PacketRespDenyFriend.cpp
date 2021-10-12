@@ -3,8 +3,8 @@
 #include <Networking/ArgumentsWriter.hpp>
 #include <Networking/RawPacket.hpp>
 
-Babel::Networking::Packets::PacketRespDenyFriend::PacketRespDenyFriend(char ok, const std::string &errorMessage)
-        : Packet(PacketType::PacketRespDenyFriend), _ok(ok), _errorMessage(errorMessage) {
+Babel::Networking::Packets::PacketRespDenyFriend::PacketRespDenyFriend(char ok, const std::string &errorMessage, int friendshipId)
+        : Packet(PacketType::PacketRespDenyFriend), _ok(ok), _errorMessage(errorMessage), _friendshipId(friendshipId) {
 }
 
 Babel::Networking::Packets::PacketRespDenyFriend::PacketRespDenyFriend(std::vector<char> data)
@@ -12,6 +12,7 @@ Babel::Networking::Packets::PacketRespDenyFriend::PacketRespDenyFriend(std::vect
     ArgumentsReader reader{data};
     _ok = reader.readChar();
     _errorMessage = reader.readString();
+    _friendshipId = reader.readInt();
 }
 
 char Babel::Networking::Packets::PacketRespDenyFriend::getOk() const {
@@ -22,10 +23,15 @@ std::string Babel::Networking::Packets::PacketRespDenyFriend::getErrorMessage() 
     return _errorMessage;
 }
 
+int Babel::Networking::Packets::PacketRespDenyFriend::getFriendshipId() const {
+    return _friendshipId;
+}
+
 Babel::Networking::RawPacket Babel::Networking::Packets::PacketRespDenyFriend::serialize() const {
     Babel::Networking::ArgumentsWriter writer;
     writer.addChar(_ok);
     writer.addString(_errorMessage);
+    writer.addInt(_friendshipId);
     return {build(writer.build())};
 }
 

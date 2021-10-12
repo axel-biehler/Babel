@@ -1,6 +1,6 @@
 #include "FriendItemWidget.hpp"
 
-Babel::Ui::FriendItemWidget::FriendItemWidget(const std::string &username) {
+Babel::Ui::FriendItemWidget::FriendItemWidget(int userId, const std::string &username) : _userId(userId) {
     setLayout(&_mainLayout);
     _mainLayout.setAlignment(Qt::AlignLeft);
     _mainLayout.addWidget(&_userImageLabel);

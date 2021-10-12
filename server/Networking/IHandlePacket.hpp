@@ -16,6 +16,11 @@ namespace Babel {
         public:
             virtual RawPacket handleCmdLoginPacket(RawPacket packet, Session *session) = 0;
             virtual RawPacket handleCmdRegisterPacket(RawPacket rawPacket, Session *session) = 0;
+            virtual RawPacket handleCmdInviteFriendPacket(RawPacket rawPacket, Session *session) = 0;
+            virtual RawPacket handleCmdListInvites(RawPacket rawPacket, Session *session) = 0;
+            virtual RawPacket handleCmdAcceptFriend(RawPacket rawPacket, Session *session) = 0;
+            virtual RawPacket handleCmdDenyFriend(RawPacket rawPacket, Session *session) = 0;
+            virtual RawPacket handleCmdListFriends(RawPacket rawPacket, Session *session) = 0;
         };
     }
 }

@@ -9,7 +9,7 @@ namespace Babel {
     namespace Ui {
         class FriendItemWidget : public QWidget {
         public:
-            FriendItemWidget(const std::string &username);
+            FriendItemWidget(int userId, const std::string &username);
 
         private:
             QHBoxLayout _mainLayout;
@@ -17,6 +17,7 @@ namespace Babel {
             QLabel _usernameLabel;
             QPushButton _messageButton;
             QPushButton _callButton;
+            int _userId;
         };
     }
 }

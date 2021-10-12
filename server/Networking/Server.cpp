@@ -50,3 +50,10 @@ std::shared_ptr<Babel::Networking::IHandlePacket> Babel::Networking::Server::get
 {
     return _handlePacket;
 }
+
+std::shared_ptr<Babel::Networking::Session> Babel::Networking::Server::getSessionFromUser(int userId) {
+    for (auto &session : _sessions)
+        if (session->getUserId() == userId)
+            return session;
+    return nullptr;
+}
