@@ -75,10 +75,10 @@ void Babel::Networking::Session::on_read_data(std::error_code error, std::size_t
 void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawPacket) {
     switch (rawPacket.getPacketType()) {
         case Babel::Networking::PacketType::PacketCmdLogin:
-            write(_handlePacket->handleCmdLoginPacket(rawPacket));
+            write(_handlePacket->handleCmdLoginPacket(rawPacket, this));
             break;
         case Babel::Networking::PacketType::PacketCmdRegister:
-            write(_handlePacket->handleCmdRegisterPacket(rawPacket));
+            write(_handlePacket->handleCmdRegisterPacket(rawPacket, this));
             break;
 
     }
@@ -100,3 +100,7 @@ std::shared_ptr<Babel::Networking::IHandlePacket> Babel::Networking::Session::ge
     return _handlePacket;
 }
 
+void Babel::Networking::Session::setUserId(int userId)
+{
+    _userId = userId;
+}

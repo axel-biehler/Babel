@@ -10,7 +10,7 @@
 
 #include "asio.hpp"
 #include "Session.hpp"
-#include "IHandlepacket.h"
+#include "IHandlePacket.hpp"
 #include <optional>
 #include <vector>
 #include <Database/Database.hpp>

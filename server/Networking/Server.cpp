@@ -26,7 +26,7 @@ void Babel::Networking::Server::async_accept()
     {
         if (!err) {
             std::cout << "connected" << std::endl;
-            auto session = std::make_shared<Babel::Networking::Session>(socket_ptr, std::move(_handlePacket));
+            auto session = std::make_shared<Babel::Networking::Session>(socket_ptr, _handlePacket);
             session->start();
             _sessions.push_back(session);
             async_accept();

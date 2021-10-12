@@ -10,7 +10,7 @@
 Babel::Ui::ConnectionWindow::ConnectionWindow(Babel::Networking::Client *cli) {
     this->setMinimumSize(600, 400);
     setWindowTitle("Connection");
-    Babel::Ui::ConnectionPage *page = new Babel::Ui::ConnectionPage(cli);
+    Babel::Ui::ConnectionPage *page = new Babel::Ui::ConnectionPage(cli, this);
     _layout = new QGridLayout(this);
     _pages.addWidget(page);
     _pages.setFixedSize(width() / 2, height() / 2);
