@@ -88,7 +88,6 @@ void Babel::Ui::ConnectionPage::OnPacketReceived(Babel::Networking::RawPacket pa
             handlePacketRespLogin(packet);
             break;
         case Networking::PacketRespRegister:
-            auto respRegisterPacket = std::static_pointer_cast<Babel::Networking::Packets::PacketRespRegister> (packet.deserialize());
             handlePacketRespRegister(packet);
             break;
     }

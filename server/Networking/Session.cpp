@@ -39,8 +39,7 @@ void Babel::Networking::Session::start()
 
 void Babel::Networking::Session::read()
 {
-    // Schedule asynchronous receiving of a data
-    _socket->async_receive( asio::buffer(_data, 4), std::bind(&Session::on_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+    _socket->async_receive( asio::buffer(_size_str, 4), std::bind(&Session::on_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 }
 
 void Babel::Networking::Session::on_read(std::error_code error, std::size_t bytes_transferred)
@@ -50,11 +49,9 @@ void Babel::Networking::Session::on_read(std::error_code error, std::size_t byte
     try {
         RawInt raw{};
         for (int i = 0; i < sizeof(raw.i); i++)
-            raw.c[i] = _data[i];
-        for (int i = 0; i < 4; i++)
-            _buffer.push_back(_data[i]);
+            raw.c[i] = _size_str[i];
         _size = raw.i - 4;
-        _socket->async_receive(asio::buffer(_data, raw.i - 4), std::bind(&Session::on_read_data, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+        _socket->async_receive(asio::buffer(_data, _size), std::bind(&Session::on_read_data, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
     }
     catch (std::invalid_argument err) {
         std::cerr << err.what() << std::endl;
@@ -65,10 +62,13 @@ void Babel::Networking::Session::on_read_data(std::error_code error, std::size_t
 {
     if (error)
         return;
+    for (int i = 0; i < 4; i++)
+        _buffer.push_back(_size_str[i]);
     for (int i = 0; i < _size; i++)
         _buffer.push_back(_data[i]);
     auto rawPacket = Babel::Networking::RawPacket(_buffer);
     handle_packet(rawPacket);
+    _buffer.clear();
     read();
 }
 
@@ -80,7 +80,6 @@ void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawP
         case Babel::Networking::PacketType::PacketCmdRegister:
             write(_handlePacket->handleCmdRegisterPacket(rawPacket, this));
             break;
-
     }
 }
 
