@@ -53,7 +53,7 @@ std::shared_ptr<Babel::Networking::IHandlePacket> Babel::Networking::Server::get
 
 std::shared_ptr<Babel::Networking::Session> Babel::Networking::Server::getSessionFromUser(int userId) {
     for (auto &session : _sessions)
-        if (session->getUserId() == userId)
+        if (session->getUserId() == userId && !session->getIsClosed())
             return session;
     return nullptr;
 }
