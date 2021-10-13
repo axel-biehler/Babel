@@ -1,6 +1,9 @@
+#include <Networking/Packets/PacketCall.hpp>
 #include "FriendItemWidget.hpp"
+#include "CallWindow.hpp"
 
-Babel::Ui::FriendItemWidget::FriendItemWidget(int userId, const std::string &username) : _userId(userId) {
+Babel::Ui::FriendItemWidget::FriendItemWidget(Babel::Networking::Client *cli, int userId, const std::string &username)
+        : _cli(cli), _userId(userId), _username(username) {
     setLayout(&_mainLayout);
     _mainLayout.setAlignment(Qt::AlignLeft);
     _mainLayout.addWidget(&_userImageLabel);
@@ -26,4 +29,12 @@ Babel::Ui::FriendItemWidget::FriendItemWidget(int userId, const std::string &use
 
     _usernameLabel.setText(username.c_str());
     _usernameLabel.setFont(QFont("Roboto", 10));
+
+    QObject::connect(&_callButton, &QPushButton::pressed, this, &FriendItemWidget::call);
+}
+
+void Babel::Ui::FriendItemWidget::call() {
+    Networking::Packets::PacketCall packet{_userId};
+    _cli->write(packet.serialize());
+    (new CallWindow(_cli, CallStatus::WaitingForAnswer, _userId, _username))->show();
 }

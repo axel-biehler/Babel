@@ -95,6 +95,12 @@ void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawP
         case Babel::Networking::PacketType::PacketCmdListFriends:
             write(_handlePacket->handleCmdListFriends(rawPacket, this));
             break;
+        case Babel::Networking::PacketType::PacketCall:
+            _handlePacket->handleCmdCall(rawPacket, this);
+            break;
+        case Babel::Networking::PacketType::PacketAcceptCall:
+            _handlePacket->handleAcceptCall(rawPacket, this);
+            break;
     }
 }
 
@@ -121,4 +127,8 @@ void Babel::Networking::Session::setUserId(int userId)
 
 int Babel::Networking::Session::getUserId() const {
     return _userId;
+}
+
+std::string Babel::Networking::Session::getIp() const {
+    return _socket->remote_endpoint().address().to_string();
 }

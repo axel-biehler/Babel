@@ -55,7 +55,11 @@ add_executable(babel_client client/main.cpp
         shared/Networking/Packets/PacketRespListFriends.cpp shared/Networking/Packets/PacketRespListFriends.hpp
         shared/Networking/PacketTypes.hpp
         shared/Networking/Packets/PacketCmdListInvites.cpp shared/Networking/Packets/PacketCmdListInvites.hpp
-        shared/Networking/Packets/PacketRespListInvites.cpp shared/Networking/Packets/PacketRespListInvites.hpp)
+        shared/Networking/Packets/PacketRespListInvites.cpp shared/Networking/Packets/PacketRespListInvites.hpp
+        shared/Networking/Packets/PacketCall.cpp shared/Networking/Packets/PacketCall.hpp
+        shared/Networking/Packets/PacketCallReceived.cpp shared/Networking/Packets/PacketCallReceived.hpp
+        shared/Networking/Packets/PacketAcceptCall.cpp shared/Networking/Packets/PacketAcceptCall.hpp
+        shared/Networking/Packets/PacketStartVoip.cpp shared/Networking/Packets/PacketStartVoip.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/client)
@@ -96,7 +100,12 @@ add_executable(babel_server server/main.cpp
         shared/Networking/Packets/PacketRespListInvites.cpp shared/Networking/Packets/PacketRespListInvites.hpp
         server/Networking/HandlePacket.cpp server/Networking/HandlePacket.hpp
         server/Networking/IHandlePacket.hpp
-        shared/Networking/Packets/PacketAudio.cpp shared/Networking/Packets/PacketAudio.hpp)
+        shared/Networking/Packets/PacketAudio.cpp shared/Networking/Packets/PacketAudio.hpp
+        shared/Networking/Packets/PacketCall.cpp shared/Networking/Packets/PacketCall.hpp
+        server/Networking/Call.cpp server/Networking/Call.hpp
+        shared/Networking/Packets/PacketCallReceived.cpp shared/Networking/Packets/PacketCallReceived.hpp
+        shared/Networking/Packets/PacketAcceptCall.cpp shared/Networking/Packets/PacketAcceptCall.hpp
+        shared/Networking/Packets/PacketStartVoip.cpp shared/Networking/Packets/PacketStartVoip.hpp)
 target_include_directories(babel_server PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/server)

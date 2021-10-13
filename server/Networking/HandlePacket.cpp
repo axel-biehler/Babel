@@ -20,6 +20,11 @@
 #include <Networking/Packets/PacketInviteReceived.hpp>
 #include <Networking/Packets/PacketFriendAdded.hpp>
 #include <Networking/Packets/PacketFriendDenied.hpp>
+#include <Networking/Packets/PacketCall.hpp>
+#include <Networking/Packets/PacketCallReceived.hpp>
+#include <Networking/Packets/PacketAcceptCall.hpp>
+#include <Networking/Packets/PacketStartVoip.hpp>
+#include <random>
 #include "HandlePacket.hpp"
 
 Babel::Networking::HandlePacket::HandlePacket(std::shared_ptr<Server> server) : _server(server)
@@ -245,4 +250,46 @@ Babel::Networking::HandlePacket::handleCmdListFriends(Babel::Networking::RawPack
 
     Babel::Networking::Packets::PacketRespListFriends resp{netUsers};
     return resp.serialize();
+}
+
+void Babel::Networking::HandlePacket::handleCmdCall(Babel::Networking::RawPacket rawPacket,
+                                                                         Babel::Networking::Session *session) {
+    auto packet = std::static_pointer_cast<Babel::Networking::Packets::PacketCall>(rawPacket.deserialize());
+    auto db = _server->getDb();
+
+    auto otherSession = _server->getSessionFromUser(packet->getId());
+    if (otherSession == nullptr)
+        return;
+
+    _server->addCall(session->getUserId(), packet->getId());
+
+    Database::User user;
+    user.getById(*db, session->getUserId());
+
+    Packets::PacketCallReceived otherPacket{session->getUserId(), user.getUsername()};
+    otherSession->write(otherPacket.serialize());
+}
+
+void Babel::Networking::HandlePacket::handleAcceptCall(Babel::Networking::RawPacket rawPacket,
+                                                       Babel::Networking::Session *session) {
+    auto packet = std::static_pointer_cast<Babel::Networking::Packets::PacketAcceptCall>(rawPacket.deserialize());
+
+    _server->validateCall(packet->getId(), session->getUserId());
+
+    auto otherSession = _server->getSessionFromUser(packet->getId());
+    if (otherSession == nullptr)
+        return;
+
+
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<int> dist(10000, 11000);
+    auto a = dist(mt);
+    auto b = dist(mt);
+
+    Networking::Packets::PacketStartVoip packetFrom{packet->getId(), session->getIp(), a, b};
+    otherSession->write(packetFrom.serialize());
+
+    Networking::Packets::PacketStartVoip packetTo{session->getUserId(), otherSession->getIp(), b, a};
+    session->write(packetTo.serialize());
 }

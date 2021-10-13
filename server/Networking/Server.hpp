@@ -11,6 +11,7 @@
 #include "asio.hpp"
 #include "Session.hpp"
 #include "IHandlePacket.hpp"
+#include "Call.hpp"
 #include <optional>
 #include <vector>
 #include <Database/Database.hpp>
@@ -29,6 +30,8 @@ namespace Babel {
                 std::shared_ptr<Babel::Networking::IHandlePacket> getHandlePacket() const;
 
                 std::shared_ptr<Babel::Networking::Session> getSessionFromUser(int userId);
+                void addCall(int from, int to);
+                void validateCall(int from, int to);
 
             private:
                 asio::ip::tcp::acceptor _acceptor;
@@ -36,6 +39,7 @@ namespace Babel {
                 std::vector<std::shared_ptr<Babel::Networking::Session>> _sessions;
                 std::shared_ptr<Babel::Database::Database> _db;
                 std::shared_ptr<Babel::Networking::IHandlePacket> _handlePacket;
+                std::vector<Call> _calls;
         };
     }
 }

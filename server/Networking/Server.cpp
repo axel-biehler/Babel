@@ -57,3 +57,16 @@ std::shared_ptr<Babel::Networking::Session> Babel::Networking::Server::getSessio
             return session;
     return nullptr;
 }
+
+void Babel::Networking::Server::addCall(int from, int to) {
+    _calls.emplace_back(from, to);
+}
+
+void Babel::Networking::Server::validateCall(int from, int to) {
+    for (auto &call : _calls) {
+        if (call.getFrom() == from && call.getTo() == to) {
+            _calls.erase(std::remove(_calls.begin(), _calls.end(), call), _calls.end());
+            return;
+        }
+    }
+}

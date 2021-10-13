@@ -21,6 +21,8 @@ namespace Babel {
             virtual RawPacket handleCmdAcceptFriend(RawPacket rawPacket, Session *session) = 0;
             virtual RawPacket handleCmdDenyFriend(RawPacket rawPacket, Session *session) = 0;
             virtual RawPacket handleCmdListFriends(RawPacket rawPacket, Session *session) = 0;
+            virtual void handleCmdCall(RawPacket rawPacket, Session *session) = 0;
+            virtual void handleAcceptCall(RawPacket rawPacket, Session *session) = 0;
         };
     }
 }

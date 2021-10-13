@@ -26,6 +26,7 @@ namespace Babel {
                 std::shared_ptr<Babel::Networking::IHandlePacket> getHandlePacket() const;
                 void setUserId(int userId);
                 int getUserId() const;
+                std::string getIp() const;
 
             ~Session();
 

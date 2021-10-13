@@ -19,6 +19,10 @@
 #include <Networking/Packets/PacketRespListFriends.hpp>
 #include <Networking/Packets/PacketCmdListInvites.hpp>
 #include <Networking/Packets/PacketRespListInvites.hpp>
+#include <Networking/Packets/PacketCall.hpp>
+#include <Networking/Packets/PacketCallReceived.hpp>
+#include <Networking/Packets/PacketAcceptCall.hpp>
+#include <Networking/Packets/PacketStartVoip.hpp>
 
 Babel::Networking::RawPacket::RawPacket(std::vector<char> data) : _data(data) {
 }
@@ -55,6 +59,10 @@ std::shared_ptr<Babel::Networking::Packet> Babel::Networking::RawPacket::deseria
         case PacketRespListFriends: return std::make_shared<Packets::PacketRespListFriends>(_data);
         case PacketCmdListInvites: return std::make_shared<Packets::PacketCmdListInvites>(_data);
         case PacketRespListInvites: return std::make_shared<Packets::PacketRespListInvites>(_data);
+        case PacketCall: return std::make_shared<Packets::PacketCall>(_data);
+        case PacketCallReceived: return std::make_shared<Packets::PacketCallReceived>(_data);
+        case PacketAcceptCall: return std::make_shared<Packets::PacketAcceptCall>(_data);
+        case PacketStartVoip: return std::make_shared<Packets::PacketStartVoip>(_data);
         default: return std::make_shared<Babel::Networking::Packet>(PacketUnknown);
     }
 }

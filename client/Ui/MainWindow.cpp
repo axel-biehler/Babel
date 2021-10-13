@@ -5,9 +5,11 @@
 #include <Networking/Packets/PacketInviteReceived.hpp>
 #include <QMessageBox>
 #include <Networking/Packets/PacketFriendAdded.hpp>
+#include <Networking/Packets/PacketCallReceived.hpp>
 #include "MainWindow.hpp"
 #include "FriendsWindow.hpp"
 #include "FriendItemWidget.hpp"
+#include "CallWindow.hpp"
 
 Babel::Ui::MainWindow::MainWindow(Babel::Networking::Client *cli) : _cli(cli) {
     setWindowTitle("Babel");
@@ -49,18 +51,21 @@ void Babel::Ui::MainWindow::onPacketReceived(Babel::Networking::RawPacket packet
     if (packet.getPacketType() == Networking::PacketType::PacketRespListFriends) {
         auto resp = std::static_pointer_cast<Networking::Packets::PacketRespListFriends>(packet.deserialize());
         for (auto &f : resp->getFriends()) {
-            _friendsInnerLayout.addWidget(new FriendItemWidget(f.id, f.username));
+            _friendsInnerLayout.addWidget(new FriendItemWidget(_cli, f.id, f.username));
         }
     } else if (packet.getPacketType() == Networking::PacketRespAcceptFriend) {
         auto resp = std::static_pointer_cast<Babel::Networking::Packets::PacketRespAcceptFriend>(packet.deserialize());
         if (resp->getOk() == 0)
             return;
-        _friendsInnerLayout.addWidget(new FriendItemWidget(resp->getUserId(), resp->getUsername()));
+        _friendsInnerLayout.addWidget(new FriendItemWidget(_cli, resp->getUserId(), resp->getUsername()));
     } else if (packet.getPacketType() == Networking::PacketInviteReceived) {
         auto resp = std::static_pointer_cast<Babel::Networking::Packets::PacketInviteReceived>(packet.deserialize());
         QMessageBox::information(nullptr, "Friend invite received", QString("You received an invite from ") + QString(resp->getUsername().c_str()) + QString("."));
     } else if (packet.getPacketType() == Networking::PacketFriendAdded) {
         auto resp = std::static_pointer_cast<Babel::Networking::Packets::PacketFriendAdded>(packet.deserialize());
-        _friendsInnerLayout.addWidget(new FriendItemWidget(resp->getId(), resp->getUsername()));
+        _friendsInnerLayout.addWidget(new FriendItemWidget(_cli, resp->getId(), resp->getUsername()));
+    } else if (packet.getPacketType() == Networking::PacketCallReceived) {
+        auto resp = std::static_pointer_cast<Babel::Networking::Packets::PacketCallReceived>(packet.deserialize());
+        (new Babel::Ui::CallWindow(_cli, Babel::Ui::CallStatus::Receiving, resp->getId(), resp->getUsername()))->show();
     }
 }
