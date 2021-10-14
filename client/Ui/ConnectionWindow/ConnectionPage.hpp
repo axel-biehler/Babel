@@ -11,14 +11,18 @@
 #include <QLabel>
 #include <QPushButton>
 #include <Networking/Client.hpp>
+#include "ConnectionWindow.hpp"
 
 namespace Babel {
     namespace Ui {
         class ConnectionPage : public QWidget {
             Q_OBJECT
         public:
-            ConnectionPage(Babel::Networking::Client *cli);
+            ConnectionPage(Babel::Networking::Client *cli, Babel::Ui::ConnectionWindow *win);
             ~ConnectionPage() = default;
+
+            void handlePacketRespLogin(Babel::Networking::RawPacket rawPacket);
+            void handlePacketRespRegister(Babel::Networking::RawPacket rawPacket);
         private:
             QLineEdit _input;
             QLineEdit _pass;
@@ -30,6 +34,7 @@ namespace Babel {
             QPushButton *_register;
             QPushButton *_login;
             Babel::Networking::Client *_cli;
+            Babel::Ui::ConnectionWindow *_win;
 
         private slots:
             void Register();

@@ -8,19 +8,19 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#include "Networking/Server.hpp"
+#include <Networking/Server.hpp>
+#include <Database/Database.hpp>
+#include <Networking/HandlePacket.hpp>
 
 int main(int argc, char* argv[])
 {
-    try {
-        asio::io_context context;
-        Babel::Networking::Server server(context, std::stoi(argv[1]));
-        server.async_accept();
-        context.run();
-    }
-    catch (std::exception &e) {
-        std::cerr << e.what() << std::endl;
-    }
+    auto database = std::make_shared<Babel::Database::Database>("db.sqlite");
+    asio::io_context context;
+    auto server = std::make_shared<Babel::Networking::Server>(context, std::stoi(argv[1]), database);
+    auto handlePacket = std::make_shared<Babel::Networking::HandlePacket>(server);
+    server->setHandlePacket(handlePacket);
+    server->async_accept();
+    context.run();
 
     return 0;
 }

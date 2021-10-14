@@ -1,11 +1,28 @@
 #include <Networking/RawPacket.hpp>
+#include <memory>
 #include <Networking/Packets/PacketCmdRegister.hpp>
 #include <Networking/Packets/PacketRespRegister.hpp>
 #include <Networking/Packets/PacketCmdLogin.hpp>
 #include <Networking/Packets/PacketRespLogin.hpp>
 #include <Networking/Packets/PacketCmdLogout.hpp>
 #include <Networking/Packets/PacketAudio.hpp>
-#include <memory>
+#include <Networking/Packets/PacketCmdInviteFriend.hpp>
+#include <Networking/Packets/PacketRespInviteFriend.hpp>
+#include <Networking/Packets/PacketCmdAcceptFriend.hpp>
+#include <Networking/Packets/PacketRespAcceptFriend.hpp>
+#include <Networking/Packets/PacketCmdDenyFriend.hpp>
+#include <Networking/Packets/PacketRespDenyFriend.hpp>
+#include <Networking/Packets/PacketInviteReceived.hpp>
+#include <Networking/Packets/PacketFriendAdded.hpp>
+#include <Networking/Packets/PacketFriendDenied.hpp>
+#include <Networking/Packets/PacketCmdListFriends.hpp>
+#include <Networking/Packets/PacketRespListFriends.hpp>
+#include <Networking/Packets/PacketCmdListInvites.hpp>
+#include <Networking/Packets/PacketRespListInvites.hpp>
+#include <Networking/Packets/PacketCall.hpp>
+#include <Networking/Packets/PacketCallReceived.hpp>
+#include <Networking/Packets/PacketAcceptCall.hpp>
+#include <Networking/Packets/PacketStartVoip.hpp>
 
 Babel::Networking::RawPacket::RawPacket(std::vector<char> data) : _data(data) {
 }
@@ -29,6 +46,23 @@ std::shared_ptr<Babel::Networking::Packet> Babel::Networking::RawPacket::deseria
         case PacketRespLogin: return std::make_shared<Packets::PacketRespLogin>(_data);
         case PacketCmdLogout: return std::make_shared<Packets::PacketCmdLogout>(_data);
         case PacketAudio: return std::make_shared<Packets::PacketAudio>(_data);
+        case PacketCmdInviteFriend: return std::make_shared<Packets::PacketCmdInviteFriend>(_data);
+        case PacketRespInviteFriend: return std::make_shared<Packets::PacketRespInviteFriend>(_data);
+        case PacketCmdAcceptFriend: return std::make_shared<Packets::PacketCmdAcceptFriend>(_data);
+        case PacketRespAcceptFriend: return std::make_shared<Packets::PacketRespAcceptFriend>(_data);
+        case PacketCmdDenyFriend: return std::make_shared<Packets::PacketCmdDenyFriend>(_data);
+        case PacketRespDenyFriend: return std::make_shared<Packets::PacketRespDenyFriend>(_data);
+        case PacketInviteReceived: return std::make_shared<Packets::PacketInviteReceived>(_data);
+        case PacketFriendAdded: return std::make_shared<Packets::PacketFriendAdded>(_data);
+        case PacketFriendDenied: return std::make_shared<Packets::PacketFriendDenied>(_data);
+        case PacketCmdListFriends: return std::make_shared<Packets::PacketCmdListFriends>(_data);
+        case PacketRespListFriends: return std::make_shared<Packets::PacketRespListFriends>(_data);
+        case PacketCmdListInvites: return std::make_shared<Packets::PacketCmdListInvites>(_data);
+        case PacketRespListInvites: return std::make_shared<Packets::PacketRespListInvites>(_data);
+        case PacketCall: return std::make_shared<Packets::PacketCall>(_data);
+        case PacketCallReceived: return std::make_shared<Packets::PacketCallReceived>(_data);
+        case PacketAcceptCall: return std::make_shared<Packets::PacketAcceptCall>(_data);
+        case PacketStartVoip: return std::make_shared<Packets::PacketStartVoip>(_data);
         default: return std::make_shared<Babel::Networking::Packet>(PacketUnknown);
     }
 }

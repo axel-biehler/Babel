@@ -7,7 +7,10 @@
 
 #include "Server.hpp"
 
-Babel::Networking::Server::Server(asio::io_context& io_context, short port) : _acceptor(io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)), _io_context(io_context)
+Babel::Networking::Server::Server(asio::io_context& io_context, short port, std::shared_ptr<Babel::Database::Database> db) :
+    _acceptor(io_context,asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)),
+    _io_context(io_context),
+    _db(db)
 {
 }
 
@@ -23,7 +26,7 @@ void Babel::Networking::Server::async_accept()
     {
         if (!err) {
             std::cout << "connected" << std::endl;
-            auto session = std::make_shared<Babel::Networking::Session>(socket_ptr);
+            auto session = std::make_shared<Babel::Networking::Session>(socket_ptr, _handlePacket);
             session->start();
             _sessions.push_back(session);
             async_accept();
@@ -31,4 +34,39 @@ void Babel::Networking::Server::async_accept()
             std::cerr << err << std::endl;
         }
     });
+}
+
+std::shared_ptr<Babel::Database::Database> Babel::Networking::Server::getDb() const
+{
+    return _db;
+}
+
+void Babel::Networking::Server::setHandlePacket(std::shared_ptr<Babel::Networking::IHandlePacket> handlePacket)
+{
+    _handlePacket = handlePacket;
+}
+
+std::shared_ptr<Babel::Networking::IHandlePacket> Babel::Networking::Server::getHandlePacket() const
+{
+    return _handlePacket;
+}
+
+std::shared_ptr<Babel::Networking::Session> Babel::Networking::Server::getSessionFromUser(int userId) {
+    for (auto &session : _sessions)
+        if (session->getUserId() == userId)
+            return session;
+    return nullptr;
+}
+
+void Babel::Networking::Server::addCall(int from, int to) {
+    _calls.emplace_back(from, to);
+}
+
+void Babel::Networking::Server::validateCall(int from, int to) {
+    for (auto &call : _calls) {
+        if (call.getFrom() == from && call.getTo() == to) {
+            _calls.erase(std::remove(_calls.begin(), _calls.end(), call), _calls.end());
+            return;
+        }
+    }
 }

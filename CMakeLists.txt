@@ -40,10 +40,29 @@ add_executable(babel_client client/main.cpp
         client/Audio/Opus.cpp client/Audio/Opus.hpp
         client/LibHandler/LibHandler.cpp client/LibHandler/LibHandler.hpp
         client/Audio/IAudio.hpp
-        shared/Networking/Packets/PacketAudio.cpp shared/Networking/Packets/PacketAudio.hpp
         client/Networking/ClientUdp.cpp client/Networking/ClientUdp.hpp
         client/Networking/IClient.hpp
-        client/Audio/ICompressor.h)
+        client/Audio/ICompressor.h
+        shared/Networking/Packets/PacketAudio.cpp shared/Networking/Packets/PacketAudio.hpp
+        shared/Networking/Packets/PacketCmdInviteFriend.cpp shared/Networking/Packets/PacketCmdInviteFriend.hpp
+        shared/Networking/Packets/PacketRespInviteFriend.cpp shared/Networking/Packets/PacketRespInviteFriend.hpp
+        shared/Networking/Packets/PacketCmdAcceptFriend.cpp shared/Networking/Packets/PacketCmdAcceptFriend.hpp
+        shared/Networking/Packets/PacketRespAcceptFriend.cpp shared/Networking/Packets/PacketRespAcceptFriend.hpp
+        shared/Networking/Packets/PacketCmdDenyFriend.cpp shared/Networking/Packets/PacketCmdDenyFriend.hpp
+        shared/Networking/Packets/PacketRespDenyFriend.cpp shared/Networking/Packets/PacketRespDenyFriend.hpp
+        shared/Networking/Packets/PacketRespDenyFriend.cpp shared/Networking/Packets/PacketRespDenyFriend.hpp
+        shared/Networking/Packets/PacketInviteReceived.cpp shared/Networking/Packets/PacketInviteReceived.hpp
+        shared/Networking/Packets/PacketFriendAdded.cpp shared/Networking/Packets/PacketFriendAdded.hpp
+        shared/Networking/Packets/PacketFriendDenied.cpp shared/Networking/Packets/PacketFriendDenied.hpp
+        shared/Networking/Packets/PacketCmdListFriends.cpp shared/Networking/Packets/PacketCmdListFriends.hpp
+        shared/Networking/Packets/PacketRespListFriends.cpp shared/Networking/Packets/PacketRespListFriends.hpp
+        shared/Networking/PacketTypes.hpp
+        shared/Networking/Packets/PacketCmdListInvites.cpp shared/Networking/Packets/PacketCmdListInvites.hpp
+        shared/Networking/Packets/PacketRespListInvites.cpp shared/Networking/Packets/PacketRespListInvites.hpp
+        shared/Networking/Packets/PacketCall.cpp shared/Networking/Packets/PacketCall.hpp
+        shared/Networking/Packets/PacketCallReceived.cpp shared/Networking/Packets/PacketCallReceived.hpp
+        shared/Networking/Packets/PacketAcceptCall.cpp shared/Networking/Packets/PacketAcceptCall.hpp
+        shared/Networking/Packets/PacketStartVoip.cpp shared/Networking/Packets/PacketStartVoip.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/client)
@@ -66,7 +85,30 @@ add_executable(babel_server server/main.cpp
         server/Database/IModel.hpp
         server/Database/User.cpp server/Database/User.hpp
         server/Networking/Server.cpp server/Networking/Server.hpp
-        server/Networking/Session.cpp server/Networking/Session.hpp)
+        server/Networking/Session.cpp server/Networking/Session.hpp
+        server/Database/Friendship.cpp server/Database/Friendship.hpp
+        shared/Networking/Packets/PacketCmdInviteFriend.cpp shared/Networking/Packets/PacketCmdInviteFriend.hpp
+        shared/Networking/Packets/PacketRespInviteFriend.cpp shared/Networking/Packets/PacketRespInviteFriend.hpp
+        shared/Networking/Packets/PacketCmdAcceptFriend.cpp shared/Networking/Packets/PacketCmdAcceptFriend.hpp
+        shared/Networking/Packets/PacketRespAcceptFriend.cpp shared/Networking/Packets/PacketRespAcceptFriend.hpp
+        shared/Networking/Packets/PacketCmdDenyFriend.cpp shared/Networking/Packets/PacketCmdDenyFriend.hpp
+        shared/Networking/Packets/PacketRespDenyFriend.cpp shared/Networking/Packets/PacketRespDenyFriend.hpp
+        shared/Networking/Packets/PacketInviteReceived.cpp shared/Networking/Packets/PacketInviteReceived.hpp
+        shared/Networking/Packets/PacketFriendAdded.cpp shared/Networking/Packets/PacketFriendAdded.hpp
+        shared/Networking/Packets/PacketFriendDenied.cpp shared/Networking/Packets/PacketFriendDenied.hpp
+        shared/Networking/Packets/PacketCmdListFriends.cpp shared/Networking/Packets/PacketCmdListFriends.hpp
+        shared/Networking/Packets/PacketRespListFriends.cpp shared/Networking/Packets/PacketRespListFriends.hpp
+        shared/Networking/PacketTypes.hpp
+        shared/Networking/Packets/PacketCmdListInvites.cpp shared/Networking/Packets/PacketCmdListInvites.hpp
+        shared/Networking/Packets/PacketRespListInvites.cpp shared/Networking/Packets/PacketRespListInvites.hpp
+        server/Networking/HandlePacket.cpp server/Networking/HandlePacket.hpp
+        server/Networking/IHandlePacket.hpp
+        shared/Networking/Packets/PacketAudio.cpp shared/Networking/Packets/PacketAudio.hpp
+        shared/Networking/Packets/PacketCall.cpp shared/Networking/Packets/PacketCall.hpp
+        server/Networking/Call.cpp server/Networking/Call.hpp
+        shared/Networking/Packets/PacketCallReceived.cpp shared/Networking/Packets/PacketCallReceived.hpp
+        shared/Networking/Packets/PacketAcceptCall.cpp shared/Networking/Packets/PacketAcceptCall.hpp
+        shared/Networking/Packets/PacketStartVoip.cpp shared/Networking/Packets/PacketStartVoip.hpp)
 target_include_directories(babel_server PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/server)

@@ -15,9 +15,9 @@ Babel::Networking::Client::Client() : QObject(nullptr), _socket(new QTcpSocket(t
     connect(_socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 }
 
-void Babel::Networking::Client::start(const std::string &address, u_int16_t port)
+void Babel::Networking::Client::start(const QString &address, quint16 port)
 {
-    _socket->connectToHost(QHostAddress(address.c_str()), port);
+    _socket->connectToHost(QHostAddress(address), port);
     _socket->waitForConnected();
 }
 
@@ -44,4 +44,12 @@ void Babel::Networking::Client::write(Babel::Networking::RawPacket rawPacket)
 
 bool Babel::Networking::Client::isConnected() const {
     return _socket->state() == QAbstractSocket::ConnectedState;
+}
+
+int Babel::Networking::Client::getUserId() const {
+    return _userId;
+}
+
+void Babel::Networking::Client::setUserId(int userId) {
+    _userId = userId;
 }
