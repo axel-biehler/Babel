@@ -12,7 +12,7 @@
 #define SAMPLE_RATE         48000
 #define FRAMES_PER_BUFFER   480
 
-Babel::Compression::Opus::Opus() {
+Babel::Compression::Opus::Opus() : ICompressor() {
     int error;
 
     _encoder = opus_encoder_create(SAMPLE_RATE, STEREO, OPUS_APPLICATION_VOIP, &error);

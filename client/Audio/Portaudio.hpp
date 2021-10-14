@@ -12,13 +12,17 @@
 
 #include <queue>
 #include <memory>
+//#include <Networking/ClientUdp.hpp>
 #include "portaudio.h"
 #include "IAudio.hpp"
-#include "../LibHandler/LibHandler.hpp"
 
 #define STEREO              2
 #define SAMPLE_RATE         48000
 #define FRAMES_PER_BUFFER   480
+
+namespace Babel::Networking {
+    class ClientUDP;
+}
 
 namespace Babel::Audio {
     class PortAudio : public IAudio {
@@ -29,14 +33,15 @@ namespace Babel::Audio {
         void stopRecording() override;
         void startPlaying() override;
         void stopPlaying() override;
-        void send_audio(std::queue<std::vector<float>> samples) override;
+        void add_sample(std::vector<float> &sample) override;
+        void send_audio() override;
         std::queue<std::vector<float>> get_audio_input();
         std::queue<std::vector<float>> get_audio_output();
         void set_audio_input(std::queue<std::vector<float>> &samples);
         void set_audio_output(std::queue<std::vector<float>> &samples);
-        void set_sender(Babel::Management::LibHandler *sender);
+        void set_sender(Babel::Networking::ClientUDP *sender) override;
     private:
-        std::shared_ptr<Babel::Management::LibHandler> *_sender;
+        Babel::Networking::ClientUDP *_sender;
         PaStreamParameters  _inputParameters;
         PaStreamParameters  _outputParameters;
         PaStream *          _stream;

@@ -40,6 +40,9 @@ add_executable(babel_client client/main.cpp
         client/Audio/Opus.cpp client/Audio/Opus.hpp
         client/LibHandler/LibHandler.cpp client/LibHandler/LibHandler.hpp
         client/Audio/IAudio.hpp
+        client/Networking/ClientUdp.cpp client/Networking/ClientUdp.hpp
+        client/Networking/IClient.hpp
+        client/Audio/ICompressor.h
         shared/Networking/Packets/PacketAudio.cpp shared/Networking/Packets/PacketAudio.hpp
         shared/Networking/Packets/PacketCmdInviteFriend.cpp shared/Networking/Packets/PacketCmdInviteFriend.hpp
         shared/Networking/Packets/PacketRespInviteFriend.cpp shared/Networking/Packets/PacketRespInviteFriend.hpp

@@ -7,10 +7,11 @@
 
 #include <Networking/RawPacket.hpp>
 #include "QtNetwork"
+#include "IClient.hpp"
 
 namespace Babel {
     namespace Networking {
-        class   Client : public QObject {
+        class Client : public QObject {
         Q_OBJECT
         public:
             Client();
