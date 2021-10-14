@@ -9,6 +9,8 @@
 #include <iostream>
 #include <utility>
 #include "Portaudio.hpp"
+#include "Networking/Packets/PacketAudio.hpp"
+#include "Networking/ClientUdp.hpp"
 
 Babel::Audio::PortAudio::PortAudio(): IAudio() {
     PaError err = Pa_Initialize();
@@ -98,13 +100,17 @@ void Babel::Audio::PortAudio::stopPlaying() {
     }
 }
 
+void Babel::Audio::PortAudio::add_sample(std::vector<float> &sample) {
+    _output_sample.push(sample);
+}
+
 int Babel::Audio::PortAudio::recordCallback(const void *inputBuffer, void *, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags , void *userData) {
     auto *audioHandler = (PortAudio *)userData;
     std::vector<float> newAudio = std::vector<float>();
 
     newAudio.assign((float *)inputBuffer, (float *)inputBuffer + framesPerBuffer * STEREO);
     audioHandler->_input_sample.push(newAudio);
-    audioHandler->send_audio(audioHandler->get_audio_input());
+    audioHandler->send_audio();
     return 0;
 }
 
@@ -142,12 +148,14 @@ void Babel::Audio::PortAudio::set_audio_output(std::queue<std::vector<float>> &s
     _output_sample = samples;
 }
 
-void Babel::Audio::PortAudio::send_audio(std::queue<std::vector<float>> samples) {
-    if (_sender)
-        _sender->get()->send(samples);
-    // ->get()->send(samples);
+void Babel::Audio::PortAudio::send_audio() {
+
+    while (!_input_sample.empty()) {
+        _sender->send(_input_sample.front());
+        _input_sample.pop();
+    }
 }
 
-void Babel::Audio::PortAudio::set_sender(Babel::Management::LibHandler *sender) {
-    _sender = reinterpret_cast<std::shared_ptr<Babel::Management::LibHandler> *>(sender);
+void Babel::Audio::PortAudio::set_sender(Babel::Networking::ClientUDP *sender) {
+    _sender = sender;
 }

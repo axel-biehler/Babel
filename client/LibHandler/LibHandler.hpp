@@ -10,9 +10,8 @@
 
 #include <queue>
 #include <memory>
-#include "../Audio/IAudio.hpp"
-#include "../Audio/Opus.hpp"
-#include "../Networking/IClient.hpp"
+#include "Audio/Portaudio.hpp"
+#include "Audio/Opus.hpp"
 
 namespace Babel::Management {
     class LibHandler {
@@ -20,13 +19,13 @@ namespace Babel::Management {
         LibHandler();
         ~LibHandler();
         void send(std::queue<std::vector<float>> &samples);
-        [[nodiscard]] std::shared_ptr<Babel::Audio::IAudio> get_lib_audio() const;
+        void start();
+        void stop();
+        [[nodiscard]] std::shared_ptr<Babel::Audio::PortAudio> get_lib_audio() const;
         [[nodiscard]] std::shared_ptr<Babel::Compression::Opus> get_lib_compressor() const;
-        [[nodiscard]] std::shared_ptr<Babel::Networking::IClient> get_lib_network() const;
     private:
-        std::shared_ptr<Babel::Audio::IAudio>       _libAudio;
+        std::shared_ptr<Babel::Audio::PortAudio>    _libAudio;
         std::shared_ptr<Babel::Compression::Opus>   _libCompressor;
-        std::shared_ptr<Babel::Networking::IClient> _libNetwork;
     };
 }
 

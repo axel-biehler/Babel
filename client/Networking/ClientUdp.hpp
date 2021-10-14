@@ -20,8 +20,11 @@ namespace Babel {
         Q_OBJECT
         public:
             explicit ClientUDP(Management::LibHandler *handler, QObject *parent = nullptr);
-            explicit ClientUDP(std::shared_ptr<Babel::Management::LibHandler> handler, QObject *parent = nullptr, int inputPort = 80, int outputPort = 8080);
+            explicit ClientUDP(QObject *parent = nullptr, int inputPort = 80, int outputPort = 8080);
+            void send(std::vector<float>);
             void write(Babel::Networking::RawPacket payload) override;
+            void startConnection(const std::string &ip, int inputPort, int outputPort) override;
+            void stopConnection() override;
             void setInputPort(int port);
             void setOutputPort(int port);
         signals:
@@ -34,6 +37,7 @@ namespace Babel {
             QUdpSocket *_socket;
             int _inputPort;
             int _outputPort;
+            QHostAddress _targetIp;
         };
     }
 }
