@@ -27,7 +27,8 @@ Babel::Networking::ClientUDP::ClientUDP(QObject *parent, int inputPort, int outp
 void Babel::Networking::ClientUDP::write(std::vector<unsigned char> payload) {
     //QByteArray Data(payload.data(), payload.size());
 
-    _socket->writeDatagram((char *)&payload[0], payload.size(), QHostAddress::LocalHost, _outputPort);
+    _socket->writeDatagram((char *)&payload[0], payload.size(), _targetIp, _outputPort);
+    //_socket->writeDatagram((char *)&payload[0], payload.size(), QHostAddress::LocalHost, _outputPort);
 }
 
 void Babel::Networking::ClientUDP::startConnection(const std::string &ip, int inputPort, int outputPort) {

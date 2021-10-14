@@ -8,6 +8,7 @@ Babel::Ui::CallWindow::CallWindow(Babel::Networking::Client *cli, Babel::Ui::Cal
     setWindowTitle("Call");
     setFixedSize(300, 200);
     setLayout(&_mainLayout);
+    _cliUdp = new Networking::ClientUDP(nullptr, 0, 0);
 
     _mainLayout.addWidget(&_titleLabel);
     _mainLayout.addWidget(&_actionButton);
@@ -45,6 +46,7 @@ void Babel::Ui::CallWindow::onPacketReceived(Babel::Networking::RawPacket packet
 
         auto voip = std::static_pointer_cast<Networking::Packets::PacketStartVoip>(packet.deserialize());
         // start call
+        _cliUdp->startConnection(voip->getIp(), voip->getListenPort(), voip->getSendPort());
         std::cout << voip->getIp() << " (" << voip->getListenPort() << "/" << voip->getSendPort() << ")" << std::endl;
     }
 }
@@ -57,6 +59,7 @@ void Babel::Ui::CallWindow::actionButton() {
         _cli->write(packet.serialize());
     } else {
         // stop call
+        _cliUdp->stopConnection();
         delete this;
     }
 }

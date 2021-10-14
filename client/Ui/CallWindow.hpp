@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <Ui/ChatWidget.hpp>
 #include <Networking/Client.hpp>
+#include <Networking/ClientUdp.hpp>
 
 namespace Babel {
     namespace Ui {
@@ -26,6 +27,7 @@ namespace Babel {
             QLabel _titleLabel;
             QPushButton _actionButton;
             Babel::Networking::Client *_cli;
+            Babel::Networking::ClientUDP *_cliUdp;
             CallStatus _status;
             int _otherId;
             std::string _otherUsername;
