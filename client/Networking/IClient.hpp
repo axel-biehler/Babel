@@ -15,7 +15,7 @@ namespace Babel {
     namespace Networking {
         class IClient : public QObject {
         public:
-            virtual void write(Babel::Networking::RawPacket payload) = 0;
+            virtual void write(std::vector<unsigned char> payload) = 0;
             virtual void startConnection(const std::string &ip, int inputPort, int outputPort) = 0;
             virtual void stopConnection() = 0;
         public slots:

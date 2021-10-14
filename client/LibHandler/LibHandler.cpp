@@ -6,10 +6,7 @@
 */
 
 
-#include <utility>
 #include "LibHandler.hpp"
-#include "../Audio/Opus.hpp"
-#include "../Audio/Portaudio.hpp"
 #include "../Networking/ClientUdp.hpp"
 
 Babel::Management::LibHandler::LibHandler() {
@@ -18,10 +15,6 @@ Babel::Management::LibHandler::LibHandler() {
 }
 
 Babel::Management::LibHandler::~LibHandler() {
-}
-
-void Babel::Management::LibHandler::send(std::queue<std::vector<float>> &samples) {
-    //std::cout << "sending..." << std::endl;
 }
 
 std::shared_ptr<Babel::Audio::PortAudio> Babel::Management::LibHandler::get_lib_audio() const {
@@ -33,11 +26,11 @@ std::shared_ptr<Babel::Compression::Opus> Babel::Management::LibHandler::get_lib
 }
 
 void Babel::Management::LibHandler::start() {
+    _libAudio->startRecording();
     _libAudio->startPlaying();
-    //_libAudio->startRecording();
 }
 
 void Babel::Management::LibHandler::stop() {
-   _libAudio->stopPlaying();
-   // _libAudio->stopRecording();
+    _libAudio->stopRecording();
+    _libAudio->stopPlaying();
 }

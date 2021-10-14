@@ -18,7 +18,6 @@ namespace Babel::Management {
     public:
         LibHandler();
         ~LibHandler();
-        void send(std::queue<std::vector<float>> &samples);
         void start();
         void stop();
         [[nodiscard]] std::shared_ptr<Babel::Audio::PortAudio> get_lib_audio() const;

@@ -22,7 +22,7 @@ namespace Babel {
             explicit ClientUDP(Management::LibHandler *handler, QObject *parent = nullptr);
             explicit ClientUDP(QObject *parent = nullptr, int inputPort = 80, int outputPort = 8080);
             void send(std::vector<float>);
-            void write(Babel::Networking::RawPacket payload) override;
+            void write(std::vector<unsigned char> payload) override;
             void startConnection(const std::string &ip, int inputPort, int outputPort) override;
             void stopConnection() override;
             void setInputPort(int port);

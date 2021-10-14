@@ -19,13 +19,11 @@ Babel::Audio::PortAudio::PortAudio(): IAudio() {
     if (err != paNoError) {
         std::cerr << "PortAudio initialisation failed." << std::endl;
         exit(84);
-        //TODO: throw error
     }
     _inputParameters.device = Pa_GetDefaultInputDevice();
     if (_inputParameters.device == paNoDevice) {
         std::cerr << "No default input device." << std::endl;
         exit(84);
-        //TODO: throw error
     }
     _inputParameters.channelCount = STEREO;
     _inputParameters.sampleFormat = paFloat32;
@@ -36,7 +34,6 @@ Babel::Audio::PortAudio::PortAudio(): IAudio() {
     if (_outputParameters.device == paNoDevice) {
         std::cerr << "No default output device." << std::endl;
         exit(84);
-        //TODO: throw error
     }
     _outputParameters.channelCount = STEREO;
     _outputParameters.sampleFormat = paFloat32;
@@ -50,20 +47,14 @@ Babel::Audio::PortAudio::~PortAudio() {
 }
 
 void Babel::Audio::PortAudio::startRecording() {
-    if (!_is_initialized) {
+    if (!_is_initialized)
         exit(84);
-        //TODO: throw error
-    }
-    PaError err = Pa_OpenStream(&_stream, &_inputParameters, nullptr, SAMPLE_RATE, FRAMES_PER_BUFFER, paClipOff, PortAudio::recordCallback, this);
-    if (err != paNoError) {
+    PaError err = Pa_OpenStream(&_stream, &_inputParameters, &_outputParameters, SAMPLE_RATE, FRAMES_PER_BUFFER, paClipOff, PortAudio::recordCallback, this);
+    if (err != paNoError)
         exit(84);
-       //TODO: throw error
-    }
     err = Pa_StartStream(_stream);
-    if (err != paNoError) {
+    if (err != paNoError)
         exit(84);
-        //TODO: throw error
-    }
     _recording = true;
 }
 
@@ -73,31 +64,24 @@ void Babel::Audio::PortAudio::stopRecording() {
         //TODO: throw error
     }
     PaError err = Pa_StopStream(_stream);
-    if (err != paNoError) {
+    _recording = false;
+    if (err != paNoError)
         exit(84);
-        //TODO: throw error
-    }
 }
 
 void Babel::Audio::PortAudio::startPlaying() {
-    PaError err = Pa_OpenStream(&_stream, nullptr, &_outputParameters, SAMPLE_RATE, FRAMES_PER_BUFFER, paClipOff, playCallback, this);
-    if (err != paNoError) {
+    PaError err = Pa_OpenStream(&_stream, &_inputParameters, &_outputParameters, SAMPLE_RATE, FRAMES_PER_BUFFER, paClipOff, PortAudio::playCallback, this);
+    if (err != paNoError)
         exit(84);
-        //TODO: throw error
-    }
     err = Pa_StartStream(_stream);
-    if (err != paNoError) {
+    if (err != paNoError)
         exit(84);
-        //TODO: throw error
-    }
 }
 
 void Babel::Audio::PortAudio::stopPlaying() {
     PaError err = Pa_CloseStream(_stream);
-    if (err != paNoError) {
+    if (err != paNoError)
         exit(84);
-        //TODO: throw error
-    }
 }
 
 void Babel::Audio::PortAudio::add_sample(std::vector<float> &sample) {
@@ -119,7 +103,7 @@ int Babel::Audio::PortAudio::playCallback(const void *, void *outputBuffer, unsi
     auto *output = (float *)outputBuffer;
 
     if (audioHandler->_output_sample.empty())
-        return 1;
+        return 0;
     std::vector<float> playAudio = audioHandler->_output_sample.front();
     auto it = playAudio.begin();
     audioHandler->_output_sample.pop();
@@ -149,7 +133,6 @@ void Babel::Audio::PortAudio::set_audio_output(std::queue<std::vector<float>> &s
 }
 
 void Babel::Audio::PortAudio::send_audio() {
-
     while (!_input_sample.empty()) {
         _sender->send(_input_sample.front());
         _input_sample.pop();
