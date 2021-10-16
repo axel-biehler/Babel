@@ -1,0 +1,14 @@
+//
+// Created by axel on 14/10/2021.
+//
+
+#ifndef BABEL_PACKETRESPMESSAGERECEIVE_HPP
+#define BABEL_PACKETRESPMESSAGERECEIVE_HPP
+
+
+class PacketRespMessageReceive {
+
+};
+
+
+#endif //BABEL_PACKETRESPMESSAGERECEIVE_HPP

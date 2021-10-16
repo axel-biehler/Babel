@@ -1,0 +1,14 @@
+//
+// Created by axel on 14/10/2021.
+//
+
+#ifndef BABEL_PACKETRESPLISTMESSAGES_HPP
+#define BABEL_PACKETRESPLISTMESSAGES_HPP
+
+
+class PacketRespListMessages {
+
+};
+
+
+#endif //BABEL_PACKETRESPLISTMESSAGES_HPP
