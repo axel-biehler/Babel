@@ -26,7 +26,13 @@ namespace Babel {
             PacketCmdListFriends,
             PacketRespListFriends,
             PacketCmdListInvites,
-            PacketRespListInvites
+            PacketRespListInvites,
+            PacketCmdListMessages,
+            PacketRespListMessages,
+            PacketCmdMessagesOpen,
+            PacketRespMessageOpen,
+            PacketMessageReceive,
+            PacketMessageSend
         };
 
         enum PacketArgType {

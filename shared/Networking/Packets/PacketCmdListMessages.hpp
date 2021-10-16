@@ -1,14 +1,15 @@
-//
-// Created by axel on 14/10/2021.
-//
+#pragma once
 
-#ifndef BABEL_PACKETCMDLISTMESSAGES_HPP
-#define BABEL_PACKETCMDLISTMESSAGES_HPP
+#include <vector>
+#include <string>
+#include <Networking/Packet.hpp>
 
+namespace Babel::Networking::Packets {
+            class PacketCmdListMessages : public Packet {
+            public:
+                PacketCmdListMessages();
+                explicit PacketCmdListMessages(std::vector<char> data);
 
-class PacketCmdListMessages {
-
-};
-
-
-#endif //BABEL_PACKETCMDLISTMESSAGES_HPP
+                RawPacket serialize() const;
+            };
+        }

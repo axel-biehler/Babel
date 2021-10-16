@@ -25,6 +25,7 @@ namespace Babel {
             RawPacket handleCmdAcceptFriend(RawPacket rawPacket, Session *session) override;
             RawPacket handleCmdDenyFriend(RawPacket rawPacket, Session *session) override;
             RawPacket handleCmdListFriends(RawPacket rawPacket, Session *session) override;
+            RawPacket handleCmdListMessages(RawPacket rawPacket, Session *session) override;
         private:
             std::shared_ptr<Babel::Networking::Server> _server;
         };

@@ -20,6 +20,8 @@
 #include <Networking/Packets/PacketInviteReceived.hpp>
 #include <Networking/Packets/PacketFriendAdded.hpp>
 #include <Networking/Packets/PacketFriendDenied.hpp>
+#include <Database/Message.hpp>
+#include <Networking/Packets/PacketRespListMessages.hpp>
 #include "HandlePacket.hpp"
 
 Babel::Networking::HandlePacket::HandlePacket(std::shared_ptr<Server> server) : _server(server)
@@ -244,5 +246,31 @@ Babel::Networking::HandlePacket::handleCmdListFriends(Babel::Networking::RawPack
     }
 
     Babel::Networking::Packets::PacketRespListFriends resp{netUsers};
+    return resp.serialize();
+}
+
+Babel::Networking::RawPacket
+Babel::Networking::HandlePacket::handleCmdListMessages(Babel::Networking::RawPacket rawPacket,
+                                                       Babel::Networking::Session *session) {
+    auto db = _server->getDb();
+    std::vector<Babel::Networking::Message> netMessages;
+    Database::User user;
+
+    auto messages = Database::Message::getByConversation(*db, session->getUserId());
+    for (auto &mess : messages) {
+        Babel::Networking::Message netMess;
+        netMess.id = mess.getId();
+        netMess.body = mess.getBody();
+        netMess.from = mess.getFrom();
+        netMess.to = mess.getTo();
+        netMess.status = mess.getStatus();
+        netMess.timestamp = mess.getTimestamp();
+        user.getById(*db, netMess.to);
+        netMess.toUsername = user.getUsername();
+        user.getById(*db, netMess.from);
+        netMess.fromUsername = user.getUsername();
+        netMessages.push_back(netMess);
+    }
+    Babel::Networking::Packets::PacketRespListMessages resp{netMessages};
     return resp.serialize();
 }

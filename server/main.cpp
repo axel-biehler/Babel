@@ -11,8 +11,9 @@
 #include <Networking/Server.hpp>
 #include <Database/Database.hpp>
 #include <Networking/HandlePacket.hpp>
+#include <Database/Message.hpp>
 
-void handle_arg(int ac, char* av[])
+ void handle_arg(int ac, char* av[])
 {
     if (ac < 2) {
         std::cerr << "Bad argument." << std::endl;
@@ -29,14 +30,11 @@ void handle_arg(int ac, char* av[])
 
 int main(int argc, char* argv[])
 {
-    handle_arg(argc, argv);
-    auto database = std::make_shared<Babel::Database::Database>("db.sqlite");
-    asio::io_context context;
-    auto server = std::make_shared<Babel::Networking::Server>(context, std::stoi(argv[1]), database);
-    auto handlePacket = std::make_shared<Babel::Networking::HandlePacket>(server);
-    server->setHandlePacket(handlePacket);
-    server->async_accept();
-    context.run();
+    Babel::Database::Message message;
+    Babel::Database::Database db("db.sqlite");
 
+    std::vector<Babel::Database::Message> messages = message.getByConversation(db, 2);
+    for (int i = 0; i < messages.size(); i++)
+        std::cout << messages[i].getBody() << std::endl;
     return 0;
 }

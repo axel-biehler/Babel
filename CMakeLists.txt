@@ -55,7 +55,11 @@ add_executable(babel_client client/main.cpp
         shared/Networking/Packets/PacketRespListFriends.cpp shared/Networking/Packets/PacketRespListFriends.hpp
         shared/Networking/PacketTypes.hpp
         shared/Networking/Packets/PacketCmdListInvites.cpp shared/Networking/Packets/PacketCmdListInvites.hpp
-        shared/Networking/Packets/PacketRespListInvites.cpp shared/Networking/Packets/PacketRespListInvites.hpp)
+        shared/Networking/Packets/PacketRespListInvites.cpp shared/Networking/Packets/PacketRespListInvites.hpp
+        shared/Networking/Packets/PacketCmdListMessages.cpp shared/Networking/Packets/PacketCmdListMessages.hpp
+        shared/Networking/Packets/PacketRespListMessages.cpp shared/Networking/Packets/PacketRespListMessages.hpp
+        shared/Networking/Packets/PacketMessageOpen.cpp shared/Networking/Packets/PacketMessageOpen.hpp
+        shared/Networking/Packets/PacketMessageReceive.cpp shared/Networking/Packets/PacketMessageReceive.hpp shared/Networking/Packets/PacketMessageSend.cpp shared/Networking/Packets/PacketMessageSend.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/client)
@@ -96,7 +100,8 @@ add_executable(babel_server server/main.cpp
         shared/Networking/Packets/PacketRespListInvites.cpp shared/Networking/Packets/PacketRespListInvites.hpp
         server/Networking/HandlePacket.cpp server/Networking/HandlePacket.hpp
         server/Networking/IHandlePacket.hpp
-        shared/Networking/Packets/PacketAudio.cpp shared/Networking/Packets/PacketAudio.hpp)
+        shared/Networking/Packets/PacketAudio.cpp shared/Networking/Packets/PacketAudio.hpp
+        server/Database/Message.cpp server/Database/Message.hpp)
 target_include_directories(babel_server PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/server)

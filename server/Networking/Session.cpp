@@ -99,6 +99,8 @@ void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawP
         case Babel::Networking::PacketType::PacketCmdListFriends:
             write(_handlePacket->handleCmdListFriends(rawPacket, this));
             break;
+        case Babel::Networking::PacketType::PacketCmdListMessages:
+            write(_handlePacket->handleCmdListMessages(rawPacket, this));
     }
 }
 
