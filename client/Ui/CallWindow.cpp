@@ -45,7 +45,6 @@ void Babel::Ui::CallWindow::onPacketReceived(Babel::Networking::RawPacket packet
         _status = CallStatus::Call;
 
         auto voip = std::static_pointer_cast<Networking::Packets::PacketStartVoip>(packet.deserialize());
-        // start call
         _cliUdp->startConnection(voip->getIp(), voip->getListenPort(), voip->getSendPort());
         std::cout << voip->getIp() << " (" << voip->getListenPort() << "/" << voip->getSendPort() << ")" << std::endl;
     }
@@ -58,7 +57,6 @@ void Babel::Ui::CallWindow::actionButton() {
         Networking::Packets::PacketAcceptCall packet{_otherId};
         _cli->write(packet.serialize());
     } else {
-        // stop call
         _cliUdp->stopConnection();
         delete this;
     }

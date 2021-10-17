@@ -37,6 +37,7 @@ namespace Babel {
             QUdpSocket *_socket;
             int _inputPort;
             int _outputPort;
+            bool _connected;
             QHostAddress _targetIp;
         };
     }

@@ -5,7 +5,6 @@
 ** Created by arthur,
 */
 
-
 #include "LibHandler.hpp"
 #include "../Networking/ClientUdp.hpp"
 

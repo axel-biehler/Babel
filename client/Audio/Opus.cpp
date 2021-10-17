@@ -18,12 +18,10 @@ Babel::Compression::Opus::Opus() : ICompressor() {
     _encoder = opus_encoder_create(SAMPLE_RATE, STEREO, OPUS_APPLICATION_VOIP, &error);
     if (error) {
         exit(84);
-        //TODO: throw error
     }
     _decoder = opus_decoder_create(SAMPLE_RATE, STEREO, &error);
     if (error) {
         exit(84);
-        //TODO: throw error
     }
 }
 

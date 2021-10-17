@@ -10,9 +10,5 @@ int main(int ac, char **av)
     Babel::Ui::ConnectionWindow connWindow(&cli);
 
     connWindow.show();
-
-    Babel::Networking::ClientUDP client_udp(nullptr, 4000, 4001);
-
-    client_udp.startConnection("127.0.0.1", 4000, 4001);
     return app.exec();
 }
