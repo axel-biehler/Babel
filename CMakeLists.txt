@@ -101,7 +101,9 @@ add_executable(babel_server server/main.cpp
         server/Networking/HandlePacket.cpp server/Networking/HandlePacket.hpp
         server/Networking/IHandlePacket.hpp
         shared/Networking/Packets/PacketAudio.cpp shared/Networking/Packets/PacketAudio.hpp
-        server/Database/Message.cpp server/Database/Message.hpp)
+        server/Database/Message.cpp server/Database/Message.hpp
+        shared/Networking/Packets/PacketRespListMessages.cpp shared/Networking/Packets/PacketRespListMessages.hpp
+        shared/Networking/Packets/PacketMessageSend.cpp shared/Networking/Packets/PacketMessageSend.hpp)
 target_include_directories(babel_server PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/server)

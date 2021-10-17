@@ -8,6 +8,7 @@
 
 #include <Networking/Packet.hpp>
 #include <Networking/PacketTypes.hpp>
+#include <Networking/RawPacket.hpp>
 
 namespace Babel::Networking::Packets {
     class PacketMessageSend : public Packet {
@@ -17,7 +18,7 @@ namespace Babel::Networking::Packets {
         explicit PacketMessageSend(std::vector<char> data);
 
         Message getMessage() const;
-        RawPacket serialize() const;
+        Babel::Networking::RawPacket serialize() const;
 
     private:
         Message _message;

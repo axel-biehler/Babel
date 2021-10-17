@@ -5,12 +5,14 @@
 #ifndef BABEL_MESSAGE_HPP
 #define BABEL_MESSAGE_HPP
 
+#include <Networking/PacketTypes.hpp>
 #include "IModel.hpp"
 
 namespace Babel::Database {
     class Message : public IModel {
     public:
         Message();
+        explicit Message(Babel::Networking::Message);
 
         void save(const Database &db) override;
         void getById(const Database &db, int id) override;

@@ -101,6 +101,10 @@ void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawP
             break;
         case Babel::Networking::PacketType::PacketCmdListMessages:
             write(_handlePacket->handleCmdListMessages(rawPacket, this));
+            break;
+        case Babel::Networking::PacketType::PacketMessageSend:
+            _handlePacket->handleSendMessage(rawPacket,this);
+            break;
     }
 }
 

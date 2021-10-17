@@ -26,7 +26,7 @@ Babel::Networking::Message Babel::Networking::Packets::PacketMessageSend::getMes
 }
 
 Babel::Networking::RawPacket Babel::Networking::Packets::PacketMessageSend::serialize() const {
-    ArgumentsWriter writer;
+    Babel::Networking::ArgumentsWriter writer;
 
     writer.addInt(_message.id);
     writer.addInt(_message.to);
@@ -35,5 +35,3 @@ Babel::Networking::RawPacket Babel::Networking::Packets::PacketMessageSend::seri
     writer.addInt(_message.timestamp);
     return {build(writer.build())};
 }
-
-

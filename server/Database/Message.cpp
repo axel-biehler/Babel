@@ -123,4 +123,9 @@ int Babel::Database::Message::getTimestamp() const {
     return _timestamp;
 }
 
+Babel::Database::Message::Message(Babel::Networking::Message message) : _id(message.id), _body(message.body), _to(message.to),
+    _from(message.from), _status(message.status), _timestamp(message.timestamp) {
+
+}
+
 

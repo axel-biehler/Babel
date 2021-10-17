@@ -22,6 +22,7 @@
 #include <Networking/Packets/PacketFriendDenied.hpp>
 #include <Database/Message.hpp>
 #include <Networking/Packets/PacketRespListMessages.hpp>
+#include <Networking/Packets/PacketMessageSend.hpp>
 #include "HandlePacket.hpp"
 
 Babel::Networking::HandlePacket::HandlePacket(std::shared_ptr<Server> server) : _server(server)
@@ -273,4 +274,16 @@ Babel::Networking::HandlePacket::handleCmdListMessages(Babel::Networking::RawPac
     }
     Babel::Networking::Packets::PacketRespListMessages resp{netMessages};
     return resp.serialize();
+}
+
+void Babel::Networking::HandlePacket::handleSendMessage(Babel::Networking::RawPacket rawPacket,
+                                                                                Babel::Networking::Session *session) {
+    auto db = _server->getDb();
+    auto message = std::static_pointer_cast<Babel::Networking::Packets::PacketMessageSend>(rawPacket.deserialize())->getMessage();
+    Database::Message toSave(message);
+    auto user = _server->getSessionFromUser(toSave.getTo());
+
+    toSave.save(*db);
+    handleCmdListMessages(rawPacket, session);
+    handleCmdListMessages(rawPacket, &(*user));
 }
