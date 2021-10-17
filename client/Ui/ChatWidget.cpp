@@ -3,7 +3,6 @@
 #include <QScrollBar>
 #include <Networking/Packets/PacketCmdListMessages.hpp>
 #include <Networking/Packets/PacketMessageSend.hpp>
-#include <unistd.h>
 #include <iostream>
 
 Babel::Ui::ChatWidget::ChatWidget(const std::string &username, int id, Babel::Networking::Client *cli) : _userId(id), _cli(cli) {
