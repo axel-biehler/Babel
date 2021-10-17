@@ -2,8 +2,8 @@
 #include "FriendItemWidget.hpp"
 #include "CallWindow.hpp"
 
-Babel::Ui::FriendItemWidget::FriendItemWidget(Babel::Networking::Client *cli, int userId, const std::string &username)
-        : _cli(cli), _userId(userId), _username(username) {
+Babel::Ui::FriendItemWidget::FriendItemWidget(Babel::Networking::Client *cli, int userId, const std::string &username, std::shared_ptr<ChatWidget> chat)
+        : _cli(cli), _userId(userId), _chat(chat), _username(username) {
     setLayout(&_mainLayout);
     _mainLayout.setAlignment(Qt::AlignLeft);
     _mainLayout.addWidget(&_userImageLabel);
@@ -31,6 +31,8 @@ Babel::Ui::FriendItemWidget::FriendItemWidget(Babel::Networking::Client *cli, in
     _usernameLabel.setFont(QFont("Roboto", 10));
 
     QObject::connect(&_callButton, &QPushButton::pressed, this, &FriendItemWidget::call);
+    connect(&_messageButton, &QPushButton::released, this, &FriendItemWidget::onMessageClick);
+
 }
 
 void Babel::Ui::FriendItemWidget::call() {
@@ -38,3 +40,16 @@ void Babel::Ui::FriendItemWidget::call() {
     _cli->write(packet.serialize());
     (new CallWindow(_cli, CallStatus::WaitingForAnswer, _userId, _username))->show();
 }
+
+void Babel::Ui::FriendItemWidget::onMessageClick() {
+    if (_chat != nullptr) {
+        _chat->setId(_userId);
+        _chat->setUsername(_username);
+        _chat->updateMessage(_userId);
+    }
+}
+
+QPushButton *Babel::Ui::FriendItemWidget::getMessageButton() {
+    return &_messageButton;
+}
+

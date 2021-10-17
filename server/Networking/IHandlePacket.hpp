@@ -23,6 +23,9 @@ namespace Babel {
             virtual RawPacket handleCmdListFriends(RawPacket rawPacket, Session *session) = 0;
             virtual void handleCmdCall(RawPacket rawPacket, Session *session) = 0;
             virtual void handleAcceptCall(RawPacket rawPacket, Session *session) = 0;
+            virtual RawPacket handleCmdListMessages(RawPacket rawPacket, Session *session) = 0;
+            virtual void handleSendMessage(RawPacket rawPacket, Session *session) = 0;
+            virtual void handleReceiveMessage(RawPacket, Session *session) = 0;
         };
     }
 }

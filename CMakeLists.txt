@@ -62,7 +62,12 @@ add_executable(babel_client client/main.cpp
         shared/Networking/Packets/PacketCall.cpp shared/Networking/Packets/PacketCall.hpp
         shared/Networking/Packets/PacketCallReceived.cpp shared/Networking/Packets/PacketCallReceived.hpp
         shared/Networking/Packets/PacketAcceptCall.cpp shared/Networking/Packets/PacketAcceptCall.hpp
-        shared/Networking/Packets/PacketStartVoip.cpp shared/Networking/Packets/PacketStartVoip.hpp)
+        shared/Networking/Packets/PacketStartVoip.cpp shared/Networking/Packets/PacketStartVoip.hpp
+        shared/Networking/Packets/PacketCmdListMessages.cpp shared/Networking/Packets/PacketCmdListMessages.hpp
+        shared/Networking/Packets/PacketRespListMessages.cpp shared/Networking/Packets/PacketRespListMessages.hpp
+        shared/Networking/Packets/PacketMessageOpen.cpp shared/Networking/Packets/PacketMessageOpen.hpp
+        shared/Networking/Packets/PacketMessageReceive.cpp shared/Networking/Packets/PacketMessageReceive.hpp
+        shared/Networking/Packets/PacketMessageSend.cpp shared/Networking/Packets/PacketMessageSend.hpp)
 target_include_directories(babel_client PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_client PUBLIC ${CMAKE_SOURCE_DIR}/client)
@@ -108,7 +113,10 @@ add_executable(babel_server server/main.cpp
         server/Networking/Call.cpp server/Networking/Call.hpp
         shared/Networking/Packets/PacketCallReceived.cpp shared/Networking/Packets/PacketCallReceived.hpp
         shared/Networking/Packets/PacketAcceptCall.cpp shared/Networking/Packets/PacketAcceptCall.hpp
-        shared/Networking/Packets/PacketStartVoip.cpp shared/Networking/Packets/PacketStartVoip.hpp)
+        shared/Networking/Packets/PacketStartVoip.cpp shared/Networking/Packets/PacketStartVoip.hpp
+        server/Database/Message.cpp server/Database/Message.hpp
+        shared/Networking/Packets/PacketRespListMessages.cpp shared/Networking/Packets/PacketRespListMessages.hpp
+        shared/Networking/Packets/PacketMessageSend.cpp shared/Networking/Packets/PacketMessageSend.hpp)
 target_include_directories(babel_server PUBLIC ${CONAN_INCLUDE_DIRS})
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/shared)
 target_include_directories(babel_server PUBLIC ${CMAKE_SOURCE_DIR}/server)

@@ -31,6 +31,12 @@ namespace Babel {
             PacketCallReceived,
             PacketAcceptCall,
             PacketStartVoip,
+            PacketCmdListMessages,
+            PacketRespListMessages,
+            PacketCmdMessagesOpen,
+            PacketRespMessageOpen,
+            PacketMessageReceive,
+            PacketMessageSend
         };
 
         enum PacketArgType {

@@ -21,6 +21,17 @@ namespace Babel {
             int from;
             int to;
         };
+
+        struct Message {
+            int id;
+            std::string body;
+            std::string fromUsername;
+            std::string toUsername;
+            int from;
+            int to;
+            unsigned long timestamp;
+            int status;
+        };
     }
 }
 

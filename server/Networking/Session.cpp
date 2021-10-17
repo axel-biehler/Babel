@@ -13,13 +13,13 @@
 #include <utility>
 
 Babel::Networking::Session::Session(std::shared_ptr<asio::ip::tcp::socket> socket, std::shared_ptr<Babel::Networking::IHandlePacket> handlePacket) :
-    _socket(socket), _handlePacket(handlePacket)
+    _socket(socket), _handlePacket(handlePacket), _isClosed(false)
 {
     _data = (char *)(malloc(1024));
     _size_str = (char *)(malloc(4));
 }
 
-Babel::Networking::Session::Session(const Session &session) : _socket(session.getSocket()), _handlePacket(session.getHandlePacket())
+Babel::Networking::Session::Session(const Session &session) : _socket(session.getSocket()), _handlePacket(session.getHandlePacket()), _isClosed(false)
 {
     _data = (char *)(malloc(1024));
     _size_str = (char *)(malloc(4));
@@ -44,8 +44,10 @@ void Babel::Networking::Session::read()
 
 void Babel::Networking::Session::on_read(std::error_code error, std::size_t bytes_transferred)
 {
-    if(error)
+    if(error) {
+        _isClosed = true;
         return;
+    }
     try {
         RawInt raw{};
         for (int i = 0; i < sizeof(raw.i); i++)
@@ -60,8 +62,10 @@ void Babel::Networking::Session::on_read(std::error_code error, std::size_t byte
 
 void Babel::Networking::Session::on_read_data(std::error_code error, std::size_t bytes_transferred)
 {
-    if (error)
+    if (error) {
+        _isClosed = true;
         return;
+    }
     for (int i = 0; i < 4; i++)
         _buffer.push_back(_size_str[i]);
     for (int i = 0; i < _size; i++)
@@ -101,6 +105,15 @@ void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawP
         case Babel::Networking::PacketType::PacketAcceptCall:
             _handlePacket->handleAcceptCall(rawPacket, this);
             break;
+        case Babel::Networking::PacketType::PacketCmdListMessages:
+            write(_handlePacket->handleCmdListMessages(rawPacket, this));
+            break;
+        case Babel::Networking::PacketType::PacketMessageSend:
+            _handlePacket->handleSendMessage(rawPacket,this);
+            break;
+        case Babel::Networking::PacketType::PacketMessageReceive:
+            _handlePacket->handleReceiveMessage(rawPacket, this);
+            break;;
     }
 }
 
@@ -131,4 +144,8 @@ int Babel::Networking::Session::getUserId() const {
 
 std::string Babel::Networking::Session::getIp() const {
     return _socket->remote_endpoint().address().to_string();
+}
+
+bool Babel::Networking::Session::getIsClosed() const {
+    return _isClosed;
 }
