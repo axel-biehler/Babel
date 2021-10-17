@@ -6,16 +6,29 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QScrollArea>
+#include <Networking/PacketTypes.hpp>
+#include <Networking/Client.hpp>
 
 namespace Babel {
     namespace Ui {
         class ChatWidget : public QWidget {
             Q_OBJECT
         public:
-            ChatWidget(const std::string &username, int id);
+            ChatWidget(const std::string &username, int id, Babel::Networking::Client *cli);
+            ChatWidget(ChatWidget const &widget);
+
+            void setUsername(std::string username);
+            std::string getUsername() const;
+            void setId(int id);
+            int getUID() const;
+            void setMessages(std::vector<Babel::Networking::Message> messages);
+            void updateMessage(int uid);
 
         private:
             int _userId;
+            std::string  _username;
+            std::vector<Babel::Networking::Message> _messages;
+            Babel::Networking::Client *_cli;
 
             QVBoxLayout _mainLayout;
 
@@ -36,6 +49,8 @@ namespace Babel {
 
         private slots:
             void moveScrollBarToBottom(int min, int max);
+            void sendMessage();
+
         };
     }
 }

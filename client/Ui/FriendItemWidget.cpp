@@ -1,6 +1,8 @@
+#include <iostream>
 #include "FriendItemWidget.hpp"
 
-Babel::Ui::FriendItemWidget::FriendItemWidget(int userId, const std::string &username) : _userId(userId) {
+Babel::Ui::FriendItemWidget::FriendItemWidget(int userId, const std::string &username, std::shared_ptr<Babel::Ui::ChatWidget> chat) : _userId(userId),
+                                                                                                         _chat(chat), _username(username) {
     setLayout(&_mainLayout);
     _mainLayout.setAlignment(Qt::AlignLeft);
     _mainLayout.addWidget(&_userImageLabel);
@@ -26,4 +28,17 @@ Babel::Ui::FriendItemWidget::FriendItemWidget(int userId, const std::string &use
 
     _usernameLabel.setText(username.c_str());
     _usernameLabel.setFont(QFont("Roboto", 10));
+    connect(&_messageButton, &QPushButton::released, this, &FriendItemWidget::onMessageClick);
 }
+
+void Babel::Ui::FriendItemWidget::onMessageClick() {
+    if (_chat != nullptr) {
+        _chat->setId(_userId);
+        _chat->setUsername(_username);
+    }
+}
+
+QPushButton *Babel::Ui::FriendItemWidget::getMessageButton() {
+    return &_messageButton;
+}
+

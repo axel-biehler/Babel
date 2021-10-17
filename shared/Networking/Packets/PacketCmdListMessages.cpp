@@ -10,7 +10,7 @@ Babel::Networking::Packets::PacketCmdListMessages::PacketCmdListMessages()
         : Packet(PacketType::PacketCmdListMessages) {
 }
 
-Babel::Networking::Packets::PacketCmdListMessages::PacketCmdListMessages(std::vector<char> data) : Packet(PacketType::PacketCmdListMessages) {
+Babel::Networking::Packets::PacketCmdListMessages::PacketCmdListMessages(const std::vector<char>& data) : Packet(PacketType::PacketCmdListMessages) {
 
 }
 

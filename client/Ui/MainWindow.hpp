@@ -25,6 +25,8 @@ namespace Babel {
             QPushButton _friendsButton;
             std::shared_ptr<ChatWidget> _chatWidget;
             Babel::Networking::Client *_cli;
+            std::string _firstUsername;
+            int _firstId;
 
         private slots:
             void showFriends();
