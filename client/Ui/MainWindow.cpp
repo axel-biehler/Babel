@@ -71,12 +71,10 @@ void Babel::Ui::MainWindow::onPacketReceived(Babel::Networking::RawPacket packet
     } else if (packet.getPacketType() == Networking::PacketFriendAdded) {
         auto resp = std::static_pointer_cast<Babel::Networking::Packets::PacketFriendAdded>(packet.deserialize());
         _friendsInnerLayout.addWidget(new FriendItemWidget(resp->getId(), resp->getUsername(), _chatWidget));
-    } else if (packet.getPacketType() == Networking::PacketRespListMessages) {
+    }
+    if (packet.getPacketType() == Networking::PacketRespListMessages) {
         auto resp = std::static_pointer_cast<Babel::Networking::Packets::PacketRespListMessages>(packet.deserialize());
         auto message = resp->getMessages();
-        for (auto &m : message) {
-            std::cout << m.body << std::endl;
-        }
         _chatWidget->setMessages(resp->getMessages());
         _chatWidget->updateMessage(_chatWidget->getUID());
     }

@@ -8,6 +8,7 @@
 #include <QScrollArea>
 #include <Networking/PacketTypes.hpp>
 #include <Networking/Client.hpp>
+#include "MessageWidget.hpp"
 
 namespace Babel {
     namespace Ui {
@@ -46,6 +47,8 @@ namespace Babel {
             QHBoxLayout _bottomLayout;
             QLineEdit _chatLineEdit;
             QPushButton _sendButton;
+
+            std::vector<QWidget *> _widgets;
 
         private slots:
             void moveScrollBarToBottom(int min, int max);

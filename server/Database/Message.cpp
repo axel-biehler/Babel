@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include "Message.hpp"
+#include <chrono>
 
 Babel::Database::Message::Message() : _id(-1) {
 
@@ -12,15 +13,17 @@ Babel::Database::Message::Message() : _id(-1) {
 
 void Babel::Database::Message::save(const Babel::Database::Database &db) {
     auto sqlite{db.getHandle()};
+    const auto p1 = std::chrono::system_clock::now();
 
     if (_id < 0) {
-        std::string query{"INSERT INTO Messages (body, to, from, status, timestamp) VALUES ('" +  _body + "', '" + std::to_string(_to) +
-                          ", '" + std::to_string(_from) + "', '" + std::to_string(_status) +"', '"+ std::to_string(_timestamp) + "')"};
+        _timestamp = std::time(0);
+        std::string query{"INSERT INTO Messages (body, \"to\", \"from\", status, timestamp) VALUES ('" +  _body + "', '" + std::to_string(_to) +
+                          "', '" + std::to_string(_from) + "', '" + std::to_string(_status) + "', '" + std::to_string(_timestamp) +"')"};
         sqlite3_exec(sqlite, query.c_str(), nullptr, 0, nullptr);
         _id = sqlite3_last_insert_rowid(sqlite);
     } else {
         std::string query{"UPDATE Messages SET id = " + std::to_string(_id) + ", body = '" + _body +
-                          "', to = '" + std::to_string(_to) + "', from = '" + std::to_string(_from)
+                          "', \"to\" = '" + std::to_string(_to) + "', \"from\" = '" + std::to_string(_from)
                           + "', status = '" + std::to_string(_status) + "' WHERE id = " + std::to_string(_id)};
         sqlite3_exec(sqlite, query.c_str(), nullptr, 0, nullptr);
     }
@@ -95,7 +98,7 @@ void Babel::Database::Message::setStatus(int status) {
     _status = status;
 }
 
-void Babel::Database::Message::setTimestamp(int timestamp) {
+void Babel::Database::Message::setTimestamp(unsigned long timestamp) {
     _timestamp = timestamp;
 }
 
@@ -119,7 +122,7 @@ int Babel::Database::Message::getStatus() const {
     return _status;
 }
 
-int Babel::Database::Message::getTimestamp() const {
+unsigned long Babel::Database::Message::getTimestamp() const {
     return _timestamp;
 }
 

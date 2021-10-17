@@ -35,6 +35,8 @@ void Babel::Ui::FriendItemWidget::onMessageClick() {
     if (_chat != nullptr) {
         _chat->setId(_userId);
         _chat->setUsername(_username);
+        std::cout << _userId << std::endl;
+        _chat->updateMessage(_userId);
     }
 }
 

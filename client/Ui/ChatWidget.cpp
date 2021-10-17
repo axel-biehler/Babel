@@ -2,6 +2,9 @@
 #include "MessageWidget.hpp"
 #include <QScrollBar>
 #include <Networking/Packets/PacketCmdListMessages.hpp>
+#include <Networking/Packets/PacketMessageSend.hpp>
+#include <unistd.h>
+#include <iostream>
 
 Babel::Ui::ChatWidget::ChatWidget(const std::string &username, int id, Babel::Networking::Client *cli) : _userId(id), _cli(cli) {
     setLayout(&_mainLayout);
@@ -109,7 +112,23 @@ void Babel::Ui::ChatWidget::moveScrollBarToBottom(int min, int max) {
 }
 
 void Babel::Ui::ChatWidget::sendMessage() {
+    Babel::Networking::Message message;
+    message.body = _chatLineEdit.text().toStdString();
+    std::cout << _userId << "  " <<  _cli->getUserId() << std::endl;
+    message.to = _userId;
+    message.from = _cli->getUserId();
+    message.status = 0;
+    message.id = -1;
+    Babel::Networking::Packets::PacketMessageSend packet(message);
+    std::vector<char> rawBytes = packet.serialize().getData();
 
+    auto rawPacket = Babel::Networking::RawPacket(rawBytes);
+
+    _cli->write(rawPacket);
+    Babel::Networking::Packets::PacketCmdListMessages messages;
+    _cli->write(messages.serialize());
+    updateMessage(_userId);
+    _innerLayout.update();
 }
 
 void Babel::Ui::ChatWidget::setUsername(std::string username) {
@@ -135,14 +154,21 @@ void Babel::Ui::ChatWidget::setMessages(std::vector<Babel::Networking::Message> 
 void Babel::Ui::ChatWidget::updateMessage(int uid) {
     std::vector<Babel::Networking::Message> messages;
 
+    for (auto &w : _widgets) {
+        w->hide();
+        _innerLayout.removeWidget(w);
+    }
+    _innerLayout.update();
     for (auto &mess : _messages) {
         if (mess.to == uid || mess.from == uid)
             messages.push_back(mess);
     }
     std::sort(messages.begin(), messages.end(), [](const Babel::Networking::Message &lhs, const Babel::Networking::Message &rhs) {
-        return lhs.timestamp > rhs.timestamp;
+        return lhs.timestamp < rhs.timestamp;
     });
     for(auto &mess : messages) {
-        _innerLayout.addWidget(new MessageWidget(mess.fromUsername, mess.body));
+        QWidget *wid = new MessageWidget(mess.fromUsername, mess.body);
+        _widgets.push_back(wid);
+        _innerLayout.addWidget(wid);
     }
 }

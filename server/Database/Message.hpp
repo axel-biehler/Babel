@@ -23,7 +23,7 @@ namespace Babel::Database {
         void setTo(int to);
         void setFrom(int from);
         void setStatus(int status);
-        void setTimestamp(int timestamp);
+        void setTimestamp(unsigned long timestamp);
 
         static std::vector<Message> getByConversation(const Database &db, int uid);
         int getId() const;
@@ -31,7 +31,7 @@ namespace Babel::Database {
         int getTo() const;
         int getFrom() const;
         int getStatus() const;
-        int getTimestamp()const;
+        unsigned long getTimestamp()const;
 
     private:
         int _id;
@@ -39,7 +39,7 @@ namespace Babel::Database {
         int _from;
         int _to;
         int _status;
-        int _timestamp;
+        unsigned long _timestamp;
 
     };
 }

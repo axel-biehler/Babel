@@ -105,6 +105,9 @@ void Babel::Networking::Session::handle_packet(Babel::Networking::RawPacket rawP
         case Babel::Networking::PacketType::PacketMessageSend:
             _handlePacket->handleSendMessage(rawPacket,this);
             break;
+        case Babel::Networking::PacketType::PacketMessageReceive:
+            _handlePacket->handleReceiveMessage(rawPacket, this);
+            break;;
     }
 }
 
@@ -134,5 +137,5 @@ int Babel::Networking::Session::getUserId() const {
 }
 
 bool Babel::Networking::Session::getIsClosed() const {
-    return true;
+    return _isClosed;
 }

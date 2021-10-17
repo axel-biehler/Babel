@@ -19,6 +19,7 @@ Babel::Networking::Packets::PacketMessageSend::PacketMessageSend(std::vector<cha
     _message.from = reader.readInt();
     _message.status = reader.readInt();
     _message.timestamp = reader.readInt();
+    _message.body = reader.readString();
 }
 
 Babel::Networking::Message Babel::Networking::Packets::PacketMessageSend::getMessage() const {
@@ -33,5 +34,6 @@ Babel::Networking::RawPacket Babel::Networking::Packets::PacketMessageSend::seri
     writer.addInt(_message.from);
     writer.addInt(_message.status);
     writer.addInt(_message.timestamp);
+    writer.addString(_message.body);
     return {build(writer.build())};
 }

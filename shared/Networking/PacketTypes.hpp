@@ -29,7 +29,7 @@ namespace Babel {
             std::string toUsername;
             int from;
             int to;
-            int timestamp;
+            unsigned long timestamp;
             int status;
         };
     }
