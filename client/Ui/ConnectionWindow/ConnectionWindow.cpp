@@ -7,19 +7,13 @@
 #include "ConnectionWindow.hpp"
 #include "ConnectionPage.hpp"
 
-Babel::Ui::ConnectionWindow::ConnectionWindow(Babel::Networking::Client *cli) {
-    this->setMinimumSize(600, 400);
+Babel::Ui::ConnectionWindow::ConnectionWindow(Babel::Networking::Client *cli): _connectionPage(cli, this) {
+    setFixedSize(600, 400);
     setWindowTitle("Connection");
-    Babel::Ui::ConnectionPage *page = new Babel::Ui::ConnectionPage(cli, this);
-    _layout = new QGridLayout(this);
-    _pages.addWidget(page);
-    _pages.setFixedSize(width() / 2, height() / 2);
-    _layout->addWidget(&_pages, 0, 0,Qt::AlignCenter);
 
-    this->setLayout(_layout);
+    setLayout(&_layout);
+   _connectionPage.setParent(this);
+    _layout.addWidget(&_connectionPage);
+
     show();
-}
-
-Babel::Ui::ConnectionWindow::~ConnectionWindow() noexcept {
-
 }

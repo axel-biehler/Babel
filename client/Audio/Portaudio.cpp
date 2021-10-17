@@ -61,7 +61,6 @@ void Babel::Audio::PortAudio::startRecording() {
 void Babel::Audio::PortAudio::stopRecording() {
     if (!_is_initialized || !_recording) {
         exit(84);
-        //TODO: throw error
     }
     PaError err = Pa_StopStream(_stream);
     _recording = false;

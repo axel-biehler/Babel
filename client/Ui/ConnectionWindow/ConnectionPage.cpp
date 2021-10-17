@@ -12,7 +12,7 @@
 #include "ConnectionPage.hpp"
 #include "ConnectionWindow.hpp"
 
-Babel::Ui::ConnectionPage::ConnectionPage(Babel::Networking::Client *cli, Babel::Ui::ConnectionWindow *win) : _cli(cli), _win(win) {
+Babel::Ui::ConnectionPage::ConnectionPage(Babel::Networking::Client *cli, Babel::Ui::ConnectionWindow *win) : _cli(cli), _win(win), _register("Sign Up", this), _login("Sign In", this) {
     _text.setText("Enter connection informations :");
     _text.setAlignment(Qt::AlignCenter);
     _mainLayout.addWidget(&_text);
@@ -22,16 +22,14 @@ Babel::Ui::ConnectionPage::ConnectionPage(Babel::Networking::Client *cli, Babel:
     _mainLayout.addWidget(&_input, Qt::AlignCenter);
     _mainLayout.addWidget(&_pass, Qt::AlignCenter);
     _mainLayout.addWidget(&_ip, Qt::AlignCenter);
-    _register = new QPushButton("Sign Up", this);
-    _login = new QPushButton("Sign In", this);
     _mainLayout.addWidget(&_btnWidget);
     _btnWidget.setLayout(&_btnLayout);
-    _btnLayout.addWidget(_login);
-    _btnLayout.addWidget(_register);
+    _btnLayout.addWidget(&_login);
+    _btnLayout.addWidget(&_register);
     this->setLayout(&_mainLayout);
 
-    QObject::connect(_register, &QPushButton::released, this, &Babel::Ui::ConnectionPage::Register);
-    QObject::connect(_login, &QPushButton::released, this, &Babel::Ui::ConnectionPage::Login);
+    QObject::connect(&_register, &QPushButton::released, this, &Babel::Ui::ConnectionPage::Register);
+    QObject::connect(&_login, &QPushButton::released, this, &Babel::Ui::ConnectionPage::Login);
     QObject::connect(_cli, &Babel::Networking::Client::packetReceive, this, &Babel::Ui::ConnectionPage::OnPacketReceived);
 }
 
@@ -98,4 +96,8 @@ void Babel::Ui::ConnectionPage::OnPacketReceived(Babel::Networking::RawPacket pa
             handlePacketRespRegister(packet);
             break;
     }
+}
+
+Babel::Ui::ConnectionPage::~ConnectionPage() {
+    exit(0);
 }

@@ -13,28 +13,31 @@
 #include "Networking/Packets/PacketCmdLogin.hpp"
 #include "Networking/Packet.hpp"
 
+#include <chrono>
+#include <thread>
+
+
 Babel::Networking::ClientUDP::ClientUDP(Management::LibHandler *handler, QObject *parent) :
     IClient(), _handler(std::move(handler))
 {
 }
 
 Babel::Networking::ClientUDP::ClientUDP(QObject *parent, int inputPort, int outputPort) :
-    IClient(), _inputPort(inputPort), _outputPort(outputPort)
+    IClient(), _inputPort(inputPort), _outputPort(outputPort), _connected(false)
 {
     _handler = std::make_shared<Babel::Management::LibHandler>();
 }
 
 void Babel::Networking::ClientUDP::write(std::vector<unsigned char> payload) {
-    //QByteArray Data(payload.data(), payload.size());
-
-    _socket->writeDatagram((char *)&payload[0], payload.size(), _targetIp, _outputPort);
-    //_socket->writeDatagram((char *)&payload[0], payload.size(), QHostAddress::LocalHost, _outputPort);
+    if (_connected)
+        _socket->writeDatagram((char *)&payload[0], payload.size(), _targetIp, _outputPort);
 }
 
 void Babel::Networking::ClientUDP::startConnection(const std::string &ip, int inputPort, int outputPort) {
     _handler->get_lib_audio()->set_sender(this);
     _socket = new QUdpSocket(this);
 
+    _connected = true;
     _inputPort = inputPort;
     _outputPort = outputPort;
     _targetIp.setAddress(ip.c_str());
@@ -51,8 +54,13 @@ void Babel::Networking::ClientUDP::readyRead()
     quint16 senderPort;
 
     _socket->readDatagram((char *)&buffer[0], buffer.size(), &sender, &senderPort);
-    auto decoded_sample = _handler->get_lib_compressor()->decode(buffer);
-    _handler->get_lib_audio()->add_sample(decoded_sample);
+    if (buffer.size() == 18) {
+        _connected = false;
+        stopConnection();
+    } else {
+        auto decoded_sample = _handler->get_lib_compressor()->decode(buffer);
+        _handler->get_lib_audio()->add_sample(decoded_sample);
+    }
 }
 
 void Babel::Networking::ClientUDP::setInputPort(int port) {
@@ -65,7 +73,9 @@ void Babel::Networking::ClientUDP::setOutputPort(int port) {
 
 void Babel::Networking::ClientUDP::stopConnection() {
     _handler->stop();
-    delete _socket;
+    _socket->deleteLater();
+    disconnect(_socket);
+    _connected = false;
 }
 
 void Babel::Networking::ClientUDP::send(std::vector<float> sample) {
