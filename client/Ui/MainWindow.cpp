@@ -76,7 +76,6 @@ void Babel::Ui::MainWindow::onPacketReceived(Babel::Networking::RawPacket packet
     } else if (packet.getPacketType() == Networking::PacketCallReceived) {
         auto resp = std::static_pointer_cast<Babel::Networking::Packets::PacketCallReceived>(packet.deserialize());
         (new Babel::Ui::CallWindow(_cli, Babel::Ui::CallStatus::Receiving, resp->getId(), resp->getUsername()))->show();
-        _friendsInnerLayout.addWidget(new FriendItemWidget(_cli, resp->getId(), resp->getUsername(), _chatWidget));
     }
     if (packet.getPacketType() == Networking::PacketRespListMessages) {
         auto resp = std::static_pointer_cast<Babel::Networking::Packets::PacketRespListMessages>(packet.deserialize());
